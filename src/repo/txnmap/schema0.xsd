@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="single" type="xs:string">
+   
+  </xs:element>
+  <xs:element name="multiple" type="xs:string">
+   
+  </xs:element>
+  <xs:element name="rsp">
+    <xs:complexType>
+      <xs:sequence maxOccurs="1" minOccurs="0">
+        <xs:element ref="single"/>
+        <xs:element ref="multiple"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="req">
+    <xs:complexType>
+      <xs:sequence maxOccurs="1" minOccurs="0">
+        <xs:element ref="single"/>
+        <xs:element ref="multiple"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="txn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="rsp">        </xs:element>
+        <xs:element ref="req"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="txn" maxOccurs="unbounded" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

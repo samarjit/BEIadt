@@ -1,0 +1,15 @@
+<root>
+<txn id="STUCAP"><!-- FF9000,FF0151,FF0152*FF0151,FF0148,FF0149|FF9000:H,FF0151:H,FF0152:H*FF0151:H,FF0148:H,FF0149:H -->
+<rsp><single>FF0151,FF0148,FF0149</single><multiple>FF9000,FF0151,FF0152</multiple></rsp> 
+<req><single>FF0151:H,FF0148:H,FF0149:H</single><multiple>FF9000:H,FF0151:H,FF0152:H</multiple></req></txn>
+
+<txn id="STUCNF"><!-- FF9000,FF0151,FF0152*FF0151,FF0148,FF0149|FF9000:H,FF0151:H,FF0152:H*FF0151:H,FF0148:H,FF0149:H -->
+<rsp><multiple>FF9000,FF0151,FF0152</multiple><single>FF0151,FF0148,FF0149</single></rsp> 
+<req><multiple>FF9000:H,FF0151:H,FF0152:H</multiple><single>FF0151:H,FF0148:H,FF0149:H</single></req></txn>
+
+<txn id="BNGPVW"><!-- TRANS_CODE:BNGPVW|FF0143,FF0141,FF0111,FF0112*IDCT_NO_DATA|FF0143 -->
+<rsp><multiple>FF0143,FF0141,FF0111,FF0112</multiple></rsp>
+<req><multiple>FF0143</multiple></req>
+</txn>
+</root>
+
