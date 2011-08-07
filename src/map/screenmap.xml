@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<root>
+ <screen name="ProgramSetup" mappingxml="map/ProgramSetup.xml" />
+ <screen name="TestPage" mappingxml="map/testsetup.xml" />
+ 
+</root>

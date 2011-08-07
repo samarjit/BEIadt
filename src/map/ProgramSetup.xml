@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl" ?>
+<root xsi:noNamespaceSchemaLocation="config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<screen name="ProgramSetup">
+		<htmltemplate>
+			html/ProgramSetup.html
+		</htmltemplate>
+		<includedjsp>
+ 
+		</includedjsp>
+		<callbackclass>
+			com.ycs.fe.businesslogic.ProgramSetupBL
+		</callbackclass>
+		<scripts>
+			<scriptinclude></scriptinclude>
+			 <text><![CDATA[    
+				<script> 
+				var selonload='<@s.property value="resDTO" escape="false" />';
+				</script>
+				]]>
+			 </text>
+			<scriptinclude>hello.js</scriptinclude>
+		</scripts>
+		<stylesheets>
+			<styleinclude>some.css</styleinclude>
+			<text><![CDATA[
+				 jQuery.get("jsrpc.action?screenName=ProgramSetup&panelName=form1&command=selectonload",function (data){alert(data);});
+			]]>
+			</text>
+			<styleinclude>some2.css</styleinclude>
+		</stylesheets>
+		<crud>
+			<jsonrpc id="rpc1" outstack="form1">SELECT PROGNAME "txtnewprogname",PROGDESC "txtprogramdesc",ISSUERNAME "issuername", COUNTRY_ISSUE "countryofissue", STATUS "txtstatus" FROM
+				PROGRAMDETAILS
+				where PROGNAME=:whereval|STRING order by 1</jsonrpc>
+			<jsonrpc id="rpc3" outstack="form1"><![CDATA[
+				SELECT PROGNAME "txtnewprogname",PROGDESC "txtprogramdesc",ISSUERNAME "issuername", COUNTRY_ISSUE "countryofissue", STATUS "txtstatus" FROM PROGRAMDETAILS
+				where PROGNAME <> :whereval|STRING order by 1]]>
+				<countquery pagesize="3">SELECT count('x') from PROGRAMDETAILS </countquery>
+				<error message="The select failed for :whereval"></error>
+				<message message="The record,:whereval was selected successfully"></message>
+			</jsonrpc>
+			<selectonload outstack="form2" id="selqry1">SELECT 'LOYCARD' "txtnewprogname" from DUAL </selectonload>
+			<selectonload outstack="form1" id="selqry2">
+				SELECT PROGNAME "txtnewprogname",PROGDESC "txtprogramdesc",ISSUERNAME "issuername" ,COUNTRY_ISSUE "countryofissue", STATUS "txtstatus" FROM PROGRAMDETAILS
+				where PROGNAME is not :inp.form2[0].txtnewprogname order by 1
+				<countquery pagesize="3">SELECT count('x') from PROGRAMDETAILS where PROGNAME=:form2[0].txtnewprogname </countquery>
+			</selectonload>
+	
+	
+			<sqlselect id="selSpl1" outstack="list1">
+				select USER_ID userid, PASSWD password from USER_MASTER
+				<error message="Select Failed {userid} "></error>
+			</sqlselect>
+			<sqlinsert id="ins1" outstack="frmIns1">insert into PROGRAMDETAILS (PROGNAME,PROGDESC,COUNTRY_ISSUE,STATUS)values(:txtnewprogname,:txtprogramdesc,:countryofissue, :txtstatus|STRING )</sqlinsert>
+			<sqldelete id="del1" outstack="frmDel1">delete from PROGRAMDETAILS where PROGNAME=:form1[0].txtnewprogname AND COUNTRY_ISSUE=:form1[0].countryofissue</sqldelete>
+			<sqlupdate id="Upd1" outstack="frmUpd1">update PROGRAMDETAILS set PROGDESC=:txtprogramdesc,COUNTRY_ISSUE=:countryofissue, ISSUERNAME=:issuername|STRING, STATUS=:txtstatus|STRING 	
+							 where PROGNAME=:inp.form1[0].txtnewprogname </sqlupdate>
+		</crud>
+		<dm>
+			<txnproc id="TRANSCODE"></txnproc>
+		</dm>
+		<bl>
+			<buslogic id="ArbritrarySelect" method="testMethod1"> </buslogic>
+		</bl>
+		<anyprocs >
+				<proc id="upd2" xml="input.xml" ><![CDATA[
+				 dfgdfgdfg
+				]]></proc>
+		</anyprocs>
+		<commands>
+		   <cmd name="BusLogic1" opt="buslogic:ArbritrarySelect" instack="form1" result="ajax" processor="bl" />
+		   <cmd name="TXNPROC1" opt="txnproc:TRANSCODE" instack="form1" result="ajax" processor="dm" />
+		   <cmd name="jrpcCmd1" opt="jsonrpc:rpc3" instack="form1" result="ajax"  processor="crud" />
+		   <cmd name="Update" opt="sqlupdate:Upd1" instack="form1" result="ajax"  processor="crud" />
+		   <cmd name="Create" opt="sqlinsert:ins1" instack="form1" result="ajax"  processor="crud" />
+		   <cmd name="merge" opt="jsonrpc:rpc1|selectonload:selqry1" instack="form1" result="ajax|{screenName}"  processor="crud" />
+		   <cmd name="selectlist" opt="sqlupdate:ins2|sqlupdate:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="crud" />
+		   <cmd name="CallAayProc" opt="proc:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="anyproc" />
+		   <bulkcmd name="blTest" opt="buslogic#ArbritrarySelect"  result="ajax"/>
+		</commands>
+	</screen>
+
+	<panels>
+		<panel id="form1">
+			
+			
+			<fields>
+				<field>
+					<sometype name="whereval" dbdatatype="STRING"></sometype>
+				</field>
+				<field>
+					<div id="alertmessage" forid="alertmessage" replace="append">
+						<xpath position="prepend">/html/body</xpath>
+						<rule></rule>
+						<query></query>
+					</div>
+				</field>
+				<field>
+					<input type="text" class="userid" forid="txtnewprogname" value="dfgdfg" name="txtnewprogname" id="txtnewprogname" column="FF0151" dbdatatype="STRING" primarykey="YES" dbcolsize="" mask="" mandatory=""
+						hidden="" label="" replace="modify" >
+						<rule></rule>
+					</input>
+				</field>
+				<field>
+					<input type="text" class="userid" forid="txtprogramdesc" value="dfgdfg" name="txtprogramdesc" id="txtprogramdesc" column="FF0148" dbdatatype="STRING" dbcolsize="" mask="" mandatory=""
+						hidden="" label="" replace="modify">
+						<rule></rule>
+					</input>
+				</field>
+				<field>
+					<select  type="text" class="userid" forid="countryofissue" value="" name="countryofissue" id="countryofissue" column="FF0149" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
+						hidden="" label="" replace="modify">
+						<text>
+						<![CDATA[<select name="countryofissue" maxlength="50" class="field" id="countryofissue">
+				        <option value="" selected="selected">Select</option>
+				        <option value="INDIA">India</option>
+				        <option value="SINGAPORE">Singapore</option>
+				        <option value="AUSTRALIA">Australia</option>
+				        <option value="PHILIPPINES">Philippines</option>
+				        <option value="UAE">UAE</option>
+				        </select>]]> 
+				        </text> 
+						<rule></rule>
+						<query></query>
+					</select>
+				</field>
+			</fields>
+			  
+			<testscriptlet><![CDATA[<@s.property value="selectmonthl"/> ]]></testscriptlet> 
+
+		</panel>
+		<panel id="userpanellist">
+			
+			<fields>
+				<field>
+					<customfield forid="displayuserlist">
+					</customfield>
+				</field>
+			</fields>
+		</panel>
+	</panels>
+</root>

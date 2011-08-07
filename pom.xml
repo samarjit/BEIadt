@@ -14,7 +14,7 @@
 			</resource>
 		</resources>
 	</build>
-    
+     
   
   <dependencies>
   	<dependency>
@@ -73,6 +73,27 @@
     	<groupId>com.google.code.gson</groupId>
     	<artifactId>gson</artifactId>
     	<version>1.4</version>
+    </dependency>
+    <dependency>
+    	<groupId>jaxen</groupId>
+    	<artifactId>jaxen</artifactId>
+    	<version>1.1.1</version>
+    	<exclusions>
+    		<exclusion>
+    			<artifactId>icu4j</artifactId>
+    			<groupId>com.ibm.icu</groupId>
+    		</exclusion>
+    	</exclusions>
+    </dependency>
+    <dependency>
+    	<groupId>net.sf.ehcache</groupId>
+    	<artifactId>ehcache</artifactId>
+    	<version>1.6.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.h2database</groupId>
+    	<artifactId>h2</artifactId>
+    	<version>1.3.150</version>
     </dependency>
   </dependencies>
 </project>
