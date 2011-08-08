@@ -1,5 +1,7 @@
 package com.ycs.struts.mock;
 
+import java.util.ResourceBundle;
+
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class ServletActionContext extends ActionContext{
@@ -15,7 +17,7 @@ public class ServletActionContext extends ActionContext{
 	}
 
 	public String getRealPath(String string) {
-		String path = "D:/workspace/BEIadt/src";
+		String path = ResourceBundle.getBundle("path_config").getString("context.path");//"D:/workspace/BEIadt/src";
 		if(string.contains("classes")){
 		String parts[] = string.split("classes");
 			if(parts.length ==1 )return path;

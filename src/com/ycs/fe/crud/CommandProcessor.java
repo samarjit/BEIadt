@@ -35,7 +35,10 @@ public class CommandProcessor {
 	 * {"row":1,"programname":"TRACARD","txtnewprogname":"TRACARD","txtprogramdesc":"Travel Card Program","issuername":"HSBC Bank","countryofissue":"SINGAPORE",
 	 * "txtstatus":"Modify",
 	 * command:"jrpcCmd1"}],
-	 * “txnrec”:{single:””,multiple:[{aaa:’’},{aaa:’’}]}, bulkcmd:''}
+	 * “txnrec”:{single:””,multiple:[{aaa:’’},{aaa:’’}]}, 
+	 * bulkcmd:'',
+	 * sessionvars: {key:'value',sessionkey:'sessiondata'} //This part is dynamically inserted
+	 * }
 	 * 
 	 * default bulk process is true
 	 * 
@@ -48,7 +51,7 @@ public class CommandProcessor {
 	 * @param inputDTO 
 	 * @return
 	 */
-	public ResultDTO commandProcessor( JSONObject submitdataObj, String screenName){
+	public ResultDTO commandProcessor( JSONObject submitdataObj, String screenName) throws Exception{
 //		JsrpcPojo rpc = new JsrpcPojo();
 		
 		ResultDTO resDTO = null;
@@ -56,17 +59,19 @@ public class CommandProcessor {
 		if(Constants.APP_LAYER == Constants.FRONTEND){	
 			Element rootXml = ScreenMapRepo.findMapXMLRoot(screenName);
 			Node sessionVar = rootXml.selectSingleNode("/root/screen/sessionvars");
+		   if(sessionVar != null){
 			String strSessionVar = sessionVar.getText();
 			Map<String, String> sessionMap = new HashMap<String,String>();
 			if(strSessionVar != null || !"".equals(strSessionVar)){
 				String[] arSessionVar = strSessionVar.split(",");
 				if(arSessionVar.length >0){
 					for (String sessVariable : arSessionVar) {
-						String[] sessionField = sessVariable.split("|");
+							String[] sessionField = sessVariable.trim().split("\\|");
 						String sessionData = "";
 						if(sessionField.length >1){
 							//datatype is defined and it is required
-							sessionData = ServletActionContext.getContext().getSession().get(sessionField[0]);
+								sessionData = (String) ServletActionContext.getContext().getSession().get(sessionField[0]);
+								System.out.println("sessionData:"+sessionData);
 							if(sessionField[1].equals("INT")){
 								sessionData.matches("0-9");
 								
@@ -78,7 +83,7 @@ public class CommandProcessor {
 				}
 			}
 			((JSONObject) submitdataObj).put("sessionvars",sessionMap);
-			
+		   }
 		}
 		InputDTO inputDTO = new InputDTO();
 		inputDTO.setData((JSONObject) submitdataObj);
@@ -110,7 +115,10 @@ public class CommandProcessor {
 	    		
 		    }else{
 		    	
-			    for (String dataSetkey : itr) { //form1, form2 ...
+			    for (String dataSetkey : itr) { //form1, form2 ...skip txnrec,sessionvars
+			    	//skip bulkcmd should be processed earlier, txnrec and sessionvars are just data groups
+			    	if(dataSetkey.equals("bulkcmd") || dataSetkey.equals("txnrec")   ||  dataSetkey.equals("sessionvars"))continue;
+			    	
 			    	JSONArray dataSetJobj = ((JSONObject) submitdataObj).getJSONArray(dataSetkey);
 			    	for (Object jsonRecord : dataSetJobj) { //rows in dataset a Good place to insert DB Transaction
 			    		String cmd = ((JSONObject) jsonRecord).getString("command");
@@ -118,13 +126,14 @@ public class CommandProcessor {
 			    		System.out.println("/root/screen/commands/cmd[@name='"+cmd+"' ] ");
 	//		    		String instack = elmCmd.attributeValue("instack");
 			    		String operation = elmCmd.attributeValue("opt");
-			    		String strProcessor = elmCmd.attributeValue("processor");
-			    		logger  .debug("Command Processor:"+strProcessor+" operation:"+operation);
+//			    		String strProcessor = elmCmd.attributeValue("processor");
+//			    		logger  .debug("Command Processor:"+strProcessor+" operation:"+operation);
 			    		String[] opts = operation.split("\\|"); //get chained commands
 			    		for (String opt : opts) {
 			    			String[] sqlcmd = opt.split("\\:"); //get Id of query 
 			    			String querynodeXpath =  sqlcmd[0]+"[@id='"+sqlcmd[1]+"']"; //Query node xpath
-			    			
+			    			Element processorElm = (Element) rootXml.selectSingleNode("/root/screen/*/"+querynodeXpath+" ");
+			    			String strProcessor = processorElm.getParent().getName();
 			    		    BaseCommandProcessor cmdProcessor =  CommandProcessorResolver.getCommandProcessor(strProcessor);
 			    		    resDTO = cmdProcessor.processCommand(screenName, querynodeXpath, (JSONObject) jsonRecord, inputDTO, resDTO);				
 			    		    //resDTO = rpc.selectData(  screenName,   null, querynodeXpath ,   (JSONObject)jsonRecord);
@@ -142,6 +151,7 @@ public class CommandProcessor {
 			List<String> errors = resDTO.getErrors();
 			if(errors == null)errors = new ArrayList<String>();
 			errors.add("command.processing.feerror");
+			throw new Exception(errors.toString(),e);
 		}
 		return resDTO;
 	}

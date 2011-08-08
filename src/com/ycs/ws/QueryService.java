@@ -58,7 +58,7 @@ public class QueryService<str> {
 	}
 	
 	@WebMethod
-	public String remoteCommandProcessor(String submitdataObj, String screenName){
+	public String remoteCommandProcessor(String submitdataObj, String screenName) throws Exception{
 		String tmpResDTO = "Query Service Error in remoteCommandProcessor";
 		JSONObject submitdata =  JSONObject.fromObject(submitdataObj);
 

@@ -3,6 +3,7 @@ package com.ycs.ws.beclient;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 import javax.xml.ws.WebEndpoint;
@@ -25,42 +26,30 @@ public class QueryServiceService
     private final static URL QUERYSERVICESERVICE_WSDL_LOCATION;
     private final static WebServiceException QUERYSERVICESERVICE_EXCEPTION;
     private final static QName QUERYSERVICESERVICE_QNAME = new QName("http://ws.ycs.com/", "QueryServiceService");
-
+    private final static Logger logger = Logger.getLogger(com.ycs.ws.beclient.QueryServiceService.class.getName());
     static {
         URL url = null;
         WebServiceException e = null;
         try {
             url = new URL("http://localhost:8183/WS/qservice?wsdl");
         } catch (MalformedURLException ex) {
+        	logger.warning("Failed to create URL for the wsdl Location: 'http://localhost:8183/WS/qservice?wsdl', retrying as a local file");
+            logger.warning(e.getMessage());
             e = new WebServiceException(ex);
         }
         QUERYSERVICESERVICE_WSDL_LOCATION = url;
         QUERYSERVICESERVICE_EXCEPTION = e;
     }
 
-    public QueryServiceService() {
+	public QueryServiceService() {
         super(__getWsdlLocation(), QUERYSERVICESERVICE_QNAME);
-    }
-
-    public QueryServiceService(WebServiceFeature... features) {
-        super(__getWsdlLocation(), QUERYSERVICESERVICE_QNAME, features);
-    }
-
-    public QueryServiceService(URL wsdlLocation) {
-        super(wsdlLocation, QUERYSERVICESERVICE_QNAME);
-    }
-
-    public QueryServiceService(URL wsdlLocation, WebServiceFeature... features) {
-        super(wsdlLocation, QUERYSERVICESERVICE_QNAME, features);
     }
 
     public QueryServiceService(URL wsdlLocation, QName serviceName) {
         super(wsdlLocation, serviceName);
     }
 
-    public QueryServiceService(URL wsdlLocation, QName serviceName, WebServiceFeature... features) {
-        super(wsdlLocation, serviceName, features);
-    }
+    
 
     /**
      * 
