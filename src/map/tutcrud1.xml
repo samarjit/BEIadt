@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl" ?>
+<root xsi:noNamespaceSchemaLocation="config.xsd" 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<screen name="TestPage">
+		<htmltemplate>html/TestScreen.html</htmltemplate>
+		<includedjsp> </includedjsp>
+		<callbackclass></callbackclass>
+		<scripts>
+			<scriptinclude>jquery.js,jquery.validate.js,iadtframework.js</scriptinclude>
+			<text>
+		<![CDATA[
+		<script>
+			$(document).ready(function(){
+				     var form1 = document.forms[0];	 
+				    // var ruleobj  = initRule_Callback(rule); //Use this if multiple rule objects are defined extends rule with ruleobj
+				     $(form1).validate(ruleobj);
+				});
+				
+				function formsubmit(){
+				    var form1 = document.forms[0];	
+					alert("hello from formsubmit()");
+					if(!jQuery(form1).valid()){
+						return;
+					}
+				}
+		</script>		
+		]]>
+		
+		</text>
+		</scripts>
+		<stylesheets><styleinclude>main.css</styleinclude></stylesheets>
+		<crud></crud>
+		<dm>
+			<txnproc></txnproc>
+		</dm>
+		<bl>
+			<buslogic></buslogic>
+		</bl>
+		<anyprocs>
+			<proc></proc>
+		</anyprocs>
+		<commands>
+
+		</commands>
+
+	</screen>
+	<panels>
+		<panel>
+			<fields>
+				<field>
+					<input name="userid" forid="userid" id="userid" replace="modify" type="text" value="sss"  >
+						<rule>[{fieldname:"userid",rules:{required:true},messages:{required:"User Id is required"}}]</rule>
+					</input>
+				</field>
+				<field>
+					<input name="username" forid="username" id="username" replace="modify" type="text" value=""  >
+						<rule>[{fieldname:"username",rules:{required:true},messages:{required:"User Name is required"}}]</rule>
+					</input>
+				</field>
+				<field>
+					<select forid="divProgram" id="selProgram" replace="append" >
+					 <text>
+					 <![CDATA[
+					       <select name="country" id="selProgram">
+								<@s.iterator value="list1">
+	 								<option value="<@s.property value="key"/>" ><@s.property value="value"/></option>
+								</@s.iterator>
+								
+						 	</select>
+					 ]]>
+					 
+					 </text>
+					 <query stackid="list1" type="SQL">select PROGNAME ,PROGNAME  from PROGRAMDETAILS </query>
+					</select>
+				</field>
+				<field>
+					<select forid="divIdappend" id="selIdappend" replace="append" >
+					 <query stackid="selIdappend" type="SQL">select PROGNAME ,PROGNAME  from PROGRAMDETAILS </query>
+					</select>
+				</field>
+				<field>
+					<select forid="selIdmodify" id="selIdmodify" replace="modify" >
+					 <query stackid="selIdmodify" type="SQL">select PROGNAME ,PROGNAME  from PROGRAMDETAILS </query>
+					</select>
+				</field>
+			</fields>
+			<button type="submit" replace="modify" forid="submitbutton" id="submitbutton">Submit Button</button>
+			<button type="button" replace="append" forid="submitcontainer" id="submitbutton2">A Button</button>	
+				
+		</panel>
+	</panels>
+</root>

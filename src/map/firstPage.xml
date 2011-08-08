@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<root>
+	<screen>
+		<htmltempalte>
+		
+		</htmltempalte>
+		<includedjsp>
+		
+		</includedjsp>
+		<scripts>
+			<![CDATA[    
+				<@s.head/>
+    			<@sx.head/>
+				<script>
+				function javaScriptFn(){
+				}
+				</script>
+				
+				]]>
+			<scriptinclude>json.js,jquery.js</scriptinclude>
+		</scripts>
+		<stylesheets>
+			<![CDATA[
+				<style>	
+				.userid{
+				 text-decoration:underline;
+				 }
+				</style>
+			]]>	
+				<styleinclude>home.css</styleinclude>	
+		</stylesheets>
+	</screen>
+
+	<panels>
+		<fields>
+			<field>
+				<input type="text" class="userid" forid="userid" value="${testHeader}"
+					column="USER_ID" rulemessage="" dbcolsize="" mask="" mandatory="" hidden="" >
+					<rule></rule>
+					<validation event="onclick" ></validation>
+					<query></query>
+				</input>
+			</field>
+
+			<field>
+				<input type="text" class="password" forid="password"  value="${testFooter}"
+					validationattr="" column="PASSWD" rulemessage="" dbcolsize="" mask="">
+					<rule></rule>
+					<validation></validation>
+					<query></query>
+				</input>
+			</field>
+			<field>
+				<customfield type="datepicker" class=" " forid="dateid" 
+					validationattr="" column="PASSWD" rulemessage="" dbcolsize="" mask="">
+					<!-- will need to experiment to see if dojo tags of struts2 say datepicker can be added? -->
+					<text><![CDATA[<@sx.datetimepicker name="order.date" label="Order Date" displayFormat="dd-MMM-yyyy" />]]></text>
+					<rule></rule>
+					<validation></validation>
+					<query></query>
+				</customfield>
+			</field>
+			<field>
+			<select class="" forid="list" value="${list}"
+					validationattr="" column="PASSWD" rulemessage="" dbcolsize="" mask="">
+					<text><![CDATA[<select name="country"> </select>]]></text>
+					<rule></rule>
+					<validation></validation>
+					<query></query>
+			</select>
+			</field>
+		</fields>
+		<button forid="loginbutton" onclick=""></button>
+		<button forid="reset" onclick=""></button>
+		freemarker start ${testHeader} and ${testFooter}  freenarker end
+	</panels>
+</root>

@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="root" type="rootType"/>
+  <xs:complexType name="scriptsType" mixed="true">
+    <xs:sequence>
+      <xs:element type="xs:string" name="styleinclude" minOccurs="0"/>
+      <xs:element type="xs:string" name="scriptinclude" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="stylesheetsType" mixed="true">
+    <xs:sequence>
+      <xs:element type="xs:string" name="styleinclude" minOccurs="0"/>
+      <xs:element type="xs:string" name="scriptinclude" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="screenType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="xs:string" name="htmltempalte"/>
+      <xs:element type="xs:string" name="includedjsp" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="xs:string" name="callbackclass"/>
+      <xs:element type="scriptsType" name="scripts"/>
+      <xs:element type="stylesheetsType" name="stylesheets"/>
+    </xs:choice>
+    <xs:attribute type="xs:string" name="name"/>
+  </xs:complexType>
+  <xs:complexType name="jsonrpcType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:byte" name="id" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="selectonloadType" mixed="true">
+    <xs:sequence>
+      <xs:element type="countqueryType" name="countquery" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="stackid" use="optional"/>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="countqueryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:byte" name="pagesize"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="sqlselectType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <xs:attribute type="xs:string" name="stackid" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="sqlselectcountType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="refselectid"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="crudType" mixed="true">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="jsonrpcType" name="jsonrpc"/>
+      <xs:element type="selectonloadType" name="selectonload"/>
+      <xs:element type="xs:string" name="savefieldids"/>
+      <xs:element type="sqlselectType" name="sqlselect"/>
+      <xs:element type="xs:string" name="sqlinsert"/>
+      <xs:element type="xs:string" name="sqldelete"/>
+      <xs:element type="sqlselectcountType" name="sqlselectcount"/>
+      <xs:element type="xs:string" name="sqlupdate"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="sometypeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="dbdatatype"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="fieldType">
+    <xs:sequence>
+      <xs:element type="sometypeType" name="sometype" minOccurs="0"/>
+      <xs:element type="divType" name="div" minOccurs="0"/>
+      <xs:element type="inputType" name="input" minOccurs="0"/>
+      <xs:element type="selectType" name="select" minOccurs="0"/>
+      <xs:element type="customfieldType" name="customfield" minOccurs="0"/>
+      <xs:element type="compositefieldType" name="compositefield" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="xpathType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="position" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="divType">
+    <xs:sequence>
+      <xs:element type="xpathType" name="xpath"/>
+      <xs:element type="xs:string" name="rule"/>
+      <xs:element type="xs:string" name="validation" minOccurs="0"/>
+      <xs:element type="xs:string" name="query"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="forid" use="optional"/>
+    <xs:attribute type="xs:string" name="replace" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="inputType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="rule"/>
+      <xs:element type="xs:string" name="validation" minOccurs="0"/>
+      <xs:element type="xs:string" name="query" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+    <xs:attribute type="xs:string" name="class" use="optional"/>
+    <xs:attribute type="xs:string" name="forid" use="optional"/>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="column" use="optional"/>
+    <xs:attribute type="xs:string" name="dbdatatype" use="optional"/>
+    <xs:attribute type="xs:string" name="primarykey" use="optional"/>
+    <xs:attribute type="xs:string" name="dbcolsize" use="optional"/>
+    <xs:attribute type="xs:string" name="mask" use="optional"/>
+    <xs:attribute type="xs:string" name="mandatory" use="optional"/>
+    <xs:attribute type="xs:string" name="hidden" use="optional"/>
+    <xs:attribute type="xs:string" name="label" use="optional"/>
+    <xs:attribute type="xs:string" name="replace" use="optional"/>
+    <xs:attribute type="xs:string" name="validationattr" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="selectType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="text"/>
+      <xs:element type="xs:string" name="rule"/>
+      <xs:element type="xs:string" name="validation" minOccurs="0"/>
+      <xs:element name="query">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute type="xs:string" name="type" use="optional"/>
+              <xs:attribute type="xs:string" name="stackid" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+    <xs:attribute type="xs:string" name="class" use="optional"/>
+    <xs:attribute type="xs:string" name="forid" use="optional"/>
+    <xs:attribute type="xs:string" name="value" use="optional"/>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+    <xs:attribute type="xs:string" name="column" use="optional"/>
+    <xs:attribute type="xs:string" name="dbdatatype" use="optional"/>
+    <xs:attribute type="xs:string" name="dbcolsize" use="optional"/>
+    <xs:attribute type="xs:string" name="mask" use="optional"/>
+    <xs:attribute type="xs:string" name="mandatory" use="optional"/>
+    <xs:attribute type="xs:string" name="hidden" use="optional"/>
+    <xs:attribute type="xs:string" name="label" use="optional"/>
+    <xs:attribute type="xs:string" name="replace" use="optional"/>
+    <xs:attribute type="xs:string" name="validationattr" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="fieldsType">
+    <xs:sequence>
+      <xs:element type="fieldType" name="field" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="buttonType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="forid" use="optional"/>
+        <xs:attribute type="xs:string" name="onclick" use="optional"/>
+        <xs:attribute type="xs:string" name="replace" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="panelType" mixed="true">
+    <xs:sequence>
+      <xs:element type="crudType" name="crud" minOccurs="0"/>
+      <xs:element type="fieldsType" name="fields"/>
+      <xs:element type="buttonType" name="button" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="id" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="customfieldType" mixed="true">
+    <xs:sequence>
+      <xs:element type="xs:string" name="text" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>will need to experiment to see if dojo tags of struts2 like datepicker can be added?</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element type="xs:string" name="rule" minOccurs="0"/>
+      <xs:element type="xs:string" name="validation" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>rule>[{fieldname:"dateid",rules:{required:true},messages:{required: "Dojo Date is mandatory field"}}]&lt;/rule</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="query" minOccurs="0">
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string">
+              <xs:attribute type="xs:string" name="type" use="optional"/>
+              <xs:attribute type="xs:string" name="stackid" use="optional"/>
+            </xs:extension>
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="type" use="optional"/>
+    <xs:attribute type="xs:string" name="class" use="optional"/>
+    <xs:attribute type="xs:string" name="forid" use="optional"/>
+    <xs:attribute type="xs:string" name="validationattr" use="optional"/>
+    <xs:attribute type="xs:string" name="column" use="optional"/>
+    <xs:attribute type="xs:string" name="dbcolsize" use="optional"/>
+    <xs:attribute type="xs:string" name="mask" use="optional"/>
+    <xs:attribute type="xs:string" name="replace" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="queryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <xs:attribute type="xs:string" name="stackid" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="datafieldType">
+        <xs:attribute type="xs:string" name="type"/>
+        <xs:attribute type="xs:string" name="value"/>
+        <xs:attribute type="xs:string" name="name"/>
+        <xs:attribute type="xs:string" name="id"/>
+        <xs:attribute type="xs:string" name="column"/>
+        <xs:attribute type="xs:string" name="forid"/>
+  </xs:complexType>
+  <xs:complexType name="displayfieldType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="type" use="optional"/>
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+        <xs:attribute type="xs:string" name="forid" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="compositefieldType">
+    <xs:sequence>
+      <xs:element type="datafieldType" name="datafield"/>
+      <xs:element type="displayfieldType" name="displayfield" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="xs:string" name="text"/>
+      <xs:element type="xs:string" name="rule"/>
+      <xs:element type="xs:string" name="validation"/>
+      <xs:element type="queryType" name="query"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="type"/>
+    <xs:attribute type="xs:string" name="class"/>
+    <xs:attribute type="xs:string" name="forid"/>
+    <xs:attribute type="xs:string" name="validationattr"/>
+    <xs:attribute type="xs:string" name="column"/>
+    <xs:attribute type="xs:string" name="dbcolsize"/>
+    <xs:attribute type="xs:string" name="mask"/>
+    <xs:attribute type="xs:string" name="replace"/>
+  </xs:complexType>
+  <xs:complexType name="panelsType">
+    <xs:sequence>
+      <xs:element type="panelType" name="panel" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="rootType">
+    <xs:sequence>
+      <xs:element type="screenType" name="screen"/>
+      <xs:element type="panelsType" name="panels"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
