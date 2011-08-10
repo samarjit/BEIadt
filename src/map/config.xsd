@@ -16,6 +16,7 @@
 			<xs:element ref="callbackclass" />
 			<xs:element ref="scripts" />
 			<xs:element ref="stylesheets" />
+			<xs:element name="sessionvars" type="xs:string" minOccurs="0" maxOccurs="1"/>
 			<xs:element ref="crud" />
 			<xs:element ref="dm" />
 			<xs:element ref="bl" />
@@ -65,9 +66,17 @@
       <xs:attribute name="id" type="xs:string"/>
     </xs:complexType>
   </xs:element>
+  
   <xs:element name="button" >
-	<xs:complexType mixed="true">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:restriction base="xs:anyType">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1" />
 	  
+						</xs:restriction>
+					</xs:simpleType>
 	 			<xs:attribute name="forid" use="required" type="xs:string" />
 				<xs:attribute name="onclick"   />
 				<xs:attribute name="id" use="optional" />
@@ -80,8 +89,12 @@
 						</xs:restriction>
 					</xs:simpleType>
 				</xs:attribute>
+	
+				</xs:restriction>
+			</xs:simpleContent>
 	</xs:complexType>
   </xs:element>
+	
   <xs:element name="crud">
     <xs:complexType>
        
@@ -182,9 +195,10 @@
   <xs:element name="dm">
     <xs:complexType  >
        <xs:sequence>
-       	<xs:element name="txnproc"   >
+       	<xs:element name="txnproc" minOccurs="0" maxOccurs="unbounded" >
        		<xs:complexType mixed="true">
        		 <xs:attribute name="id" type="xs:string"></xs:attribute>
+       		  <xs:attribute name="outstack" type="xs:string"></xs:attribute>
        		</xs:complexType>
        	</xs:element>
        </xs:sequence>
@@ -194,9 +208,10 @@
   <xs:element name="bl">
     <xs:complexType >
        <xs:sequence>
-       	<xs:element name="buslogic"  >
+       	<xs:element name="buslogic" minOccurs="0" maxOccurs="unbounded" >
        		<xs:complexType mixed="true">
        		 <xs:attribute name="id" type="xs:string"></xs:attribute>	
+       		 <xs:attribute name="method" type="xs:string"></xs:attribute>	
        		</xs:complexType>
        	</xs:element>
        </xs:sequence>
@@ -206,10 +221,10 @@
   <xs:element name="anyprocs">
   	 <xs:complexType>
   	 	<xs:sequence >
-  	 	<xs:element name="proc" maxOccurs="unbounded" >     		 
+  	 	<xs:element name="proc" maxOccurs="unbounded" minOccurs="0">     		 
 	        <xs:complexType mixed="true">
 	          <xs:attribute name="id" type="xs:string"></xs:attribute>
-	          <xs:attribute name="xml" type="xs:string"></xs:attribute>
+	           <xs:attribute name="outstack" type="xs:string"></xs:attribute>
 	        </xs:complexType>	
        	</xs:element>
        	</xs:sequence>
@@ -244,7 +259,7 @@
   						type="xs:string" />
   					<xs:attribute name="opt" use="required"
   						type="xs:string" />
-  					<xs:attribute name="processor" use="required"
+  					<xs:attribute name="processor" use="optional"
   						type="xs:string" />
   					<xs:attribute name="result" use="required" />
   				</xs:complexType>
@@ -262,6 +277,18 @@
   					<xs:attribute name="result" use="required" />
   				</xs:complexType>
   			</xs:element>
+  			<!-- this is onload -->
+  			<xs:element name="onload" minOccurs="0" maxOccurs="unbounded">
+			<xs:annotation>
+			      <xs:documentation>Tooltip: bulkcmd will get executed once per request</xs:documentation>
+			     </xs:annotation>
+  				<xs:complexType>
+  					<xs:attribute name="name" use="required"
+  						type="xs:string" />
+  					<xs:attribute name="opt" use="required"
+  						type="xs:string" />
+  				</xs:complexType>
+  			</xs:element>
   		</xs:sequence>
   	</xs:complexType>
   </xs:element>
@@ -276,6 +303,7 @@
         <xs:element ref="input"/>
         <xs:element ref="select"/>
         <xs:element ref="sometype"/>
+        <xs:element ref="label" maxOccurs="unbounded"/>
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -346,7 +374,15 @@
       </xs:sequence>
       <xs:attribute name="forid" use="required" type="xs:string"/>
       <xs:attribute name="id" use="required" type="xs:string"/>
-      <xs:attribute name="replace" type="xs:string"/>
+      <xs:attribute ref="replace" use="required"/>
+    </xs:complexType>
+  </xs:element>
+   <xs:element name="label">
+    <xs:complexType>
+      <xs:attribute name="forname" use="required" type="xs:string"/>
+      <xs:attribute name="value" use="required" type="xs:string"/>
+      <xs:attribute name="key" use="required" type="xs:string"/>
+      <xs:attribute ref="replace" use="required"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="xpath">
@@ -417,6 +453,7 @@
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="validationattr"/>
       <xs:attribute name="value" use="optional"/>
+      <xs:attribute name="key" use="optional"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="sometype">

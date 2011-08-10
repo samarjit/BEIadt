@@ -1,6 +1,7 @@
 package com.ycs.ws;
 
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -42,10 +43,13 @@ public class QueryService<str> {
 		InputDTO inpDTO = new InputDTO();
 		inpDTO.setData(jsonsubmitdata1);
 		ServletActionContext.getContext().getValueStack().set("inputDTO", inpDTO);
-		Map<String, String> sessionvars =   inpDTO.getData().getJSONObject("sessionvars");
+		JSONObject sessionvars =   inpDTO.getData().getJSONObject("sessionvars");
 		System.out.println(inpDTO.getData().toString());
-		for (Entry<String, String> itr : sessionvars.entrySet()) {
-			ServletActionContext.getContext().getSession().put(itr.getKey(), itr.getValue());
+		for (Iterator iterator = sessionvars.keys(); iterator.hasNext();) {
+			String sessionkey = (String) iterator.next();
+			String sessionval =  sessionvars.getString(sessionkey);
+			System.out.println("sessionvars getValue :"+sessionval);
+			ServletActionContext.getContext().getSession().put(sessionkey, sessionval);
 		}
 		
 		sl.selectOnLoad(screenName, jsonsubmitdata1 ); 
@@ -66,10 +70,13 @@ public class QueryService<str> {
 		InputDTO inpDTO = new InputDTO();
 		inpDTO.setData(submitdata);
 		ServletActionContext.getContext().getValueStack().set("inputDTO", inpDTO);
-		Map<String, String> sessionvars =   inpDTO.getData().getJSONObject("sessionvars");
-		System.out.println(inpDTO.getData().toString());
-		for (Entry<String, String> itr : sessionvars.entrySet()) {
-			ServletActionContext.getContext().getSession().put(itr.getKey(), itr.getValue());
+		JSONObject sessionvars =   inpDTO.getData().getJSONObject("sessionvars");
+		System.out.println("InputDTO.getData() is "+inpDTO.getData().toString());
+		for (Iterator iterator = sessionvars.keys(); iterator.hasNext();) {
+			String sessionkey = (String) iterator.next();
+			String sessionval =  sessionvars.getString(sessionkey);
+			System.out.println("sessionvars getValue :"+sessionval);
+			ServletActionContext.getContext().getSession().put(sessionkey, sessionval);
 		}
 
 		CommandProcessor processor = new CommandProcessor();

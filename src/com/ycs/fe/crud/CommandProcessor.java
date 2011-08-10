@@ -53,8 +53,8 @@ public class CommandProcessor {
 	 */
 	public ResultDTO commandProcessor( JSONObject submitdataObj, String screenName) throws Exception{
 //		JsrpcPojo rpc = new JsrpcPojo();
-		
-		ResultDTO resDTO = null;
+		logger.debug("Remote command processor");
+		ResultDTO resDTO = new ResultDTO();
 		try{
 		if(Constants.APP_LAYER == Constants.FRONTEND){	
 			Element rootXml = ScreenMapRepo.findMapXMLRoot(screenName);

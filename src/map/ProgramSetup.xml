@@ -29,10 +29,16 @@
 			</text>
 			<styleinclude>some2.css</styleinclude>
 		</stylesheets>
+		<sessionvars>
+			mysessionkey|STRING
+		</sessionvars>
 		<crud>
+			
 			<jsonrpc id="rpc1" outstack="form1">SELECT PROGNAME "txtnewprogname",PROGDESC "txtprogramdesc",ISSUERNAME "issuername", COUNTRY_ISSUE "countryofissue", STATUS "txtstatus" FROM
 				PROGRAMDETAILS
 				where PROGNAME=:whereval|STRING order by 1</jsonrpc>
+			<jsonrpc id="progdetails" outstack="form1">SELECT p.prog_desc "desc", p.issuer_name "issuername", c.country_name "country", p.country "countrycode"  FROM 
+				PROGRAM_SETUP p, country c  where p.country = c.country_code and p.prog_name=:whereval|STRING </jsonrpc>
 			<jsonrpc id="rpc3" outstack="form1"><![CDATA[
 				SELECT PROGNAME "txtnewprogname",PROGDESC "txtprogramdesc",ISSUERNAME "issuername", COUNTRY_ISSUE "countryofissue", STATUS "txtstatus" FROM PROGRAMDETAILS
 				where PROGNAME <> :whereval|STRING order by 1]]>
@@ -43,10 +49,11 @@
 			<selectonload outstack="form2" id="selqry1">SELECT 'LOYCARD' "txtnewprogname" from DUAL </selectonload>
 			<selectonload outstack="form1" id="selqry2">
 				SELECT PROGNAME "txtnewprogname",PROGDESC "txtprogramdesc",ISSUERNAME "issuername" ,COUNTRY_ISSUE "countryofissue", STATUS "txtstatus" FROM PROGRAMDETAILS
-				where PROGNAME is not :inp.form2[0].txtnewprogname order by 1
+				where PROGNAME is not :res.form2[0].txtnewprogname order by 1
 				<countquery pagesize="3">SELECT count('x') from PROGRAMDETAILS where PROGNAME=:form2[0].txtnewprogname </countquery>
 			</selectonload>
-	
+			<selectonload outstack="countryofissue" id="countryofissue">select country_code "txtccode",country_name "txtcname" from country</selectonload>
+			<selectonload outstack="programname" id="programname">select PROG_CODE "txtpmcode", PROG_NAME "txtpmname" from program_setup </selectonload>
 	
 			<sqlselect id="selSpl1" outstack="list1">
 				select USER_ID userid, PASSWD password from USER_MASTER
@@ -54,21 +61,22 @@
 			</sqlselect>
 			<sqlinsert id="ins1" outstack="frmIns1">insert into PROGRAMDETAILS (PROGNAME,PROGDESC,COUNTRY_ISSUE,STATUS)values(:txtnewprogname,:txtprogramdesc,:countryofissue, :txtstatus|STRING )</sqlinsert>
 			<sqldelete id="del1" outstack="frmDel1">delete from PROGRAMDETAILS where PROGNAME=:form1[0].txtnewprogname AND COUNTRY_ISSUE=:form1[0].countryofissue</sqldelete>
-			<sqlupdate id="Upd1" outstack="frmUpd1">update PROGRAMDETAILS set PROGDESC=:txtprogramdesc,COUNTRY_ISSUE=:countryofissue, ISSUERNAME=:issuername|STRING, STATUS=:txtstatus|STRING 	
-							 where PROGNAME=:inp.form1[0].txtnewprogname </sqlupdate>
+			<sqlupdate id="Upd1" outstack="frmUpd1">update PROGRAM_SETUP  set prog_desc =:txtprogramdesc,COUNTRY=:countryofissue, ISSUER_NAME=:issuername|STRING, STATUS=:txtstatus|STRING 	
+							 where PROG_name=:inp.form1[0].txtnewprogname </sqlupdate>
 		</crud>
 		<dm>
-			<txnproc id="TRANSCODE"></txnproc>
+			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }</txnproc>
 		</dm>
 		<bl>
 			<buslogic id="ArbritrarySelect" method="testMethod1"> </buslogic>
 		</bl>
 		<anyprocs >
-				<proc id="upd2" xml="input.xml" ><![CDATA[
-				 dfgdfgdfg
-				]]></proc>
+				<proc id="upd2" outstack="frmUpd1">{'procname':'WS_TEST_PROC','inputparam':[[{'NAME':'sam','EMAIL':'sam@yl.com'},{'NAME':'samarjit','EMAIL':'samarjit@yl.com'}],{'data1':'param2'}],'outputparam':'param3'}</proc>
+				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
+			<cmd name="getpmdetailsdm" opt="txnproc:pmdetails" instack="form1" result="ajax" processor="dm"></cmd>
+			<cmd name="getpmdetails" opt="jsonrpc:progdetails" instack="form1" result="ajax" processor="crud"></cmd>
 		   <cmd name="BusLogic1" opt="buslogic:ArbritrarySelect" instack="form1" result="ajax" processor="bl" />
 		   <cmd name="TXNPROC1" opt="txnproc:TRANSCODE" instack="form1" result="ajax" processor="dm" />
 		   <cmd name="jrpcCmd1" opt="jsonrpc:rpc3" instack="form1" result="ajax"  processor="crud" />
@@ -78,6 +86,7 @@
 		   <cmd name="selectlist" opt="sqlupdate:ins2|sqlupdate:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="crud" />
 		   <cmd name="CallAayProc" opt="proc:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="anyproc" />
 		   <bulkcmd name="blTest" opt="buslogic#ArbritrarySelect"  result="ajax"/>
+		   <onload name="blTest" opt="selectonload:selqry1|selectonload:selqry2|selectonload:programname"  />
 		</commands>
 	</screen>
 
@@ -90,6 +99,19 @@
 					<sometype name="whereval" dbdatatype="STRING"></sometype>
 				</field>
 				<field>
+					<select  type="text" class="userid" forid="programname" value="txtpmname" key="txtpmname" name="programname" id="programname" column="FF0149" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
+						hidden="" label="" replace="modify">
+						<text>
+						<![CDATA[ <select name="programname" id="programname" maxlength="50" class="field" onchange="iadt.copySeltohidden(this,'newprog','txtnewprogname',populateFieldsToModify)">
+						<option value="">Select</option>
+                		<option value="New">New</option>
+                		</select>]]> 
+				        </text> 
+						<rule></rule>
+						<query></query>
+					</select>
+				</field>
+				<field>
 					<div id="alertmessage" forid="alertmessage" replace="append">
 						<xpath position="prepend">/html/body</xpath>
 						<rule></rule>
@@ -97,32 +119,27 @@
 					</div>
 				</field>
 				<field>
-					<input type="text" class="userid" forid="txtnewprogname" value="dfgdfg" name="txtnewprogname" id="txtnewprogname" column="FF0151" dbdatatype="STRING" primarykey="YES" dbcolsize="" mask="" mandatory=""
+					<input type="text" class="userid" forid="txtnewprogname" value="" name="txtnewprogname" id="txtnewprogname" column="FF0151" dbdatatype="STRING" primarykey="YES" dbcolsize="" mask="" mandatory=""
 						hidden="" label="" replace="modify" >
 						<rule></rule>
 					</input>
 				</field>
 				<field>
-					<input type="text" class="userid" forid="txtprogramdesc" value="dfgdfg" name="txtprogramdesc" id="txtprogramdesc" column="FF0148" dbdatatype="STRING" dbcolsize="" mask="" mandatory=""
+					<input type="text" class="userid" forid="txtprogramdesc" value="" name="txtprogramdesc" id="txtprogramdesc" column="FF0148" dbdatatype="STRING" dbcolsize="" mask="" mandatory=""
 						hidden="" label="" replace="modify">
 						<rule></rule>
 					</input>
 				</field>
 				<field>
-					<select  type="text" class="userid" forid="countryofissue" value="" name="countryofissue" id="countryofissue" column="FF0149" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
+					<select  type="text" class="userid" forid="countryofissue" value="txtcname" key="txtccode" name="countryofissue" id="countryofissue" column="FF0149" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
 						hidden="" label="" replace="modify">
 						<text>
 						<![CDATA[<select name="countryofissue" maxlength="50" class="field" id="countryofissue">
 				        <option value="" selected="selected">Select</option>
-				        <option value="INDIA">India</option>
-				        <option value="SINGAPORE">Singapore</option>
-				        <option value="AUSTRALIA">Australia</option>
-				        <option value="PHILIPPINES">Philippines</option>
-				        <option value="UAE">UAE</option>
 				        </select>]]> 
 				        </text> 
 						<rule></rule>
-						<query></query>
+						<query stackid="countryofissue">select country_code "txtccode",country_name "txtcname" from country</query>
 					</select>
 				</field>
 			</fields>
