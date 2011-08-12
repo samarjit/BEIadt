@@ -11,11 +11,13 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
 
-import com.ycs.fe.dto.DataTypeException;
+import com.ycs.exception.BackendException;
+import com.ycs.exception.DataTypeException;
+import com.ycs.exception.QueryParseException;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.PrepstmtDTO;
-import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.PrepstmtDTO.DataType;
+import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.struts.mock.ActionContext;
 
@@ -25,10 +27,11 @@ public class QueryParser{
 	/**
 	 * @param nodeList List<org.dom4j.Element>[in]
 	 * @param hmfielddbtype [out]
+	 * @throws DataTypeException 
 	 * @throws JSONException
 	 * @throws Exception
 	 */
-	public static void populateFieldDBType(List<Element> nodeList, HashMap<String, DataType> hmfielddbtype) throws JSONException, Exception{
+	public static void populateFieldDBType(List<Element> nodeList, HashMap<String, DataType> hmfielddbtype) throws DataTypeException {
 		for (Element nodeelm : nodeList) {
 			String col = nodeelm.attributeValue("column");
 			String fldname = nodeelm.attributeValue("name");
@@ -61,7 +64,7 @@ public class QueryParser{
 	 * @throws QueryParseException 
 	 * @throws Exception
 	 */
-	public static String parseQuery(String updatequery,String panelname,JSONObject jsonObject, PrepstmtDTOArray  arparam, HashMap<String, DataType> hmfielddbtype, InputDTO jsonInput, ResultDTO prevResultDTO) throws DataTypeException, QueryParseException {
+	public static String parseQuery(String updatequery,String panelname,JSONObject jsonObject, PrepstmtDTOArray  arparam, HashMap<String, DataType> hmfielddbtype, InputDTO jsonInput, ResultDTO prevResultDTO) throws BackendException{
 		//Where
 //		String updatewhere = crudnode.selectSingleNode("sqlwhere").getText();
 		String PATTERN = "\\:(inp|res|vs|ses)?\\.?([^,\\s\\|]*)\\|?([^,\\s]*)";//"\\:(\\w*)\\[?(\\d*)\\]?\\.?([^,\\s\\|]*)\\|?([^,\\s]*)";
@@ -76,7 +79,7 @@ public class QueryParser{
 	       int count = 0;
 	       int end = 0;
 	       String parsedquery = "";
-	       
+	    try{   
 	       while(m1.find()) {
 	          
 	          String prop =  m1.group();
@@ -200,6 +203,12 @@ public class QueryParser{
 	       parsedquery += updatequery.substring(end);
 	       updatequery = parsedquery;
 	       logger.debug("Parsed Query:"+ parsedquery);
+	    }catch(QueryParseException e){
+	    	throw new BackendException("error.queryparsing",e);
+	    } catch (DataTypeException e) {
+	    	logger.error("error.queryparsing", e);
+	    	throw new BackendException("error.queryparsing",e);
+		}
 	       return parsedquery;
 	}
 	

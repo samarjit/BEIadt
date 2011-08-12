@@ -5,25 +5,25 @@ import java.util.HashMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.ws.WebServiceException;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
-import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
 
 import repo.txnmap.generated.Root;
 import repo.txnmap.generated.Txn;
 
+import com.ycs.exception.FrontendException;
+import com.ycs.exception.SentenceParseException;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.util.ParseSentenceOgnl;
 import com.ycs.fe.util.ScreenMapRepo;
-import com.ycs.fe.util.SentenceParseException;
 import com.ycs.ws.client.Exception_Exception;
 import com.ycs.ws.client.SPCall;
 import com.ycs.ws.client.SPCallService;
@@ -53,15 +53,12 @@ public class DmCommandProcessor implements BaseCommandProcessor {
 		try {
 //			String resultJsonConf = "{'cmd':'STUCAP','single':{'FF0151':'aaa','FF0148':'bbb','FF01258':'eee'},'multiple':[{'FF9000':111,'FF0151':222,'FF0152':333},{'FF0151':555},{'FF9000':456,'FF0151':765,'FF0152':877}]}";
 			
-			 String pageconfigxml =  ScreenMapRepo.findMapXMLPath(screenName);
-			 org.dom4j.Document document1 = new SAXReader().read(pageconfigxml);
-			org.dom4j.Element rootele = document1.getRootElement();
-			Node crudnode = rootele.selectSingleNode("//dm");
+			Element rootxml = ScreenMapRepo.findMapXMLRoot(screenName);
+			Node crudnode = rootxml.selectSingleNode("/root/screen/dm");
 			Node queryNode = crudnode.selectSingleNode(querynodeXpath);
 			
-		
-			Element rootXml = ScreenMapRepo.findMapXMLRoot(screenName);
-			Node selectSingleNode = rootXml.selectSingleNode(querynodeXpath);
+//			Element rootXml = ScreenMapRepo.findMapXMLRoot(screenName);
+//			Node selectSingleNode = rootXml.selectSingleNode(querynodeXpath);
 			
 			String jsonFromConf = queryNode.getText();
 			String resultJsonConf = ParseSentenceOgnl.parse(jsonFromConf, jsonRecord);
@@ -74,6 +71,7 @@ public class DmCommandProcessor implements BaseCommandProcessor {
 			JSONObject singleData = null;
 			JSONArray multipleData = null;
 			// creating a unique id.
+			
 			// unique id = transaction code.
 			unique += "Henry";
 			unique += "_" + System.currentTimeMillis();
@@ -89,18 +87,6 @@ public class DmCommandProcessor implements BaseCommandProcessor {
 			if (jsonObj.containsKey("multiple"))
 				multipleData = jsonObj.getJSONArray("multiple");
 
-			String xml = "<?xml version='1.0'?>";
-			xml += "<IDCT>";
-			xml += "<TRANS_CODE>" + transcode + "</TRANS_CODE>";
-			xml += "<IDCT_ID>" + application_name + "_" + unique + "</IDCT_ID>";
-			xml += "<DATETIME>" + new Date().toString() + "</DATETIME>";
-			xml += "<NET_ID>" + netId + "</NET_ID>";
-			xml += "<MESSAGE_VER_NO>1.0</MESSAGE_VER_NO>";
-			xml += "<CHANNEL_ID>WEB</CHANNEL_ID>";
-			xml += "<MESSAGE_DIGEST>NO_DATA</MESSAGE_DIGEST>";
-			xml += "<IDCT_STATUS>NO_DATA</IDCT_STATUS>";
-			xml += "<IDCT_ERR_CODE>NO_DATA</IDCT_ERR_CODE>";
-			xml += "<IDCT_MESSAGE_TYPE>01</IDCT_MESSAGE_TYPE>";
 
 			final JAXBContext jc = JAXBContext.newInstance(Root.class);
 			final Root root = (Root) jc.createUnmarshaller().unmarshal(DmCommandProcessor.class.getClassLoader().getResourceAsStream("repo/txnmap/nrow_txnmap.xml"));// new
@@ -122,6 +108,85 @@ public class DmCommandProcessor implements BaseCommandProcessor {
 				}
 			}
 
+//			Document doc = DocumentFactory.getInstance().createDocument();
+//			Element rootele = doc.addElement("IDCT");
+//
+//			rootele.addElement("TRANS_CODE").addText(transcode);
+//			rootele.addElement("IDCT_ID").addText( application_name + "_" + unique);
+//			rootele.addElement("DATETIME").addText(new Date().toString());
+//			rootele.addElement("NET_ID").addText(netId);
+//			rootele.addElement("MESSAGE_VER_NO").addText("1.0");
+//			rootele.addElement("CHANNEL_ID").addText("WEB");
+//			rootele.addElement("MESSAGE_DIGEST").addText("NO_DATA");
+//			rootele.addElement("IDCT_STATUS").addText("NO_DATA");
+//			rootele.addElement("IDCT_ERR_CODE").addText("NO_DATA");
+//			rootele.addElement("IDCT_MESSAGE_TYPE").addText("01");
+//			
+//			if (arSingle != null) {
+//				Element idctdata = rootele.addElement("IDCT_DATA");
+//				for (String columnName : arSingle) {
+//					int index = columnName.indexOf(":");
+//					if (index != -1)
+//						columnName = columnName.substring(0, index);
+//					Object snglDtval = null;
+//					if (singleData != null) {
+//						if (singleData.containsKey(columnName))
+//							snglDtval = singleData.get(columnName);
+//						if (snglDtval != null) {
+//							idctdata.addElement(columnName).addText(snglDtval.toString());
+//						} else {
+//							idctdata.addElement(columnName).addText("NO_DATA");
+//						}
+//					} else {
+//						idctdata.addElement(columnName).addText("NO_DATA");
+//					}
+//				}
+//			}
+//			// Update multiple data in XML
+//			if (arMultiple != null) {
+//				if (multipleData != null) {
+//					for (int i = 0; i < multipleData.size(); i++) {
+//						Element idctdata = rootele.addElement("IDCT_DATA");
+//						for (String columnName : arMultiple) {
+//							int index = columnName.indexOf(":");
+//							if (index != -1)
+//								columnName = columnName.substring(0, index);
+//							String mltplDtValue = null;
+//
+//							if (multipleData.getJSONObject(i).containsKey(columnName)) {
+//								mltplDtValue = multipleData.getJSONObject(i).getString(columnName);
+//							}
+//							if (mltplDtValue != null) {
+//								idctdata.addElement(columnName).addText(mltplDtValue);
+//							} else {
+//								idctdata.addElement(columnName).addText("NO_DATA");
+//							}
+//
+//						} // end for
+//					} // end for
+//				} else {
+//					Element idctdata = rootele.addElement("IDCT_DATA");
+//					for (String columnName : arMultiple) {
+//						int index = columnName.indexOf(":");
+//						if (index != -1)
+//							columnName = columnName.substring(0, index);
+//						idctdata.addElement(columnName).addText("NO_DATA");
+//					}
+//				}
+//			}
+			
+			String xml = "<?xml version='1.0'?>";
+			xml += "<IDCT>";
+			xml += "<TRANS_CODE>" + transcode + "</TRANS_CODE>";
+			xml += "<IDCT_ID>" + application_name + "_" + unique + "</IDCT_ID>";
+			xml += "<DATETIME>" + new Date().toString() + "</DATETIME>";
+			xml += "<NET_ID>" + netId + "</NET_ID>";
+			xml += "<MESSAGE_VER_NO>1.0</MESSAGE_VER_NO>";
+			xml += "<CHANNEL_ID>WEB</CHANNEL_ID>";
+			xml += "<MESSAGE_DIGEST>NO_DATA</MESSAGE_DIGEST>";
+			xml += "<IDCT_STATUS>NO_DATA</IDCT_STATUS>";
+			xml += "<IDCT_ERR_CODE>NO_DATA</IDCT_ERR_CODE>";
+			xml += "<IDCT_MESSAGE_TYPE>01</IDCT_MESSAGE_TYPE>";
 			// update single data in XML
 			if (arSingle != null) {
 				xml += "<IDCT_DATA>";
@@ -179,6 +244,8 @@ public class DmCommandProcessor implements BaseCommandProcessor {
 				}
 			}
 			xml += "</IDCT>";
+			
+//			String xml = doc.asXML();
 			xml = String.format("%06d", xml.length())+xml;
 			logger.debug("Input Xml :  " + xml);
 			System.out.println(xml);
@@ -186,21 +253,22 @@ public class DmCommandProcessor implements BaseCommandProcessor {
 			data.put("DMResult", outputxml);
 			resultDTO.setData(data);
 			logger.debug("Output Xml :  " + outputxml);
+		} catch (SentenceParseException e) {
+			resultDTO.addError("error.sentenceparse");
+			logger.error("error.sentenceparse", e);
 		} catch (JSONException e) {
-			logger.debug("submitdata parsing error", e);
-			e.printStackTrace();
+			resultDTO.addError("error.jsonexception");
+			logger.error("error.jsonexception", e);
+		} catch (WebServiceException e ){
+			resultDTO.addError("error.webservice");
+			logger.error("error.webservice", e);
 		} catch (JAXBException e) {
-			logger.debug("submitdata parsing error", e);
-			e.printStackTrace();
-		} catch (SentenceParseException e1) {
-			e1.printStackTrace();
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			resultDTO.addError("error.jaxbexception");
+			logger.error("error.jaxbexception", e);
+		} catch (FrontendException e) {
+			resultDTO.addError("error.readingxmlfile");
+			logger.error("error.readingxmlfile", e);
 		}
-
-		// inputStream = new StringBufferInputStream(resultHtml );
-
 		return resultDTO;
 	}
 

@@ -25,10 +25,10 @@ private Logger logger = Logger.getLogger(getClass());
 	    return update(screenName, panelname,"sqlupdate", jsonObject, jsonInput, prevResultDTO);
 	}
 	public ResultDTO update(String screenName, String panelname,String querynode, JSONObject jsonObject, InputDTO jsonInput, ResultDTO prevResultDTO) {
-		    String pageconfigxml =  ScreenMapRepo.findMapXMLPath(screenName);
 			String parsedquery = "";
 			ResultDTO queryres = new ResultDTO();
 			try {
+				String pageconfigxml =  ScreenMapRepo.findMapXMLPath(screenName);
 				org.dom4j.Document document1 = new SAXReader().read( pageconfigxml);
 				org.dom4j.Element root = document1.getRootElement();
 				Node crudnode = root.selectSingleNode("//crud");

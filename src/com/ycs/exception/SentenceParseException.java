@@ -1,4 +1,4 @@
-package com.ycs.fe.util;
+package com.ycs.exception;
 
 public class SentenceParseException extends Exception {
 

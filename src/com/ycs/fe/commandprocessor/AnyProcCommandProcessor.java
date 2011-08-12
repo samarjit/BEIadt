@@ -4,23 +4,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.xml.ws.WebServiceException;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
 
+import com.ycs.exception.BackendException;
+import com.ycs.exception.FrontendException;
+import com.ycs.exception.SentenceParseException;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.util.ParseSentenceOgnl;
 import com.ycs.fe.util.ScreenMapRepo;
-import com.ycs.fe.util.SentenceParseException;
 import com.ycs.ws.client.SPCall;
 import com.ycs.ws.client.SPCallService;
 
@@ -37,14 +39,12 @@ public class AnyProcCommandProcessor implements BaseCommandProcessor {
 //		 "{'procname':'WS_TEST_PROC','inputparam':[[{'NAME':'sam','EMAIL':'sam@yl.com'},{'NAME':'samarjit','EMAIL':'samarjit@yl.com'}],{'data1':'param2'}],'outputparam':'param3'}";
 
 		try {
-			 String pageconfigxml =  ScreenMapRepo.findMapXMLPath(screenName);
-			 org.dom4j.Document document1 = new SAXReader().read(pageconfigxml);
-			org.dom4j.Element root = document1.getRootElement();
+//			 String pageconfigxml =  ScreenMapRepo.findMapXMLPath(screenName);
+//			 org.dom4j.Document document1 = new SAXReader().read(pageconfigxml);
+//			org.dom4j.Element root = document1.getRootElement();
+			Element root = ScreenMapRepo.findMapXMLRoot(screenName);
 			Node crudnode = root.selectSingleNode("//anyprocs");
 			Node queryNode = crudnode.selectSingleNode(querynodeXpath);
-			
-			Element rootXml = ScreenMapRepo.findMapXMLRoot(screenName);
-			Node selectSingleNode = rootXml.selectSingleNode(querynodeXpath);
 			
 			String jsonFromConf = queryNode.getText();
 			System.out.println("JsonRecord in any proc call :"+jsonRecord);
@@ -80,11 +80,20 @@ public class AnyProcCommandProcessor implements BaseCommandProcessor {
 			resultDTO.setData(data);
 			
 		} catch (SentenceParseException e) {
-			e.printStackTrace();
+			resultDTO.addError("error.sentenceparse");
+			logger.error("error.sentenceparse", e);
 		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
+			resultDTO.addError("error.jsonexception");
+			logger.error("error.jsonexception", e);
+		} catch (WebServiceException e ){
+			resultDTO.addError("error.webservice");
+			logger.error("error.webservice", e);
+//		} catch (DocumentException e) {
+//			resultDTO.addError("error.documentException");
+//			logger.error("error.documentException", e);
+		} catch (FrontendException e) {
+			resultDTO.addError("error.readingxmlfile");
+			logger.error("error.readingxmlfile", e);
 		}
 		return resultDTO;
 	}
@@ -175,7 +184,7 @@ public class AnyProcCommandProcessor implements BaseCommandProcessor {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws BackendException {
 
 		String json = "{'procname':'WS_TEST_PROC','inputparam':[[{'name':'AAA','email':'aaa@f'},{'name':'AAA','email':'aaa@f'}],{'data1':'2'},['aaaa','bbbb','cccc'],{'name':'AAA','email':'aaa@f'}],'outputparam':['param3','param4']}";
 		// json =

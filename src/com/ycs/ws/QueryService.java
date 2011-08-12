@@ -1,24 +1,19 @@
 package com.ycs.ws;
 
-import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
-import net.sf.json.JSON;
 import net.sf.json.JSONObject;
 
+import com.ycs.exception.FrontendException;
 import com.ycs.fe.crud.CommandProcessor;
 import com.ycs.fe.crud.SelectOnLoad;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.struts.mock.ActionContext;
 import com.ycs.struts.mock.ServletActionContext;
-import com.ycs.struts.mock.ValueStack;
 
  
 @WebService
@@ -45,6 +40,7 @@ public class QueryService<str> {
 		ServletActionContext.getContext().getValueStack().set("inputDTO", inpDTO);
 		JSONObject sessionvars =   inpDTO.getData().getJSONObject("sessionvars");
 		System.out.println(inpDTO.getData().toString());
+		if(!sessionvars.isNullObject())
 		for (Iterator iterator = sessionvars.keys(); iterator.hasNext();) {
 			String sessionkey = (String) iterator.next();
 			String sessionval =  sessionvars.getString(sessionkey);
@@ -52,7 +48,11 @@ public class QueryService<str> {
 			ServletActionContext.getContext().getSession().put(sessionkey, sessionval);
 		}
 		
-		sl.selectOnLoad(screenName, jsonsubmitdata1 ); 
+		try {
+			sl.selectOnLoad(screenName, jsonsubmitdata1 );
+		} catch (FrontendException e) {
+			e.printStackTrace();
+		} 
 		
 		tmpResDTO = (String) ActionContext.getContext().getValueStack().getContext().get("resDTO");
 		

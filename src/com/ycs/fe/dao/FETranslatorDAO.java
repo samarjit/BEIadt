@@ -14,11 +14,12 @@ import net.sf.json.JSONSerializer;
 
 import org.apache.log4j.Logger;
 
+import com.ycs.exception.BackendException;
+import com.ycs.exception.SentenceParseException;
+import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
-import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.util.ParseSentenceOgnl;
-import com.ycs.fe.util.SentenceParseException;
 import com.ycs.struts.mock.ActionContext;
 import com.ycs.struts.mock.ValueStack;
 
@@ -32,8 +33,9 @@ public class FETranslatorDAO {
 	 * @param sqlquery or queryid value which will be used for lookup
 	 * @param stackid contains the value stack key against which value is going to be stored
 	 * @param type can be SQL for normal sql or QUERYID for referenced queries from QUERY_TABLE 
+	 * @throws BackendException 
 	 */
-	public void executequery(String sqlquery, String stackid, String type) {
+	public void executequery(String sqlquery, String stackid, String type) throws BackendException {
 		ValueStack stack = ActionContext.getContext().getValueStack();
 		DBConnector dbconn = new DBConnector();
 		if( "SQL".equals(type)){
@@ -51,17 +53,24 @@ public class FETranslatorDAO {
 					query = crs.getString("QUERY");
 				}
 				logger.debug("Query found ="+query);
-				if(query == null || query.length() ==0)throw new Exception("QueryID #"+sqlquery+"# not found");
+				if(query == null || query.length() ==0){
+					logger.error("QueryID #"+sqlquery+"# not found");
+					throw new BackendException("Query Not Found");
+				}
 				
 				sqlquery = query;
-			} catch (Exception e) {
-				logger.debug("DAO Exception QUERY retreive failure by QUERYID("+sqlquery+"):",e);
+			} catch (SQLException e) {
+				logger.error("DAO Exception QUERY retreive failure by QUERYID("+sqlquery+"):",e);
+				throw new BackendException("error.SelectQueryFailed",e);
+			} catch (BackendException e) {
+				throw new BackendException("error.SelectQueryFailed",e);
 			} finally {
 				if (crs != null) {
 					try {
 						crs.close();
 					} catch (SQLException e1) {
-						logger.debug("DAO Exception closing connection",e1);
+						logger.error("DAO Exception closing resultset connection",e1);
+						//throw new BackendException("error.resultsetCloseConnection");
 					}
 					crs = null;
 				}
@@ -94,14 +103,18 @@ public class FETranslatorDAO {
 						values.put("value",crs.getString(1));
 					}
 				}
-			} catch (Exception e) {
-				logger.debug("DAO Exception:"+e);
+			} catch (SQLException e) {
+				logger.error("Exception occurred in accessing ResultSet",e);
+				throw new BackendException("error.SelectQueryFailed",e);
+			} catch (BackendException e) {
+				throw new BackendException("error.SelectQueryFailed",e);
 			} finally {
 				if (crs != null) {
 					try {
 						crs.close();
 					} catch (SQLException e1) {
-						e1.printStackTrace();
+						logger.error("DAO Exception closing resultset connection",e1);
+						//throw new BackendException("error.resultsetCloseConnection");
 					}
 					crs = null;
 				}
@@ -168,15 +181,22 @@ public class FETranslatorDAO {
 					 //return resultDTO; ? how it worked before , coz' even then Invalid query came!
 				}
 				
-			} catch (Exception e) {
-				logger.debug("DAO Exception:"+e);
+			} catch (SQLException e) {
+				logger.error("Accessing Result set"+e);
 				if(jsonObject !=null)
 					try {
 						text = ParseSentenceOgnl.parse(errorTemplate, jsonObject);
 					} catch (SentenceParseException e1) {
-						e1.printStackTrace();
+						logger.error("error.parsingerrortemplate", e1);
 					}
 				retval = "ERROR:"+e.getLocalizedMessage()+"|"+text;
+				resultDTO.addError("error.QueryExecutionFailed");
+			} catch (SentenceParseException e) {
+				logger.error("Exception occured in parsing", e);
+				resultDTO.addError("error.QueryExecutionFailed");
+			} catch (BackendException e) {
+				 resultDTO.addError("error.QueryExecutionFailed");
+				//throw new BackendException("error.SelectQueryFailed",e);
 			} finally {
 				if (crs != null) {
 					try {
@@ -215,7 +235,7 @@ public class FETranslatorDAO {
 	}
 
 
-	public int executeCountQry(String screenName, String sqlquery, String panelname, PrepstmtDTOArray prepar) {
+	public int executeCountQry(String screenName, String sqlquery, String panelname, PrepstmtDTOArray prepar) throws BackendException {
 		DBConnector dbconn = new DBConnector();
 		int returncount = -1;
 		if(sqlquery!= null && sqlquery.trim().length() >0 ){
@@ -239,14 +259,16 @@ public class FETranslatorDAO {
 					 return -1;
 				}
 				
-			} catch (Exception e) {
+			} catch (SQLException e) {
 				logger.debug("DAO Exception:"+e);
+			} catch (BackendException e) {
+				throw new BackendException("error.CountQueryFailed",e);
 			} finally {
 				if (crs != null) {
 					try {
 						crs.close();
 					} catch (SQLException e1) {
-						e1.printStackTrace();
+						logger.error("Exception occurred in closing resultset", e1);
 					}
 					crs = null;
 				}

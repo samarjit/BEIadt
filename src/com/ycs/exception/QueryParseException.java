@@ -1,4 +1,4 @@
-package com.ycs.fe.crud;
+package com.ycs.exception;
 
 public class QueryParseException extends Exception {
 

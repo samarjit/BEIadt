@@ -13,6 +13,9 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.ycs.struts.mock.ServletActionContext;
+import com.ycs.exception.BackendException;
+import com.ycs.exception.FrontendException;
+import com.ycs.fe.cache.AppCacheManager;
 
  
  
@@ -25,20 +28,34 @@ public class ScreenMapRepo {
 	 * This returns the mappings of screenName to XML config
 	 * @param scrName
 	 * @return path of mapping XML
+	 * @throws BackendException 
 	 */
-	public static String findMapXMLPath(String scrName){
+	public static String findMapXMLPath(String scrName) throws FrontendException{
 		String path = null;
-		String screenpath = ServletActionContext.getServletContext().getRealPath("WEB-INF/classes/map"); 
 		
 //		InputStream scrxml = ScreenMapRepo.class.getResourceAsStream("/screenmap.xml");
 
 
 		Document doc;
 		try {
+			Element root;
+			
+			net.sf.ehcache.Element scrXmlFromCache = AppCacheManager.getElementFromCache("xmlcache", "scrxmlroot");
+					
+			if(scrXmlFromCache == null){
+				String screenpath = ServletActionContext.getServletContext().getRealPath("WEB-INF/classes/map");
 			InputStream scrxml = new BufferedInputStream(new FileInputStream(screenpath+"\\screenmap.xml"));
 		
 			doc = new SAXReader().read(scrxml);
-			Element root = doc.getRootElement();
+				root = doc.getRootElement();
+				System.out.println("xmlcache -> scrxmlroot cache miss");
+				AppCacheManager.putElementInCache("xmlcache", "scrxmlroot", root);
+			}else{
+				root = (Element) scrXmlFromCache.getObjectValue();
+				System.out.println("xmlcache -> scrxmlroot cache hit");
+			}
+			
+			
 			Element n = (Element) root.selectSingleNode("screen[@name='"+scrName+"']");
 			if(n == null){
 				logger.debug("Mapping of <screen name="+scrName+" /> is not defined in screenmap.xml!");
@@ -52,27 +69,71 @@ public class ScreenMapRepo {
 			path = f.getAbsolutePath();
 			
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			logger.error("Reading xmlDocument using SAXReader", e);
+			throw new FrontendException("error.readingScreenMapXML",e);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error("ScreenMap. xml file not found.",e);
+			throw new FrontendException("error.readingScreenMapXML",e);
 		}
 
 		return path;
 	}
 	
-	public static Element findMapXMLRoot(String scrName){
-		String path = findMapXMLPath(scrName);
+	public static Element findMapXMLRoot(String scrName) throws FrontendException{
 		Element root = null;
+		String path = findMapXMLPath(scrName);
 		try {
+			net.sf.ehcache.Element scrXmlFromCache = AppCacheManager.getElementFromCache("xmlcache", scrName);
+				
+			if(scrXmlFromCache == null){
+		
 			Document doc = new SAXReader().read(path);
 			root = doc.getRootElement();
+				System.out.println("xmlcache -> "+scrName+" cache miss");
+				AppCacheManager.putElementInCache("xmlcache", scrName, root);
+			}else{
+				root = (Element) scrXmlFromCache.getObjectValue();	
+				System.out.println("xmlcache -> "+scrName+" cache hit");
+			}
 		} catch (DocumentException e) {
-			logger.debug("XML Load Exception path="+path+" ScreenName="+scrName);
+			logger.error("XML Load Exception path="+path+" ScreenName="+scrName);
+			throw new FrontendException("error.loadxml",e);
 		}
 		return root;
 	}
 	
-	public static void main(String[] args) {
+	public static String findScrNameFromScreenName(String mappingxml){
+		Document doc;
+		String screenName = null;
+		try {
+			Element root;
+		net.sf.ehcache.Element scrXmlFromCache = AppCacheManager.getElementFromCache("xmlcache", "scrxmlroot");
+			
+		if(scrXmlFromCache == null){
+			String screenpath = ServletActionContext.getServletContext().getRealPath("WEB-INF/classes/map");
+			InputStream scrxml = new BufferedInputStream(new FileInputStream(screenpath+"\\screenmap.xml"));
+		
+			doc = new SAXReader().read(scrxml);
+			root = doc.getRootElement();
+			System.out.println("xmlcache -> scrxmlroot cache miss");
+			AppCacheManager.putElementInCache("xmlcache", "scrxmlroot", root);
+		}else{
+			root = (Element) scrXmlFromCache.getObjectValue();	
+			System.out.println("xmlcache -> scrxmlroot cache hit");
+		}
+		
+		
+		Element n = (Element) root.selectSingleNode("screen[@mappingxml='"+mappingxml+"']");
+		screenName = n.attributeValue("name");
+		}catch (DocumentException e) {
+			logger.debug("XML Load Exception  mappingxml="+mappingxml);
+		} catch (FileNotFoundException e) {
+			logger.debug("File not found",e);
+		}
+		return screenName;
+	}
+	
+	public static void main(String[] args) throws FrontendException {
 		System.out.println(ScreenMapRepo.findMapXMLPath("ProgramSetup"));
 	}
 }

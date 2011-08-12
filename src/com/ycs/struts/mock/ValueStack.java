@@ -3,10 +3,10 @@ package com.ycs.struts.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ycs.fe.crud.QueryParseException;
-
 import ognl.Ognl;
 import ognl.OgnlException;
+
+import com.ycs.exception.QueryParseException;
 
 public class ValueStack {
 	Map<String, Object> root = new HashMap<String, Object>();

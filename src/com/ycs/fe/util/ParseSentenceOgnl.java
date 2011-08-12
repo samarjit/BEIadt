@@ -10,6 +10,8 @@ import ognl.OgnlException;
 
 import org.apache.log4j.Logger;
 
+import com.ycs.exception.SentenceParseException;
+
 public class ParseSentenceOgnl {
 	private static Logger logger = Logger.getLogger(ParseSentenceOgnl.class);
 
@@ -89,7 +91,7 @@ public class ParseSentenceOgnl {
 
 		} catch (OgnlException e) {
 			e.printStackTrace();
-			throw new SentenceParseException("OgnlException...");
+			throw new SentenceParseException("OgnlException...",e); //This line was removed in a later version, why?
 		}
 
 		return parsedresult;

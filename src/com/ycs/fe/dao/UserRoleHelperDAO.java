@@ -6,16 +6,19 @@ import java.util.List;
 
 import javax.sql.rowset.CachedRowSet;
 
-import com.ycs.fe.dto.PrepstmtDTOArray;
+import org.apache.log4j.Logger;
+
+import com.ycs.exception.BackendException;
 import com.ycs.fe.dto.PrepstmtDTO.DataType;
+import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.user.Role;
 import com.ycs.user.RoleRightsMap;
 import com.ycs.user.Task;
 
 public class UserRoleHelperDAO {
+	private Logger logger = Logger.getLogger(UserRoleHelperDAO.class);
  
-	  
-	public List<Role> getRolesForUser(String userId){
+	public List<Role> getRolesForUser(String userId) throws BackendException {
 		DBConnector db = new DBConnector();
 		
 		String qry = "select roleid from user_role_map where userid=?";
@@ -33,20 +36,24 @@ public class UserRoleHelperDAO {
 				roleList.add(tmpRole);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("error.accessresultset", e);
+			throw new BackendException("error.accessresultset", e);
+		} catch (BackendException e) {
+			throw new BackendException("error.dbqueryFailed", e);
 		}finally{
 			try {
 				if(crs!=null){
 					crs.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error("error.closeResultset", e);
+				//throw new BackendException("error.closeResultset", e);
 			}
 		}
 		return roleList;
 	}
 	
-	public RoleRightsMap getTaskList(String roleId){
+	public RoleRightsMap getTaskList(String roleId) throws BackendException {
 		DBConnector db = new DBConnector();
 		RoleRightsMap roletask = new RoleRightsMap();
 		List<Task> tasklist = new ArrayList<Task>();
@@ -62,20 +69,25 @@ public class UserRoleHelperDAO {
 				tasklist.add(task);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("error.accessresultset", e);
+			throw new BackendException("error.accessresultset", e);
+		} catch (BackendException e) {
+			throw new BackendException("error.dbqueryFailed", e);
 		}finally{
 			try {
 				if(crs!=null){
 					crs.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error("error.closeResultset", e);
+				//throw new BackendException("error.closeResultset", e);
 			}
 		}
 		roletask.setRoleId(roleId);
 		roletask.setTasks(tasklist);
 		return roletask;
 	}
+
 	public static void main(String[] args) {
 
 	}

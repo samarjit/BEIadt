@@ -99,7 +99,7 @@ public class BusinessLogicFactory {
 		List<Element> n =  root.selectNodes("screen");
 		
 		Cache blcache = new Cache(BLCACHE, 5000, false, false, 5, 2);
-		AppCacheManager.putInCache( blcache);
+		AppCacheManager.addCache( blcache);
 		if(n != null){
 			 for (Element elm : n) {
 				 path = elm.attributeValue("mappingxml");

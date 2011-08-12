@@ -13,9 +13,9 @@ import org.dom4j.io.SAXReader;
 import com.ycs.fe.dao.FETranslatorDAO;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.PrepstmtDTO;
+import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
-import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.util.ScreenMapRepo;
 import com.ycs.struts.mock.ActionContext;
 import com.ycs.struts.mock.ServletActionContext;
@@ -30,11 +30,11 @@ private Logger logger = Logger.getLogger(getClass());
 	public ResultDTO selectData(String screenName, String panelname,String querynode, JSONObject jsonObject, InputDTO jsonInput, ResultDTO prevResultDTO) {
 		 
 		 
-		    String pageconfigxml =  ScreenMapRepo.findMapXMLPath(screenName);
 			String tplpath = ServletActionContext.getServletContext().getRealPath("WEB-INF/classes/map");
 			String parsedquery = "";
 			ResultDTO resultDTO = new ResultDTO();
 			try {
+				String pageconfigxml =  ScreenMapRepo.findMapXMLPath(screenName);
 				org.dom4j.Document document1 = new SAXReader().read(pageconfigxml);
 				org.dom4j.Element root = document1.getRootElement();
 				Node crudnode = root.selectSingleNode("//crud");

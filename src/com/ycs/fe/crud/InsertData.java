@@ -13,9 +13,9 @@ import org.dom4j.io.SAXReader;
 import com.ycs.fe.dao.FETranslatorDAO;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.PrepstmtDTO;
+import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
-import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.util.ScreenMapRepo;
 
 public class InsertData {
@@ -27,10 +27,10 @@ private Logger logger = Logger.getLogger(getClass());
 	
 	public ResultDTO insert(String screenName, String panelname,String querynode, JSONObject jsonObject, InputDTO jsonInput, ResultDTO prevResultDTO) {
 		
-			String xmlconfigfile =  ScreenMapRepo.findMapXMLPath(screenName);
 			String parsedquery = "";
 			ResultDTO resultDTO = new ResultDTO();
 			try {
+				String xmlconfigfile =  ScreenMapRepo.findMapXMLPath(screenName);
 				org.dom4j.Document document1 = new SAXReader().read(xmlconfigfile);
 				org.dom4j.Element root = document1.getRootElement();
 				Node crudnode = root.selectSingleNode("//crud");

@@ -6,19 +6,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 public class ResultDTO {
 
 private List<String> messages;
 private List<String> errors;
 private HashMap<String, Object>  data;
-private HashMap<String,HashMap<String,Integer>> pagination; //{currentpage:,totalpage:,pagesize:}
+private Map<String,Map<String,Integer>> pagination; //{currentpage:,totalpage:,pagesize:}
  
 
 public ResultDTO() {
 	data = new HashMap<String,Object>();
 	errors = new ArrayList<String>();
 	messages = new ArrayList<String>();
-	pagination = new HashMap<String, HashMap<String,Integer>>();
+	pagination = new HashMap<String, Map<String,Integer>>();
 	HashMap<String, Integer> hm = new HashMap<String, Integer>();
 	hm.put("currentpage",1);
 	hm.put("totalrec",1);
@@ -41,8 +43,8 @@ public void addMessage(String m){
 
 
 public void setPageDetails(String panelname,int currentpage, int totalpages, int pagesize) {
-	 if(pagination ==null)pagination = new HashMap<String, HashMap<String,Integer>>();
-	 HashMap<String, Integer> hm = pagination.get(panelname);
+	 if(pagination ==null)pagination = new HashMap<String, Map<String,Integer>>();
+	 Map<String, Integer> hm = pagination.get(panelname);
 	 if(hm != null ){
 		 hm.put("currentpage",currentpage);
 		 hm.put("totalrec",totalpages);
@@ -75,10 +77,10 @@ public void setData(HashMap<String, Object>  jobj) {
 	this.data = jobj;
 }
 
-private void setPagination(HashMap<String, HashMap<String, Integer>> pagination) {
+private void setPagination(Map<String, Map<String, Integer>> pagination) {
 	this.pagination = pagination;
 }
-public HashMap<String, HashMap<String, Integer>> getPagination() {
+public Map<String, Map<String, Integer>> getPagination() {
 	return pagination;
 }
 
@@ -96,7 +98,7 @@ public void merge(ResultDTO tempDTO){
 	
 
 	HashMap<String, Object> tempdata = tempDTO.getData();
-	HashMap<String, HashMap<String, Integer>> temppagination = tempDTO.getPagination();
+	Map<String, Map<String, Integer>> temppagination = tempDTO.getPagination();
 	for (String keyi : tempdata.keySet()) {
 		Object val = tempdata.get(keyi);
 		Object thisdataval = null;
@@ -114,6 +116,22 @@ public void merge(ResultDTO tempDTO){
 	errors.addAll(tempDTO.getErrors());
 	messages.addAll(tempDTO.getMessages());
 	pagination.putAll(tempDTO.getPagination());
+}
+
+public static ResultDTO fromJsonString(JSONObject resDTOjson){
+	ResultDTO tempDTO = new ResultDTO();
+	 HashMap<String,Object> tmpHm = new HashMap<String, Object>();
+	 JSONObject data1 = resDTOjson.getJSONObject("data");
+	 tmpHm.putAll(data1);
+	 tempDTO.setData(tmpHm);
+	 tempDTO.setErrors(resDTOjson.getJSONArray("errors"));
+	 tempDTO.setMessages(resDTOjson.getJSONArray("messages"));
+	 Map<String, Map<String,Integer>> pagination =   (Map<String, Map<String, Integer>>) resDTOjson.getJSONObject("pagination");
+	 System.out.println(pagination);
+	 tempDTO.setPagination(pagination);
+	 
+	return tempDTO;
+	
 }
 
 }
