@@ -130,26 +130,26 @@ public class SelectOnLoad {
 				
 				/////command onload ////
 				Element onloadElm = (Element) root.selectSingleNode("/root/screen/commands/onload");
-				String commandChain = onloadElm.attributeValue("opt");
-				String[] opts = commandChain.split("\\|");
 				ResultDTO resultDTO = new ResultDTO();
-				InputDTO inputDTO = new InputDTO();
-				inputDTO.setData(jsonsubmitdata);
-				
-				
-				
-				for (String opt : opts) {
-	    			String[] sqlcmd = opt.split("\\:"); //get Id of query 
-	    			String querynodeXpath =  sqlcmd[0]+"[@id='"+sqlcmd[1]+"']"; //Query node xpath
-	    			Element processorElm = (Element) root.selectSingleNode("/root/screen/*/"+querynodeXpath+" ");
-	    			String strProcessor = processorElm.getParent().getName();
-	    			String outstack = processorElm.attributeValue("outstack");
-	    		    BaseCommandProcessor cmdProcessor =  CommandProcessorResolver.getCommandProcessor(strProcessor);
-					resultDTO = cmdProcessor.processCommand(screenName1, querynodeXpath, null, inputDTO, resultDTO);				
-//					if(outstack != null && !"".equals(outstack))
-//						outstackList.add(outstack);
-					//resDTO = rpc.selectData(  screenName,   null, querynodeXpath ,   (JSONObject)jsonRecord);
-	    		}
+				if (onloadElm != null) {
+					String commandChain = onloadElm.attributeValue("opt");
+					String[] opts = commandChain.split("\\|");
+					InputDTO inputDTO = new InputDTO();
+					inputDTO.setData(jsonsubmitdata);
+					for (String opt : opts) {
+						String[] sqlcmd = opt.split("\\:"); // get Id of query
+						String querynodeXpath = sqlcmd[0] + "[@id='" + sqlcmd[1] + "']"; // Query node xpath
+						Element processorElm = (Element) root.selectSingleNode("/root/screen/*/" + querynodeXpath + " ");
+						String strProcessor = processorElm.getParent().getName();
+						String outstack = processorElm.attributeValue("outstack");
+						BaseCommandProcessor cmdProcessor = CommandProcessorResolver.getCommandProcessor(strProcessor);
+						resultDTO = cmdProcessor.processCommand(screenName1, querynodeXpath, null, inputDTO, resultDTO);
+						// if(outstack != null && !"".equals(outstack))
+						// outstackList.add(outstack);
+						// resDTO = rpc.selectData( screenName, null,
+						// querynodeXpath , (JSONObject)jsonRecord);
+					}
+				}
 				resultDTO.merge(resDTO);
 				
 				
@@ -202,11 +202,11 @@ public class SelectOnLoad {
 				*/
 			
 			} catch (FrontendException e) {
-				throw new FrontendException("error.selectOnloadFailed");
+				throw new FrontendException("error.selectOnloadFailed",e);
 			} catch (BackendException e) {
-				throw new FrontendException("error.selectOnloadFailed");
+				throw new FrontendException("error.selectOnloadFailed",e);
 			} catch (ProcessorNotFoundException e) {
-				throw new FrontendException("error.selectOnloadFailed");
+				throw new FrontendException("error.selectOnloadFailed",e);
 			}
 			
 			 

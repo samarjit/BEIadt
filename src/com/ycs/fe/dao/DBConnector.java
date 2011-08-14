@@ -94,7 +94,7 @@ public class DBConnector {
 				initContext = new InitialContext();
 				envContext = (Context) initContext.lookup("java:/comp/env");
 			} catch (NamingException e1) {
-				logger.error("Exception occured in contructing InitialContext", e1);
+				logger.error("Exception occured in contructing InitialContext");
 			}
 
 			boolean fallaback = false;

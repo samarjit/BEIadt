@@ -50,6 +50,7 @@
 			<error message="The select failed for :whereval"></error>
 			<message message="The record,:whereval was selected successfully"></message>
 			</jsonrpc>
+			<jsonrpc outstack="form1" id="gridtest">SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS </jsonrpc>
 		</crud>
 		<dm>
 			<txnproc></txnproc>
@@ -62,6 +63,7 @@
 		</anyprocs>
 		<commands>
 			<cmd result="ajax" instack="inst1" name="testjsrpc" opt="jsonrpc:rpc1" processor="crud"/>
+			<bulkcmd result="ajax" name="prodgrid" opt="jsonrpc#gridtest"/>
 		</commands>
 
 	</screen>

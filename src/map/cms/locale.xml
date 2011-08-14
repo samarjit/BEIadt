@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl"?>
+<root xsi:noNamespaceSchemaLocation="config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <screen name="locale">
+        <htmltemplate>
+            cms/locale.html
+        </htmltemplate>
+        <includedjsp>
+            
+        </includedjsp>
+        <callbackclass>
+            
+        </callbackclass>
+        <scripts>
+        </scripts>
+        <stylesheets>
+        </stylesheets>
+        <crud>
+       		 <selectonload outstack="language" id="getlang">SELECT lang_name "langname",lang_code "langcode" FROM LOCALE </selectonload>
+        </crud>
+        <dm>
+        </dm>
+        <bl>
+        </bl>
+        <anyprocs>
+        </anyprocs>
+        <commands>
+        </commands>
+    </screen>
+    
+    <panels>
+        <panel id="form1">
+            <fields>
+               <field>
+					<select  type="text" class="userid" forid="language" value="langname" key="langcode" name="language" id="language" column="" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
+						hidden="" label="" replace="modify">
+						<text>
+						<![CDATA[ <select name="language" class="field" id="language" style="width: 250px" >
+                          <option selected value="">Select</option>
+						</select>]]> 
+				        </text> 
+						<rule></rule>
+						<query></query>
+					</select>
+				</field>
+				
+            </fields>
+            
+        </panel>
+        <panel id="userpanellist">
+            
+            <fields>
+                <field>
+                    <customfield forid="displayuserlist">
+                    </customfield>
+                </field>
+            </fields>
+        </panel>
+    </panels>
+</root>

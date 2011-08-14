@@ -38,9 +38,10 @@ public class QueryService<str> {
 		InputDTO inpDTO = new InputDTO();
 		inpDTO.setData(jsonsubmitdata1);
 		ServletActionContext.getContext().getValueStack().set("inputDTO", inpDTO);
-		JSONObject sessionvars =   inpDTO.getData().getJSONObject("sessionvars");
+		JSONObject sessionvars = null;
+		if(!inpDTO.getData().isNullObject())sessionvars = inpDTO.getData().getJSONObject("sessionvars");
 		System.out.println(inpDTO.getData().toString());
-		if(!sessionvars.isNullObject())
+		if(sessionvars!=null && !sessionvars.isNullObject())
 		for (Iterator iterator = sessionvars.keys(); iterator.hasNext();) {
 			String sessionkey = (String) iterator.next();
 			String sessionval =  sessionvars.getString(sessionkey);
@@ -50,11 +51,12 @@ public class QueryService<str> {
 		
 		try {
 			sl.selectOnLoad(screenName, jsonsubmitdata1 );
+			tmpResDTO = (String) ActionContext.getContext().getValueStack().getContext().get("resDTO");
 		} catch (FrontendException e) {
 			e.printStackTrace();
+			tmpResDTO = "";
 		} 
 		
-		tmpResDTO = (String) ActionContext.getContext().getValueStack().getContext().get("resDTO");
 		
 		ServletActionContext.destroy();
 		
@@ -72,6 +74,7 @@ public class QueryService<str> {
 		ServletActionContext.getContext().getValueStack().set("inputDTO", inpDTO);
 		JSONObject sessionvars =   inpDTO.getData().getJSONObject("sessionvars");
 		System.out.println("InputDTO.getData() is "+inpDTO.getData().toString());
+		if(sessionvars!=null && !sessionvars.isNullObject())
 		for (Iterator iterator = sessionvars.keys(); iterator.hasNext();) {
 			String sessionkey = (String) iterator.next();
 			String sessionval =  sessionvars.getString(sessionkey);

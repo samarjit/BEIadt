@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl" ?>
+<root xsi:noNamespaceSchemaLocation="config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<screen name="embossList">
+		<htmltemplate>
+			cms/html/embossList.html
+		</htmltemplate>
+		<includedjsp>
+		</includedjsp>
+		<callbackclass>
+			
+		</callbackclass>
+		<scripts>
+		 <text>
+		 <![CDATA[ <script type="text/javascript">
+	
+		    </script>]]>
+		 </text>
+		</scripts> 
+		<stylesheets>
+			
+		</stylesheets>
+		<crud>
+			<jsonrpc outstack="form1" id="load">select invoice_no "invoice" ,product_code "productCode" ,product_name "productName" ,plastic_code "plasticCode" ,plastic_desc "plasticDesc" ,ordered_quantity "quantity" ,ordered_by "orderBy" ,ordered_date "orderDate" ,authorize_status "authorizeStatus" ,embossing_status "embossingStatus",process_status "processStatus" from CARD_ORDER where authorize_status = 'APPROVED' and embossing_status ='PROGRESS' and (process_status = 3 or process_status= 4)</jsonrpc>
+		</crud>
+		<dm>
+			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }</txnproc>
+		</dm>
+		<bl>
+			<buslogic id="ArbritrarySelect" outstack="frmUpd1"> </buslogic>
+		</bl>
+		<anyprocs>
+				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
+		</anyprocs>
+		<commands>
+		   <cmd name="orderList" opt="jsonrpc:load"  instack="form1"  result="ajax|{screenName}"  processor="crud" />
+		</commands>
+	</screen>
+
+	<panels>
+		<panel id="form1">
+			<fields>
+				<field>
+					<input type="text" class="userid" forid="submitdata" value="" name="submitdata" id="submitdata" column="FF0151" dbdatatype="STRING" primarykey="YES" dbcolsize="" mask="" mandatory=""
+						hidden="" label="" replace="modify" >
+						<rule></rule>
+					</input>
+				</field>
+			</fields>
+			  
+		
+
+		</panel>
+		<panel id="userpanellist">
+			
+			<fields>
+				<field>
+					<customfield forid="displayuserlist">
+					</customfield>
+				</field>
+			</fields>
+		</panel>
+	</panels>
+</root>

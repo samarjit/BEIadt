@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl" ?>
+<root xsi:noNamespaceSchemaLocation="config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<screen name="cardOrder">
+		<htmltemplate>
+			cms/html/cardOrder.html
+		</htmltemplate>
+		<includedjsp>
+ 
+		</includedjsp>
+		<callbackclass>
+			com.ycs.fe.businesslogic.ProgramSetupBL
+		</callbackclass>
+		<scripts>
+			<text>
+		 <![CDATA[ <script type="text/javascript">
+		   var prevData = '${submitdata}';
+		    </script>]]>
+		 	</text>
+		</scripts>
+		<stylesheets>
+		</stylesheets>
+		<crud>
+			<jsonrpc id="plasticDetails" outstack="plastic">select plastic_code "plasticCode", plastic_desc "plasticDesc" from product_details where PRODUCT_CODE = :whereval|STRING ;</jsonrpc>
+			<selectonload outstack="productCode" id="load1">select PRODUCT_CODE as "ptcode", PRODUCT_NAME as "ptname" from PRODUCT_DETAILS</selectonload>
+		</crud>
+		<dm>
+			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }</txnproc>
+		</dm>
+		<bl>
+			<buslogic id="plasticDetails1" outstack="frmUpd1" >{'className':'com.ycs.fe.businesslogic.CmsBL','method':'cardOrder','param':['Hello']}</buslogic>
+		</bl>
+		<anyprocs>
+				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
+		</anyprocs>
+		<commands>
+		   <cmd name="getPlasticDetails1" opt="jsonrpc:plasticDetails"  instack="form1"  result="ajax|{screenName}"  processor="crud" />
+		   <cmd name="getPlasticDetails" opt="anyprocs:pmdetails"  instack="form1"  result="ajax|{screenName}"  processor="anyproc" />
+		</commands>
+	</screen>
+
+	<panels>
+		<panel id="form1">
+			<fields>
+				<field>
+					<select  type="text" class="userid" forid="productCode" value="ptname" key="ptcode" name="productCode" id="productCode" column="FF0149" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
+						hidden="" label="" replace="modify">
+						<text>
+						<![CDATA[  <select name="productCode" class="field" id="productCode" style="width: 250px" onchange="productCodeChange()">
+                          <option selected value="">Select</option>
+						</select>]]> 
+				        </text> 
+						<rule></rule>
+						<query></query>
+					</select>
+				</field>
+				<field>
+					<customfield type="input" class=" " forid="jquerydatepicker" validationattr="" column="PASSWD" dbcolsize="" mask="">
+						<text><![CDATA[
+							<s:textfield key="global.username" name="userid" />
+							]]>
+						</text>
+						<rule>[{fieldname:"date0",rules:{required:true},messages:{required: "Date is mandatory field"}}] </rule>
+						<validation></validation>
+						<query type="SQL" stackid="selectmonth"></query>
+					</customfield>
+				</field>
+				<field>
+					<customfield type="datepicker" class=" " forid="dateid" validationattr="" column="PASSWD" dbcolsize="" mask="">
+						<!-- will need to experiment to see if dojo tags of struts2 like datepicker can be added? -->
+						<text><![CDATA[<sx.datetimepicker name="dateid"  displayFormat="dd-MMM-yyyy" />]]></text>
+						<!-- rule>[{fieldname:"dateid",rules:{required:true},messages:{required: "Dojo Date is mandatory field"}}]</rule -->
+						<validation></validation>
+						<query></query>
+					</customfield>
+				</field>
+			<field>
+				<label replace="modify" key="global.productCode" value="ProductCode" forname="lblproductCode" />
+				<label replace="modify" key="global.productName" value="Product Name" forname="lblproductName" />
+				<label replace="modify" key="global.plasticCode" value="Plastic Code" forname="lblplasticCode" />
+				<label replace="modify" key="global.plasticDesc" value="Plastic Desc" forname="lblplasticDesc" />
+				<label replace="modify" key="global.quantity" value="Quantity" forname="lblquantity" />
+				<label replace="modify" key="global.invoice" value="Order Ref No" forname="lblinvoice" />
+			</field>
+			</fields>
+			  
+		 
+
+		</panel>
+		<panel id="userpanellist">
+			
+			<fields>
+				<field>
+					<customfield forid="displayuserlist">
+					</customfield>
+				</field>
+			</fields>
+		</panel>
+	</panels>
+</root>

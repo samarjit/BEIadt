@@ -102,7 +102,11 @@ public class CommandProcessor {
 		    	String bulkcmd = ((JSONObject) submitdataObj).getString("bulkcmd");
 		    	Element elmBulkCmd = (Element) rootXml.selectSingleNode("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"' ] ");
 		    	logger.debug("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"' ] ");
-		    	String operation = elmBulkCmd.attributeValue("opt");
+		    	String operation = "";
+		    	if(elmBulkCmd !=null)
+				  operation = elmBulkCmd.attributeValue("opt");
+		    	else
+		    	  throw new ProcessorNotFoundException("bulkcmd resolution error bulkcmd[@name='"+bulkcmd+"']");
 //	    		String strProcessor = elmBulkCmd.attributeValue("processor");
 	    		logger.debug("Command Processor: operation:" + operation);
 	    		String[] opts = operation.split("\\|"); //get chained commands

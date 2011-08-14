@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl" ?>
+<root xsi:noNamespaceSchemaLocation="config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<screen name="welcome">
+		<htmltemplate>
+			cms/welcome.html
+		</htmltemplate>
+		<includedjsp>
+		</includedjsp>
+		<callbackclass>
+			
+		</callbackclass>
+		<scripts>
+		 <text>
+		 <![CDATA[ <script type="text/javascript">
+	
+		    </script>]]>
+		 </text>
+		</scripts> 
+		<stylesheets>
+			
+		</stylesheets>
+		<crud>
+		</crud>
+		<dm>
+			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }</txnproc>
+		</dm>
+		<bl>
+			<buslogic id="ArbritrarySelect" outstack="frmUpd1"> </buslogic>
+		</bl>
+		<anyprocs>
+				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
+		</anyprocs>
+		<commands>
+		</commands>
+	</screen>
+
+	<panels>
+		<panel id="form1">
+
+		</panel>
+		<panel id="userpanellist">
+			
+			<fields>
+				<field>
+					<customfield forid="displayuserlist">
+					</customfield>
+				</field>
+			</fields>
+		</panel>
+	</panels>
+</root>
