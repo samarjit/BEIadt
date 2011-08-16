@@ -1,7 +1,9 @@
-package com.ycs.struts.mock;
+package com.opensymphony.xwork2;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.opensymphony.xwork2.util.ValueStack;
 
 public class ActionContext {
 	protected static ActionContext context = null;

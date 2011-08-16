@@ -1,6 +1,8 @@
 package com.ycs.fe.crud;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -8,9 +10,11 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
+import com.ycs.exception.BackendException;
 import com.ycs.exception.FrontendException;
 import com.ycs.exception.ProcessorNotFoundException;
 import com.ycs.fe.commandprocessor.BaseCommandProcessor;
@@ -19,7 +23,6 @@ import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.util.Constants;
 import com.ycs.fe.util.ScreenMapRepo;
-import com.ycs.struts.mock.ServletActionContext;
 import com.ycs.ws.beclient.QueryService;
 import com.ycs.ws.beclient.QueryServiceService;
 
@@ -100,8 +103,8 @@ public class CommandProcessor {
 		    
 		    if(( (JSONObject) submitdataObj).get("bulkcmd") !=null){
 		    	String bulkcmd = ((JSONObject) submitdataObj).getString("bulkcmd");
-		    	Element elmBulkCmd = (Element) rootXml.selectSingleNode("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"' ] ");
-		    	logger.debug("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"' ] ");
+		    	Element elmBulkCmd = (Element) rootXml.selectSingleNode("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"']");
+		    	logger.debug("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"']");
 		    	String operation = "";
 		    	if(elmBulkCmd !=null)
 				  operation = elmBulkCmd.attributeValue("opt");
@@ -125,11 +128,12 @@ public class CommandProcessor {
 		    	
 			    for (String dataSetkey : itr) { //form1, form2 ...skip txnrec,sessionvars
 			    	//skip bulkcmd should be processed earlier, txnrec and sessionvars are just data groups
-			    	if(dataSetkey.equals("bulkcmd") || dataSetkey.equals("txnrec")   ||  dataSetkey.equals("sessionvars"))continue;
+			    	if(dataSetkey.equals("bulkcmd") || dataSetkey.equals("txnrec")   ||  dataSetkey.equals("sessionvars")||  dataSetkey.equals("pagination"))continue;
 			    	
 			    	JSONArray dataSetJobj = ((JSONObject) submitdataObj).getJSONArray(dataSetkey);
 			    	for (Object jsonRecord : dataSetJobj) { //rows in dataset a Good place to insert DB Transaction
 			    		String cmd = ((JSONObject) jsonRecord).getString("command");
+			    		if(cmd != null && !"".equals(cmd) ){
 			    		Element elmCmd = (Element) rootXml.selectSingleNode("/root/screen/commands/cmd[@name='"+cmd+"' ] ");
 			    		System.out.println("/root/screen/commands/cmd[@name='"+cmd+"' ] ");
 	//		    		String instack = elmCmd.attributeValue("instack");
@@ -146,6 +150,9 @@ public class CommandProcessor {
 			    		    resDTO = cmdProcessor.processCommand(screenName, querynodeXpath, (JSONObject) jsonRecord, inputDTO, resDTO);				
 			    		    //resDTO = rpc.selectData(  screenName,   null, querynodeXpath ,   (JSONObject)jsonRecord);
 			    		    if(resDTO.getErrors().size()>0)break;
+			    		}
+			    		}else{
+			    			logger.debug("The record does not contain a valid command. skip");
 			    		}
 			    	}
 				}

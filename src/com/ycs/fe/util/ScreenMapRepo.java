@@ -7,12 +7,12 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import com.ycs.struts.mock.ServletActionContext;
 import com.ycs.exception.BackendException;
 import com.ycs.exception.FrontendException;
 import com.ycs.fe.cache.AppCacheManager;

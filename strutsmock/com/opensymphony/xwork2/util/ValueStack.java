@@ -1,4 +1,4 @@
-package com.ycs.struts.mock;
+package com.opensymphony.xwork2.util;
 
 import java.util.HashMap;
 import java.util.Map;

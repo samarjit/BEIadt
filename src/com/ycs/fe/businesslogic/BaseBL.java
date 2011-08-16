@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import net.sf.json.JSONObject;
 
+import com.opensymphony.xwork2.ActionInvocation;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
-import com.ycs.struts.mock.ActionInvocation;
 
 /**
  * This class must be thread safe. Classes implementing this must be 

@@ -14,14 +14,14 @@ import net.sf.json.JSONSerializer;
 
 import org.apache.log4j.Logger;
 
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.util.ValueStack;
 import com.ycs.exception.BackendException;
 import com.ycs.exception.SentenceParseException;
 import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.util.ParseSentenceOgnl;
-import com.ycs.struts.mock.ActionContext;
-import com.ycs.struts.mock.ValueStack;
 
 public class FETranslatorDAO {
 	private Logger logger = Logger.getLogger(this.getClass());

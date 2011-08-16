@@ -6,10 +6,13 @@ import java.util.List;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.util.ValueStack;
 import com.ycs.fe.dao.FETranslatorDAO;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.PrepstmtDTO;
@@ -17,9 +20,6 @@ import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.util.ScreenMapRepo;
-import com.ycs.struts.mock.ActionContext;
-import com.ycs.struts.mock.ServletActionContext;
-import com.ycs.struts.mock.ValueStack;
 
 public class SelectData {
 private Logger logger = Logger.getLogger(getClass()); 
@@ -101,7 +101,7 @@ private Logger logger = Logger.getLogger(getClass());
 							if(tempresDTO == null){
 								tempresDTO = new ResultDTO();
 							}
-							tempresDTO.setPageDetails(outstack, pageno, pagecount, pagesize);
+							tempresDTO.setPageDetails(outstack, pageno, pagecount,reccount, pagesize);
 							stack.getContext().put("resultDTO",tempresDTO);
 							
 							int recfrom = pageno * pagesize;

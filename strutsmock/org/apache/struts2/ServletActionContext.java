@@ -1,8 +1,8 @@
-package com.ycs.struts.mock;
+package org.apache.struts2;
 
 import java.util.ResourceBundle;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.opensymphony.xwork2.ActionContext;
 
 public class ServletActionContext extends ActionContext{
 	private static ServletActionContext context;

@@ -6,14 +6,14 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
+import org.apache.struts2.ServletActionContext;
 import org.dom4j.Element;
 
+import com.opensymphony.xwork2.ActionInvocation;
 import com.ycs.exception.FrontendException;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.util.ScreenMapRepo;
-import com.ycs.struts.mock.ActionInvocation;
-import com.ycs.struts.mock.ServletActionContext;
 
 public class ProgramSetupBL implements BaseBL {
 

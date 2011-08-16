@@ -11,9 +11,11 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 import org.apache.log4j.Logger;
+import org.apache.struts2.ServletActionContext;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.ycs.exception.BackendException;
 import com.ycs.exception.FrontendException;
 import com.ycs.exception.ProcessorNotFoundException;
@@ -24,8 +26,6 @@ import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.util.Constants;
 import com.ycs.fe.util.ScreenMapRepo;
-import com.ycs.struts.mock.ActionContext;
-import com.ycs.struts.mock.ServletActionContext;
 import com.ycs.ws.beclient.QueryService;
 import com.ycs.ws.beclient.QueryServiceService;
 

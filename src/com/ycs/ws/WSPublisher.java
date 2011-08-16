@@ -3,7 +3,6 @@ package com.ycs.ws;
 import javax.xml.ws.Endpoint;
 
 import com.ycs.fe.cache.AppCacheManager;
-import com.ycs.struts.mock.ServletActionContext;
 
 public class WSPublisher {
 

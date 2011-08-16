@@ -7,13 +7,14 @@ import javax.jws.WebService;
 
 import net.sf.json.JSONObject;
 
+import org.apache.struts2.ServletActionContext;
+
+import com.opensymphony.xwork2.ActionContext;
 import com.ycs.exception.FrontendException;
 import com.ycs.fe.crud.CommandProcessor;
 import com.ycs.fe.crud.SelectOnLoad;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
-import com.ycs.struts.mock.ActionContext;
-import com.ycs.struts.mock.ServletActionContext;
 
  
 @WebService

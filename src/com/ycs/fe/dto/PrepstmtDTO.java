@@ -8,7 +8,9 @@ import com.ycs.exception.DataTypeException;
  //public static String DATE="DATE"; 
  //public static String DOUBLE="DOUBLE"; 
  //public static String FLOAT="FLOAT"; 
-          
+  public static final String DATEDDMMYYYY_FORMAT = "DD/MM/yyyy";
+  public static final String DATE_NS_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
+	 
  public PrepstmtDTO(DataType type,String data){ 
          this.type = type; 
          this.data = data; 

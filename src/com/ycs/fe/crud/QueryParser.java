@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.ycs.exception.BackendException;
 import com.ycs.exception.DataTypeException;
 import com.ycs.exception.QueryParseException;
@@ -19,7 +20,6 @@ import com.ycs.fe.dto.PrepstmtDTO;
 import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
-import com.ycs.struts.mock.ActionContext;
 
 public class QueryParser{
 	private static Logger logger = Logger.getLogger(QueryParser.class);
