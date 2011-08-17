@@ -77,6 +77,14 @@ public class PaginationDTO {
 	}
 
 	public static boolean sqlInjectionCheck(String s){
-		return s.matches("[a-zA-Z0-9%]*");
+		return s.matches("[a-zA-Z0-9%_]*");
 	}
+
+	@Override
+	public String toString() {
+		return "PaginationDTO [page=" + page + ", rows=" + rows + ", sidx=" + sidx + ", sord=" + sord + ", searchField=" + searchField + ", searchString=" + searchString + ", searchOper="
+				+ searchOper + ", filters=" + filters + "]";
+	}
+	
+	
 }

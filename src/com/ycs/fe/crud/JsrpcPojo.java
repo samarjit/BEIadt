@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.dom4j.Element;
 import org.dom4j.Node;
 
+import com.google.gson.Gson;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.ycs.exception.BackendException;
@@ -104,8 +105,11 @@ private Logger logger = Logger.getLogger(getClass());
 							PaginationDTO pageDTO= null; 
 							if(jobject.size()>0 ){
 								JSONObject	panel =  jobject.getJSONObject(outstack);
-								pageDTO = (PaginationDTO) JSONObject.toBean(panel, PaginationDTO.class);
+								pageDTO = new Gson().fromJson(panel.toString(), PaginationDTO.class);
+								System.out.println("pagination :"+panel);
+								System.out.println("pagination pageDTO:"+pageDTO);
 								pageno =  pageDTO.getPage();// panel.getInt("currentpage");
+								pagesize = pageDTO.getRows();
 							}else{
 								pageno = 1;
 								logger.debug("Pagination assuming first page as no page data is given" );
@@ -122,10 +126,10 @@ private Logger logger = Logger.getLogger(getClass());
 								logger.debug("Now setetting resultDTO in JsonRPC pojo="+JSONSerializer.toJSON(tempresDTO));
 								stack.getContext().put("resultDTO",tempresDTO); 
 								logger.debug("Pagination set with pageno:"+pageno+"totalrec:"+reccount+" pagecount:"+pagecount+" pagesize:"+pagesize);
-								int recfrom = pageno * pagesize;
+								int recfrom = (pageno - 1) * pagesize;
 								int recto = recfrom + pagesize;
-								jsonRecord.put("recto", recto); //put into current row value the recfrom and recto so that it can be used in count query
-								jsonRecord.put("recfrom", recfrom);
+//								jsonRecord.put("recto", recto); //put into current row value the recfrom and recto so that it can be used in count query
+//								jsonRecord.put("recfrom", recfrom);
 								hmfielddbtype.put("recto",PrepstmtDTO.getDataTypeFrmStr("INT") );
 								hmfielddbtype.put("recfrom",PrepstmtDTO.getDataTypeFrmStr("INT"));
 							
@@ -159,25 +163,64 @@ private Logger logger = Logger.getLogger(getClass());
 								if(pageDTO.getSidx() != null && pageDTO.getSord() != null){
 									orderByPart = pageDTO.getSidx() +" "+pageDTO.getSord();
 								}
-								updatequery = "select " + selectPart;
-								String joiner = " WHERE ";
+								updatequery = " " + selectPart;
+								
+								
+								String joiner = " AND ";
+								String firstJoiner = " WHERE ";
 								if (wherePart != null){
-									joiner = " AND ";
+									firstJoiner = " AND ";
 								}
-								wherePart += joiner;
 								String wherePart2 = "";
 								boolean first = true;
 								//filter
-								for (PagingFilterRule element : pageDTO.getFilters().getRules()) {
-									String data = element.getData();
-									DataType dbtype = hmfielddbtype.get(element.getField());
+								logger.debug("pageDTO.getFilters() REMOVE:"+pageDTO.getFilters());
+								if(pageDTO.getFilters() != null){
+									for (PagingFilterRule element : pageDTO.getFilters().getRules()) {
+										String data = element.getData();
+										DataType dbtype = hmfielddbtype.get(element.getField());
+										if(dbtype == null){
+											data = "'"+data+"'";
+										}else
+										switch(dbtype){
+											case  INT:
+											case  LONG:
+											case  FLOAT:
+											case  DOUBLE: 
+												break;
+											case  DATEDDMMYYYY:  data = " TO_DATE('"+data+"',"+PrepstmtDTO.DATEDDMMYYYY_FORMAT+") ";
+												break;
+											case  TIMESTAMP:
+											case  DATE_NS: data = " TO_DATE('"+data+"',"+PrepstmtDTO.DATE_NS_FORMAT+") ";
+											    break;
+											case  STRING:
+												  data = "'"+data+"'";
+												break;
+											default: 	
+												data = "'"+data+"'";
+										}
+										wherePart2 += (first)?"":joiner;
+										wherePart2 += "   "+ element.getField()+ findOp(element.getOp())+" "+ data +"  ";
+										joiner = " " + pageDTO.getFilters().getGroupOp() + " ";
+										first = false;
+									}
+								}
+								
+								if(pageDTO.getSearchField() != null && pageDTO.getSearchOper() != null && pageDTO.getSearchString() != null &&
+									!"".equals(pageDTO.getSearchField()) && !"".equals(pageDTO.getSearchOper()) && !"".equals(pageDTO.getSearchString())){
+										DataType dbtype = hmfielddbtype.get(pageDTO.getSearchField());
+										
+										String data = pageDTO.getSearchString();
+									if(dbtype == null){
+										data = "'"+data+"'";
+									}else
 									switch(dbtype){
 										case  INT:
 										case  LONG:
 										case  FLOAT:
 										case  DOUBLE: 
 											break;
-										case  DATEDDMMYYYY:  data = " TO_DATE('"+data+"',"+PrepstmtDTO.DATE_NS_FORMAT+") ";
+										case  DATEDDMMYYYY:  data = " TO_DATE('"+data+"',"+PrepstmtDTO.DATEDDMMYYYY_FORMAT+") ";
 											break;
 										case  TIMESTAMP:
 										case  DATE_NS: data = " TO_DATE('"+data+"',"+PrepstmtDTO.DATE_NS_FORMAT+") ";
@@ -188,39 +231,21 @@ private Logger logger = Logger.getLogger(getClass());
 										default: 	
 											data = "'"+data+"'";
 									}
-									wherePart2 += (first)?"":joiner + "   "+ element.getField()+ findOp(element.getOp())+" "+ data +"  ";
-									joiner = " " + pageDTO.getFilters().getGroupOp() + " ";
-									first = false;
+									wherePart2 += (first)?"":joiner;
+									wherePart2 += "   "+pageDTO.getSearchField() +findOp(pageDTO.getSearchOper())  + " " +data +" ";  
+								
 								}
 								
-								DataType dbtype = hmfielddbtype.get(pageDTO.getSearchField());
-								
-								String data = pageDTO.getSearchString();
-								switch(dbtype){
-								case  INT:
-								case  LONG:
-								case  FLOAT:
-								case  DOUBLE: 
-									break;
-								case  DATEDDMMYYYY:  data = " TO_DATE('"+data+"',"+PrepstmtDTO.DATE_NS_FORMAT+") ";
-									break;
-								case  TIMESTAMP:
-								case  DATE_NS: data = " TO_DATE('"+data+"',"+PrepstmtDTO.DATE_NS_FORMAT+") ";
-								    break;
-								case  STRING:
-									  data = "'"+data+"'";
-									break;
-								default: 	
-									data = "'"+data+"'";
-							}
-								
-								wherePart2 += joiner + " "+pageDTO.getSearchField() +findOp(pageDTO.getSearchOper())  + " " +data +" ";  
-										
-								if(wherePart2 != null && !"".equals(wherePart2))
-									wherePart += "( "+ wherePart2 +" )";
+								if(wherePart2 != null && !"".equals(wherePart2)){
+									if (wherePart != null){
+										wherePart += " AND ( "+ wherePart2 +" )";
+									}else{
+										wherePart = " WHERE " + wherePart2;
+									}
+								}
 								
 								if (wherePart != null){
-									updatequery +=  wherePart;
+									updatequery += wherePart;
 								}
 								
 								if(orderByPart!= null){
@@ -229,7 +254,9 @@ private Logger logger = Logger.getLogger(getClass());
 								
 								sql = "select * from (select v.*, ROWNUM rn from ("
 								 + updatequery
-								 + " ) v where rownum < :recto) where rn >= :recfrom";
+								 + " ) v where rownum <= "+recto+") where rn > "+recfrom;
+								
+								updatequery = sql;
 						}
 					}
 				}

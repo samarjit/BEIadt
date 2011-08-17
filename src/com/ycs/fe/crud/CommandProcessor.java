@@ -109,7 +109,7 @@ public class CommandProcessor {
 		    	if(elmBulkCmd !=null)
 				  operation = elmBulkCmd.attributeValue("opt");
 		    	else
-		    	  throw new ProcessorNotFoundException("bulkcmd resolution error bulkcmd[@name='"+bulkcmd+"']");
+		    	  throw new ProcessorNotFoundException("bulkcmd resolution error /root/screen/commands/bulkcmd[@name='"+bulkcmd+"'] in screen:"+screenName);
 //	    		String strProcessor = elmBulkCmd.attributeValue("processor");
 	    		logger.debug("Command Processor: operation:" + operation);
 	    		String[] opts = operation.split("\\|"); //get chained commands

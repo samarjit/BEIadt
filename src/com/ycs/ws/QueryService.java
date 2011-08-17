@@ -7,6 +7,7 @@ import javax.jws.WebService;
 
 import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -19,6 +20,7 @@ import com.ycs.fe.dto.ResultDTO;
  
 @WebService
 public class QueryService<str> {
+	private static Logger logger = Logger.getLogger(QueryService.class);
 	/**
 	 * @param screenName
 	 * @param querynodeXpath
@@ -85,7 +87,6 @@ public class QueryService<str> {
 
 		CommandProcessor processor = new CommandProcessor();
 		ResultDTO resultDTO = processor.commandProcessor(submitdata, screenName);
-		
 		tmpResDTO = JSONObject.fromObject(resultDTO).toString();
 		
 		ServletActionContext.destroy();

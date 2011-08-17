@@ -50,7 +50,7 @@
 			<error message="The select failed for :whereval"></error>
 			<message message="The record,:whereval was selected successfully"></message>
 			</jsonrpc>
-			<jsonrpc outstack="form1" id="gridtest">SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS 
+			<jsonrpc outstack="formpagination" id="gridtest">SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS 
 			  <countquery pagesize="10">select count('x') from PRODUCT_DETAILS</countquery>
 			</jsonrpc>
 		</crud>
