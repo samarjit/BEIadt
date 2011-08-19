@@ -1,4 +1,4 @@
-package com.ycs.exception;
+package com.ycs.fe.exception;
 
 public class ProcessorNotFoundException extends Exception {
 

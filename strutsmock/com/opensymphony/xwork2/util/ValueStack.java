@@ -6,7 +6,7 @@ import java.util.Map;
 import ognl.Ognl;
 import ognl.OgnlException;
 
-import com.ycs.exception.QueryParseException;
+import com.ycs.fe.exception.QueryParseException;
 
 public class ValueStack {
 	Map<String, Object> root = new HashMap<String, Object>();

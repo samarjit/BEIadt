@@ -16,11 +16,11 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
-import com.ycs.exception.BackendException;
-import com.ycs.exception.SentenceParseException;
 import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
+import com.ycs.fe.exception.BackendException;
+import com.ycs.fe.exception.SentenceParseException;
 import com.ycs.fe.util.ParseSentenceOgnl;
 
 public class FETranslatorDAO {

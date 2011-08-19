@@ -2,7 +2,7 @@ package com.ycs.fe.commandprocessor;
 
 import org.apache.log4j.Logger;
 
-import com.ycs.exception.ProcessorNotFoundException;
+import com.ycs.fe.exception.ProcessorNotFoundException;
 
 /**
  * Edit this class in case new CommandProcessor is introduced

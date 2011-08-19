@@ -9,7 +9,7 @@
  
 		</includedjsp>
 		<callbackclass>
-			com.ycs.fe.businesslogic.ProgramSetupBL
+			com.ycs.programsetup.business.ProgramSetupBL
 		</callbackclass>
 		<scripts>
 			<scriptinclude></scriptinclude>
