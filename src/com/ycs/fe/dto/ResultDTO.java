@@ -15,7 +15,7 @@ private List<String> errors;
 private Map<String, List<String>> fieldErrors;
 private HashMap<String, Object>  data;
 private Map<String,Map<String,Integer>> pagination; //{currentpage:,totalpage:,totalrec:,pagesize:}
- 
+private String result; //it will override the result described in command result type in screen xml
 
 public ResultDTO() {
 	data = new HashMap<String,Object>();
@@ -149,6 +149,17 @@ public void merge(ResultDTO tempDTO){
 	pagination.putAll(tempDTO.getPagination());
 }
 
+
+public String getResult() {
+	return result;
+}
+
+
+public void setResult(String result) {
+	this.result = result;
+}
+
+
 public static ResultDTO fromJsonString(JSONObject resDTOjson){
 	ResultDTO tempDTO = new ResultDTO();
 	 HashMap<String,Object> tmpHm = new HashMap<String, Object>();
@@ -161,6 +172,8 @@ public static ResultDTO fromJsonString(JSONObject resDTOjson){
 	 System.out.println(pagination);
 	 tempDTO.setPagination(pagination);
 	 
+	 if(resDTOjson.get("result")!=null)
+	   tempDTO.setResult(resDTOjson.getString("result"));
 	return tempDTO;
 	
 }

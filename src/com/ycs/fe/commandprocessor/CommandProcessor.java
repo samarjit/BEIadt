@@ -57,7 +57,7 @@ public class CommandProcessor {
 		
 	
 //		JsrpcPojo rpc = new JsrpcPojo();
-		logger.debug("Remote command processor");
+		
 		ResultDTO resDTO = null;
 		try{
 		if(Constants.APP_LAYER == Constants.FRONTEND){	
@@ -99,7 +99,7 @@ public class CommandProcessor {
 		    @SuppressWarnings("unchecked")
 			Set<String>  itr =  ( (JSONObject) submitdataObj).keySet(); 
 		    
-		    if(( (JSONObject) submitdataObj).get("bulkcmd") !=null){
+		    if(submitdataObj.get("bulkcmd") !=null && !"inline".equals(submitdataObj.getString("bulkcmd"))){
 		    	String bulkcmd = ((JSONObject) submitdataObj).getString("bulkcmd");
 		    	Element elmBulkCmd = (Element) rootXml.selectSingleNode("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"']");
 		    	logger.debug("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"']");
@@ -123,10 +123,11 @@ public class CommandProcessor {
 	    		}
 	    		
 		    }else{
-		    	
+		    	//inline command processor skip everything other than those, that starts with formXXXX
 			    for (String dataSetkey : itr) { //form1, form2 ...skip txnrec,sessionvars
 			    	//skip bulkcmd should be processed earlier, txnrec and sessionvars are just data groups
-			    	if(dataSetkey.equals("bulkcmd") || dataSetkey.equals("txnrec")   ||  dataSetkey.equals("sessionvars")||  dataSetkey.equals("pagination"))continue;
+//			    	if(dataSetkey.equals("bulkcmd") || dataSetkey.equals("txnrec")   ||  dataSetkey.equals("sessionvars")||  dataSetkey.equals("pagination"))continue;
+			    	if(! dataSetkey.startsWith("form"))continue;
 			    	
 			    	JSONArray dataSetJobj = ((JSONObject) submitdataObj).getJSONArray(dataSetkey);
 			    	for (Object jsonRecord : dataSetJobj) { //rows in dataset a Good place to insert DB Transaction
@@ -157,7 +158,7 @@ public class CommandProcessor {
 		    }
 		}else{
 			String resultJson = remoteCommandProcessor (submitdataObj.toString(), screenName);
-			resDTO = (ResultDTO) JSONObject.toBean(JSONObject.fromObject(resultJson), ResultDTO.class);
+			resDTO = ResultDTO.fromJsonString(JSONObject.fromObject(resultJson));
 		}
 		} catch (FrontendException e) {
 			if(resDTO == null)resDTO= new ResultDTO();
