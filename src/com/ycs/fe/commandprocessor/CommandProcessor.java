@@ -112,7 +112,7 @@ public class CommandProcessor {
 	    		logger.debug("Command Processor: operation:" + operation);
 	    		String[] opts = operation.split("\\|"); //get chained commands
 	    		for (String opt : opts) {
-	    			String[] sqlcmd = opt.split("\\#"); //get Id of query 
+	    			String[] sqlcmd = opt.split("\\:"); //get Id of query 
 	    			String querynodeXpath =  sqlcmd[0]+"[@id='"+sqlcmd[1]+"']"; //Query node xpath
 	    			logger.debug("querynodeXpath:"+querynodeXpath);
 	    			Element processorElm = (Element) rootXml.selectSingleNode("/root/screen/*/"+querynodeXpath+" ");

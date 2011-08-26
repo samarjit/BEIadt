@@ -99,7 +99,7 @@ private Logger logger = Logger.getLogger(getClass());
 						parsedquery = QueryParser.parseQuery(countquery, outstack, jsonRecord, arparam, hmfielddbtype,jsonInput, prevResultDTO);
 						int reccount = fetranslatorDAO.executeCountQry(screenName, parsedquery, outstack, arparam);
 						logger.debug("Processing count query"+countquery);
-						if(reccount > pagesize){
+						if(reccount > 0){
 							JSONObject jobject = jsonInput.getData().getJSONObject("pagination");
 							int pageno = 0;
 							PaginationDTO pageDTO= null; 

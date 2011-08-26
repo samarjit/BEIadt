@@ -16,6 +16,7 @@ private Map<String, List<String>> fieldErrors;
 private HashMap<String, Object>  data;
 private Map<String,Map<String,Integer>> pagination; //{currentpage:,totalpage:,totalrec:,pagesize:}
 private String result; //it will override the result described in command result type in screen xml
+private Map<String, String> sessionvars; //These variables will be put in session in command processor
 
 public ResultDTO() {
 	data = new HashMap<String,Object>();
@@ -147,6 +148,13 @@ public void merge(ResultDTO tempDTO){
 	errors.addAll(tempDTO.getErrors());
 	messages.addAll(tempDTO.getMessages());
 	pagination.putAll(tempDTO.getPagination());
+	result = tempDTO.getResult();
+	
+	if(tempDTO.getSessionvars()!=null){
+		if(sessionvars == null)
+			sessionvars = new HashMap<String, String>();
+		sessionvars.putAll(tempDTO.getSessionvars());
+	}
 }
 
 
@@ -157,6 +165,16 @@ public String getResult() {
 
 public void setResult(String result) {
 	this.result = result;
+}
+
+
+public Map<String, String> getSessionvars() {
+	return sessionvars;
+}
+
+
+public void setSessionvars(Map<String, String> sessionvars) {
+	this.sessionvars = sessionvars;
 }
 
 
@@ -171,7 +189,7 @@ public static ResultDTO fromJsonString(JSONObject resDTOjson){
 	 Map<String, Map<String,Integer>> pagination =   (Map<String, Map<String, Integer>>) resDTOjson.getJSONObject("pagination");
 	 System.out.println(pagination);
 	 tempDTO.setPagination(pagination);
-	 
+	 tempDTO.setSessionvars(resDTOjson.getJSONObject("sessionvars"));
 	 if(resDTOjson.get("result")!=null)
 	   tempDTO.setResult(resDTOjson.getString("result"));
 	return tempDTO;

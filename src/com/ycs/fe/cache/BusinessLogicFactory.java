@@ -41,14 +41,15 @@ public class BusinessLogicFactory {
 			 System.out.println(e.getTextTrim());
 			 String classname = e.getTextTrim();
 			 if(classname == null || "".equals(classname)){
-				 		logger.debug("Class name empty for screen:"+screenName);
-				 		throw new ClassNotFoundException("BL not defined for screen ["+screenName+"]");
-				 	}
+					logger.error("Class name empty for screen:" + screenName);
+					// throw new ClassNotFoundException("BL not defined for screen ["+screenName+"]");
+				} else {
 			 		
 			 BaseBL  baseBL = (BaseBL) Class.forName(classname).newInstance();
 			 net.sf.ehcache.Element elm = new net.sf.ehcache.Element(screenName, baseBL); 
 			 blcache2.put(elm);
 		 }
+			}
 		
 		} catch (DocumentException e1) {
 			logger.error("Exception in BL caching"+e1);
