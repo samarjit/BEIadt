@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl"?>
+<root xsi:noNamespaceSchemaLocation="config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <screen name="test1">
+        <htmltemplate>
+            html/test1.html
+        </htmltemplate>
+        <includedjsp>
+            
+        </includedjsp>
+        <callbackclass>
+            
+        </callbackclass>
+        <scripts>
+            
+            <text>
+                <![CDATA[    
+				<@s.head/>
+    			<@sx.head/>
+    			<@sj.head jqueryui="true" locale="en" jquerytheme="start"/>
+				<script>
+				function javaScriptFn(){
+				}
+				</script>
+				]]>
+            </text>
+            <scriptinclude>
+                js/jquery.validate.js
+            </scriptinclude>
+            <scriptinclude>
+                js/iadtframework.js,js/json2.js,js/jsonStringify.js
+            </scriptinclude>
+        </scripts>
+        <stylesheets>
+            <styleinclude>
+                css/home.css
+            </styleinclude>
+            <text>
+                <![CDATA[
+				<style>	
+				body{
+				font-size:9pt;
+				}
+				.userid{
+				 text-decoration:underline;
+				 }
+				 
+				.ui-datepicker-trigger{
+				padding:0px;
+				border: 0 none;
+				}
+				</style>
+				<style>
+				#field { margin-left: .5em;   }
+			  	#field, label { 
+			  		 display: block;
+			  	    font-family: Arial, Helvetica, sans-serif;
+			  	    font-size: small; 
+			  	    }
+				br { clear: both; }
+				select.error { border: 1px solid red; }
+				input.error { border: 1px solid red; }
+				label.error {
+					
+					background: url('../images/unchecked.gif') no-repeat;
+					padding-left: 16px;
+					margin-left: .3em;
+				}
+				label.valid {
+					background: url('../images/checked.gif') no-repeat;
+					 
+					width: 16px;
+					height: 16px;
+				}
+			</style>
+			]]>
+            </text>
+        </stylesheets>
+        <crud>
+        </crud>
+        <dm>
+            <txnproc id="pmdetails" outstack="frmUpd1">
+                {'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }
+            </txnproc>
+        </dm>
+        <bl>
+            <buslogic id="ArbritrarySelect" >
+            </buslogic>
+        </bl>
+        <anyprocs>
+            <proc id="pmdetails" outstack="frmUpd1">
+                {'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}
+            </proc>
+        </anyprocs>
+        <commands>
+            <cmd name="getPlasticDetails" opt="jsonrpc:plasticDetails" instack="form1" result="ajax|{screenName}" processor="crud"/>
+        </commands>
+    </screen>
+    
+    <panels>
+        <panel id="form1">
+            <fields>
+               <field>
+					<customfield name="" type="input" class=" " forid="textfield" validationattr="" column="PASSWD" dbcolsize="" mask="">
+						<text><![CDATA[
+							<@s.textfield key="global.productCode" name="userid" />
+							]]>
+						</text>
+						<rule>[{fieldname:"date0",rules:{required:true},messages:{required: "Date is mandatory field"}}] </rule>
+						<validation></validation>
+						<query></query>
+					</customfield>
+				</field>
+				<field>
+					<customfield name="" type="datepicker" class=" " forid="jquerydatepicker" validationattr="" column="PASSWD" dbcolsize="" mask="">
+						<text><![CDATA[<@sx.datetimepicker name="dateid"  displayFormat="dd-MMM-yyyy" />]]></text>
+						<validation></validation>
+						<query></query>
+					</customfield>
+				</field>
+				<field>
+					<customfield name="" type="datepicker" class=" " forid="prop" validationattr="" column="PASSWD" dbcolsize="" mask="">
+						<text><![CDATA[ <@s.property value="getText('global.productCode')" /> <@s.text name="global.productCode" />]]></text>
+						<validation></validation>
+						<query></query>
+					</customfield>
+				</field>
+				
+				<field>
+					<label replace="modify" value="global.username" key="global.productCode" forname="divele" />
+				</field>
+            </fields>
+            
+        </panel>
+        <panel id="userpanellist">
+            
+            <fields>
+                <field>
+                    <customfield forid="displayuserlist" name="">
+                    </customfield>
+                </field>
+            </fields>
+        </panel>
+    </panels>
+</root>
+

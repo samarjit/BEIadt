@@ -240,15 +240,15 @@ private Logger logger = Logger.getLogger(getClass());
 									if (wherePart != null){
 										wherePart += " AND ( "+ wherePart2 +" )";
 									}else{
-										wherePart = " WHERE " + wherePart2;
+										wherePart = "   " + wherePart2;
 									}
 								}
 								
 								if (wherePart != null){
-									updatequery += wherePart;
+									updatequery += " WHERE "+ wherePart;
 								}
 								
-								if(orderByPart!= null){
+								if(orderByPart!= null  && !"".equals(orderByPart)){
 									updatequery += " order by "+ orderByPart ;
 								}
 								

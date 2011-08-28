@@ -51,7 +51,7 @@
 			</fields>
 			  <fields>
 				<field>
-					<customfield type="t" class="userid" forid="submitdata"   column="RADIO,FF0021,FF0022,FF0026,FF0024,FF0027"   dbcolsize="" mask="" 
+					<customfield name="" type="t" class="userid" forid="submitdata"   column="RADIO,FF0021,FF0022,FF0026,FF0024,FF0027"   dbcolsize="" mask="" 
 						replace="modify" >
 						<text></text>
 						<rule></rule>
@@ -63,15 +63,6 @@
 			</fields>
 		
 
-		</panel>
-		<panel id="userpanellist">
-			
-			<fields>
-				<field>
-					<customfield forid="displayuserlist">
-					</customfield>
-				</field>
-			</fields>
 		</panel>
 	</panels>
 </root>

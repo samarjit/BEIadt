@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl"?>
+<root xsi:noNamespaceSchemaLocation="../config.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<screen name="merchant_view">
+		<htmltemplate>
+		</htmltemplate>
+		<includedjsp>
+		</includedjsp>
+		<callbackclass>
+			com.ycs.ezlink.business.MerchantBL
+		</callbackclass>
+		<scripts>
+		</scripts>
+		<stylesheets>
+
+		</stylesheets>
+		<crud>
+			<jsonrpc outstack="formpagination" id="search_mer">SELECT MERCHANT_ID  , MERCHANT_TYPE  , MERCHANT_LOCATION    FROM MERCHANT 
+			  <countquery pagesize="10">select count('x') from MERCHANT</countquery>
+			</jsonrpc>
+			<sqlselect outstack="ques" id="loadques">select SECRUITY_QUES_ID "quesid",QUESTION  "ques" from SECURITY_QUES</sqlselect>
+		</crud>
+		<dm>
+		</dm>
+		<bl>
+		<buslogic id="cusreg" method="insertCustomerDetails"> </buslogic>
+		</bl>
+		<anyprocs>
+		</anyprocs>
+		<commands>
+			<bulkcmd name="search_mer"  opt="jsonrpc:search_mer" result="ajax" />
+		</commands>
+	</screen>
+
+	<panels>
+	 <panel>
+	 <fields>
+	  <field>
+	    <validationfld mandatory="true"  name="location" forid="location" id="location"   column="MERCHANT_LOC" dbcolsize="10" dbdatatype="STRING" />
+	  </field>
+	 </fields>
+	 </panel>
+	</panels>
+</root>

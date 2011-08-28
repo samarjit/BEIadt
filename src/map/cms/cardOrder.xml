@@ -28,7 +28,7 @@
 			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }</txnproc>
 		</dm>
 		<bl>
-			<buslogic id="plasticDetails1" outstack="frmUpd1" >{'className':'com.ycs.fe.businesslogic.CmsBL','method':'cardOrder','param':['Hello']}</buslogic>
+			<buslogic id="plasticDetails1" outstack="frmUpd1" >{'className':'com.ycs.programsetup.business.CmsBL','method':'cardOrder','param':['Hello']}</buslogic>
 		</bl>
 		<anyprocs>
 				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>

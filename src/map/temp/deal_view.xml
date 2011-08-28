@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml-stylesheet type="text/xsl" href="config.xsl"?>
+<root xsi:noNamespaceSchemaLocation="../config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<screen name="login">
+		<htmltemplate>
+			login.jsp
+		</htmltemplate>
+		<includedjsp>
+		</includedjsp>
+		<callbackclass>
+			com.ycs.ezlink.business.LoginValidationBL
+		</callbackclass>
+		<scripts>
+		 <text>
+		 <![CDATA[ <script type="text/javascript">
+	
+		    </script>]]>
+		 </text>
+		</scripts> 
+		<stylesheets>
+			
+		</stylesheets>
+		<crud>
+			<jsonrpc outstack="formpagination" id="search_mer">SELECT MERCHANT_ID mid , MERCHANT_TYPE mtype , MERCHANT_LOCATION  mloc  FROM MERCHANT 
+			  <countquery pagesize="10">select count('x') from MERCHANT</countquery>
+			</jsonrpc>
+			<jsonrpc outstack="formpagination" id="search_deal">SELECT DEAL_ID "dealid",MERCHANT_ID "merchantid",OFFERING_QUANTITY "offeringquantity",OFFERING_QTY_LEFT "offeringqtyleft",OFFERING_ITEM "offeringitem",DEAL_START_DATE "dealstartdate",DEAL_END_DATE "dealenddate",SHORT_DESC "shortdesc",DETAILED_DESC "detaileddesc",PARTIAL_REG_LIMIT "partialreglimit",FULL_REG_LIMIT "fullreglimit",PARTIAL_REG_LIMIT_LEFT "partialreglimitleft",FULL_REG_LIMIT_LEFT "fullreglimitleft",CREATE_DATE "createdate",PROMOTION_ID "promotionid",MIN_TRANSITS_PER_INTERVAL "mintransitsperinterval",TRANSIT_INTERVAL_PERIOD_DAYS "transitintervalperioddays",UNITS_PER_MEMBER_PER_INTERVAL "unitspermemberperinterval",UNITS_DEAL_PER_INTERVAL "unitsdealperinterval",DEAL_INTERVAL_DAYS "dealintervaldays",TERMS_AND_COND "termsandcond" FROM DEAL_MASTER where 1=1 
+			  <countquery pagesize="10">select count('x') from DEAL_MASTER</countquery>
+			</jsonrpc>
+		</crud>
+		<dm>
+		</dm>
+		<bl>
+			<buslogic id="login" method="loginValidation"> </buslogic>
+		</bl>
+		<anyprocs>
+		</anyprocs>
+		<commands>
+		 <cmd name="loginvalidation" opt="buslogic:login" instack="form1" result="" processor="bl"/>
+		 <bulkcmd name="search_mer"  opt="jsonrpc:search_mer" result="ajax" />
+		 <bulkcmd name="search_deal"  opt="jsonrpc:search_deal" result="ajax" />
+		</commands>
+	</screen>
+
+	<panels>
+	<panel>
+	<fields>
+	<field>
+		<validationfld dbcolsize="20" name="dealid" column="DEAL_ID" mandatory="yes" forid="dealid" dbdatatype="STRING" />
+<validationfld dbcolsize="20" name="merchantid" column="MERCHANT_ID" mandatory="yes" forid="merchantid" dbdatatype="STRING" />
+<validationfld dbcolsize="6" name="offeringquantity" column="OFFERING_QUANTITY" mandatory="yes" forid="offeringquantity" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="offeringqtyleft" column="OFFERING_QTY_LEFT" mandatory="yes" forid="offeringqtyleft" dbdatatype="INT" />
+<validationfld dbcolsize="20" name="offeringitem" column="OFFERING_ITEM" mandatory="yes" forid="offeringitem" dbdatatype="STRING" />
+<validationfld dbcolsize="8" name="dealstartdate" column="DEAL_START_DATE" mandatory="yes" forid="dealstartdate" dbdatatype="DATE_NS" />
+<validationfld dbcolsize="8" name="dealenddate" column="DEAL_END_DATE" mandatory="yes" forid="dealenddate" dbdatatype="DATE_NS" />
+<validationfld dbcolsize="50" name="shortdesc" column="SHORT_DESC" mandatory="yes" forid="shortdesc" dbdatatype="STRING" />
+<validationfld dbcolsize="300" name="detaileddesc" column="DETAILED_DESC" mandatory="yes" forid="detaileddesc" dbdatatype="STRING" />
+<validationfld dbcolsize="6" name="partialreglimit" column="PARTIAL_REG_LIMIT" mandatory="yes" forid="partialreglimit" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="fullreglimit" column="FULL_REG_LIMIT" mandatory="yes" forid="fullreglimit" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="partialreglimitleft" column="PARTIAL_REG_LIMIT_LEFT" mandatory="yes" forid="partialreglimitleft" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="fullreglimitleft" column="FULL_REG_LIMIT_LEFT" mandatory="yes" forid="fullreglimitleft" dbdatatype="INT" />
+<validationfld dbcolsize="8" name="createdate" column="CREATE_DATE" mandatory="yes" forid="createdate" dbdatatype="DATE_NS" />
+<validationfld dbcolsize="20" name="promotionid" column="PROMOTION_ID" mandatory="yes" forid="promotionid" dbdatatype="STRING" />
+<validationfld dbcolsize="6" name="mintransitsperinterval" column="MIN_TRANSITS_PER_INTERVAL" mandatory="yes" forid="mintransitsperinterval" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="transitintervalperioddays" column="TRANSIT_INTERVAL_PERIOD_DAYS" mandatory="yes" forid="transitintervalperioddays" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="unitspermemberperinterval" column="UNITS_PER_MEMBER_PER_INTERVAL" mandatory="yes" forid="unitspermemberperinterval" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="unitsdealperinterval" column="UNITS_DEAL_PER_INTERVAL" mandatory="yes" forid="unitsdealperinterval" dbdatatype="INT" />
+<validationfld dbcolsize="6" name="dealintervaldays" column="DEAL_INTERVAL_DAYS" mandatory="yes" forid="dealintervaldays" dbdatatype="INT" />
+
+	</field>
+	</fields>
+	</panel>	
+	</panels>
+</root>

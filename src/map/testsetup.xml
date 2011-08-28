@@ -50,7 +50,7 @@
 			<error message="The select failed for :whereval"></error>
 			<message message="The record,:whereval was selected successfully"></message>
 			</jsonrpc>
-			<jsonrpc outstack="formpagination" id="gridtest">SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS 
+			<jsonrpc outstack="form1" id="gridtest">SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS 
 			  <countquery pagesize="10">select count('x') from PRODUCT_DETAILS</countquery>
 			</jsonrpc>
 		</crud>
@@ -83,7 +83,7 @@
 					</input>
 				</field>
 				<field>
-					<select forid="divProgram" id="selProgram" replace="append" >
+					<select name="country" forid="divProgram" id="selProgram" replace="append" >
 					 <text>
 					 <![CDATA[
 					       <select name="country" id="selProgram">
@@ -99,19 +99,19 @@
 					</select>
 				</field>
 				<field>
-					<select forid="divIdappend" id="selIdappend" replace="append" >
+					<select name="selIdappend" forid="divIdappend" id="selIdappend" replace="append" >
 					 <query stackid="selIdappend" type="SQL">select PROGNAME ,PROGNAME  from PROGRAMDETAILS </query>
 					</select>
 				</field>
 				<field>
-					<select forid="selIdmodify" id="selIdmodify" replace="modify" >
+					<select name="selIdmodify" forid="selIdmodify" id="selIdmodify" replace="modify" >
 					 <query stackid="selIdmodify" type="SQL">select PROGNAME ,PROGNAME  from PROGRAMDETAILS </query>
 					</select>
 				</field>
 			</fields>
 			<button type="submit" replace="modify" forid="submitbutton" id="submitbutton">Submit Button</button>
 			<button type="button" replace="append" forid="submitcontainer" id="submitbutton2" onclick="jsrpctest();">JS RPC Test</button>	
-				
+			 	
 		</panel>
 	</panels>
 </root>

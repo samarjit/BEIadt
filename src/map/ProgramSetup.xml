@@ -70,21 +70,21 @@
 		<bl>
 			<buslogic id="ArbritrarySelect" method="testMethod1"> </buslogic>
 		</bl>
-		<anyprocs >
+		<anyprocs>
 				<proc id="upd2" outstack="frmUpd1">{'procname':'WS_TEST_PROC','inputparam':[[{'NAME':'sam','EMAIL':'sam@yl.com'},{'NAME':'samarjit','EMAIL':'samarjit@yl.com'}],{'data1':'param2'}],'outputparam':'param3'}</proc>
 				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
-			<cmd name="getpmdetailsdm" opt="txnproc:pmdetails" instack="form1" result="ajax" processor="dm"></cmd>
-			<cmd name="getpmdetails" opt="jsonrpc:progdetails" instack="form1" result="ajax" processor="crud"></cmd>
+			<cmd name="getpmdetails1" opt="txnproc:pmdetails" instack="form1" result="login.jsp" processor="dm"></cmd>
+			<cmd name="getpmdetails" opt="jsonrpc:progdetails" instack="form1" result="TestPage.page" processor="crud"></cmd>
 		   <cmd name="BusLogic1" opt="buslogic:ArbritrarySelect" instack="form1" result="ajax" processor="bl" />
 		   <cmd name="TXNPROC1" opt="txnproc:TRANSCODE" instack="form1" result="ajax" processor="dm" />
 		   <cmd name="jrpcCmd1" opt="jsonrpc:rpc3" instack="form1" result="ajax"  processor="crud" />
 		   <cmd name="Update" opt="sqlupdate:Upd1" instack="form1" result="ajax"  processor="crud" />
-		   <cmd name="Create" opt="sqlinsert:ins1" instack="form1" result="ajax"  processor="crud" />
+		   <cmd name="Create1" opt="sqlinsert:ins1" instack="form1" result="ajax"  processor="crud" />
 		   <cmd name="merge" opt="jsonrpc:rpc1|selectonload:selqry1" instack="form1" result="ajax|{screenName}"  processor="crud" />
 		   <cmd name="selectlist" opt="sqlupdate:ins2|sqlupdate:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="crud" />
-		   <cmd name="CallAayProc" opt="proc:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="anyproc" />
+		   <cmd name="Create" opt="proc:upd2"  instack="formChild"  result="ajax"  processor="anyproc" />
 		   <bulkcmd name="blTest" opt="buslogic#ArbritrarySelect"  result="ajax"/>
 		   <onload name="blTest" opt="selectonload:selqry1|selectonload:selqry2|selectonload:programname"  />
 		</commands>
@@ -99,7 +99,7 @@
 					<sometype name="whereval" dbdatatype="STRING"></sometype>
 				</field>
 				<field>
-					<select  type="text" class="userid" forid="programname" value="txtpmname" key="txtpmname" name="programname" id="programname" column="FF0149" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
+					<select  type="text" class="userid" forid="programname" value="txtpmname" key="txtpmname" name="programname" id="programname" column="FF0149" dbdatatype="STRING"  dbcolsize="10" mask="" mandatory="yes"
 						hidden="" label="" replace="modify">
 						<text>
 						<![CDATA[ <select name="programname" id="programname" maxlength="50" class="field" onchange="iadt.copySeltohidden(this,'newprog','txtnewprogname',populateFieldsToModify)">
@@ -125,10 +125,8 @@
 					</input>
 				</field>
 				<field>
-					<input type="text" class="userid" forid="txtprogramdesc" value="" name="txtprogramdesc" id="txtprogramdesc" column="FF0148" dbdatatype="STRING" dbcolsize="" mask="" mandatory=""
-						hidden="" label="" replace="modify">
-						<rule></rule>
-					</input>
+					<input type="text" class="userid" forid="txtprogramdesc" value="" name="txtprogramdesc" id="txtprogramdesc" column="FF0148" dbdatatype="INT" dbcolsize="2" mask="" mandatory=""
+						hidden="" label="" replace="modify"/>
 				</field>
 				<field>
 					<select  type="text" class="userid" forid="countryofissue" value="txtcname" key="txtccode" name="countryofissue" id="countryofissue" column="FF0149" dbdatatype="STRING"  dbcolsize="" mask="" mandatory=""
@@ -146,15 +144,6 @@
 			  
 			<testscriptlet><![CDATA[<@s.property value="selectmonthl"/> ]]></testscriptlet> 
 
-		</panel>
-		<panel id="userpanellist">
-			
-			<fields>
-				<field>
-					<customfield forid="displayuserlist">
-					</customfield>
-				</field>
-			</fields>
 		</panel>
 	</panels>
 </root>

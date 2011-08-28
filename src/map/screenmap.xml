@@ -23,5 +23,7 @@
  
  <screen name="cardReceiptList" mappingxml="map/cms/cardReceiptList.xml" />
  <screen name="cardReceipt" mappingxml="map/cms/cardReceipt.xml" />
+ <screen name="merchant_view" mappingxml="map/temp/merchant_view.xml" />
+ <screen name="deal_view" mappingxml="map/temp/deal_view.xml" />
  
 </root>
