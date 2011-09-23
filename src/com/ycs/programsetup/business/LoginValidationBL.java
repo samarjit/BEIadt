@@ -9,13 +9,13 @@ import net.sf.json.JSONObject;
 
 import org.dom4j.Element;
 
-import com.ycs.fe.businesslogic.EzlinkBL;
+import com.ycs.fe.businesslogic.BaseBLAdapter;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 import com.ycs.fe.exception.FrontendException;
 import com.ycs.fe.util.ScreenMapRepo;
 
-public class LoginValidationBL extends EzlinkBL{
+public class LoginValidationBL extends BaseBLAdapter{
 
 	@Override
 	public ResultDTO executeCommand(String screenName, String querynodeXpath, JSONObject jsonRecord, InputDTO inputDTO, ResultDTO resultDTO) {

@@ -1,5 +1,8 @@
 package com.ycs.fe.dto; 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.ycs.fe.exception.DataTypeException;
   
  public class PrepstmtDTO { 
@@ -10,7 +13,8 @@ import com.ycs.fe.exception.DataTypeException;
  //public static String FLOAT="FLOAT"; 
   public static final String DATEDDMMYYYY_FORMAT = "DD/MM/yyyy";
   public static final String DATE_NS_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
-	 
+  public static final String DATE_TIME_MIN_FORMAT = "dd/MM/yyyy HH:mm"; 
+          
  public PrepstmtDTO(DataType type,String data){ 
          this.type = type; 
          this.data = data; 
@@ -24,7 +28,7 @@ import com.ycs.fe.exception.DataTypeException;
  } 
   
  public static enum DataType { 
-         STRING,INT,DATEDDMMYYYY,FLOAT,DOUBLE, TIMESTAMP, DATE_NS, LONG 
+         STRING,INT,DATEDDMMYYYY,FLOAT,DOUBLE, TIMESTAMP, DATE_NS, LONG ,DATE_TIME_MIN
  } 
  public DataType getType() { 
          return type; 
@@ -34,6 +38,8 @@ import com.ycs.fe.exception.DataTypeException;
 		 return "TIMESTAMP"; 
 	 if(type == DataType.DATE_NS)
 		 return "DATE_NS"; 
+	 if(type == DataType.DATE_TIME_MIN)
+		 return "DATE_TIME"; 
      if(type == DataType.STRING)
     	 return "STRING"; 
      if(type == DataType.INT)
@@ -58,6 +64,8 @@ import com.ycs.fe.exception.DataTypeException;
     	 return DataType.DATEDDMMYYYY; 
 	 if(type.equals("DATE_NS") )
 		 return DataType.DATE_NS; 
+	 if(type.equals("DATE_TIME") )
+		 return DataType.DATE_TIME_MIN; 
 	 if(type.equals("TIMESTAMP") )
 		 return DataType.TIMESTAMP; 
 	 if(type.equals("FLOAT") )
@@ -75,5 +83,19 @@ import com.ycs.fe.exception.DataTypeException;
  } 
           
  public String data; 
-  
- } 
+ 
+ public static String getDateStringFormat(Date dt, String format){
+	 SimpleDateFormat sm = new SimpleDateFormat();
+	 if(format.equals(DATEDDMMYYYY_FORMAT)){
+		   sm = new SimpleDateFormat(DATEDDMMYYYY_FORMAT);
+	 }else if(format.equals(DATE_NS_FORMAT)){
+		   sm = new SimpleDateFormat(DATE_NS_FORMAT);
+	 }else if(format.equals(DATE_TIME_MIN_FORMAT)){
+		 sm = new SimpleDateFormat(DATE_TIME_MIN_FORMAT);
+	 }else{ 
+		 sm = new SimpleDateFormat(DATE_NS_FORMAT);
+	 }
+	 return sm.format(dt);
+ }
+ 
+} 

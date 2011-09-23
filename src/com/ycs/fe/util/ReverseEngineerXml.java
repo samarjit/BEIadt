@@ -8,15 +8,16 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import com.ycs.fe.dao.DBConnector;
+import com.ycs.fe.dto.PrepstmtDTO.DataType;
 
 public class ReverseEngineerXml {
-
+	private String globalSQL = " select * from USER_ID_MAPPING where rownum <2";
 	public static String toPropoerCase(String inputString) {
 
 		StringBuffer result = new StringBuffer();
 		String[] list = null;
 		if (inputString != null && inputString.length() > 0) {
-			StringTokenizer tok = new StringTokenizer(inputString);
+			StringTokenizer tok = new StringTokenizer(inputString, "_ ");
 			if (tok.hasMoreElements())
 				list = new String[tok.countTokens()];
 			int n = 0;
@@ -65,12 +66,12 @@ public class ReverseEngineerXml {
 		Connection con = db.getConnection();
 		Statement st = con.createStatement();
 
-		String sql = "select * from DEAL_MASTER";
+		String sql = globalSQL;
 
 		ResultSet rs = st.executeQuery(sql);
 		ResultSetMetaData metaData = rs.getMetaData();
 		int rowCount = metaData.getColumnCount();
-		System.out.println("Table Name : " + metaData.getTableName(2));
+		System.out.println("Table Name : " + metaData.getTableName(1));
 		System.out.println("Field  \tsize\tDataType");
 		ArrayList<String> arheader = new ArrayList<String>();
 		ArrayList<String> aralias = new ArrayList<String>();
@@ -83,7 +84,7 @@ public class ReverseEngineerXml {
 		int size = 0;
 		int scale= 0;
 		String tableName = "";
-		tableName = metaData.getTableName(2);
+		tableName = metaData.getTableName(1);
 		for (int i = 0; i < rowCount; i++) {
 			columnName = metaData.getColumnName(i + 1);
 			 
@@ -105,6 +106,9 @@ public class ReverseEngineerXml {
 			
 		}
 		
+		if(con!= null){
+			con.close();
+		}
 		//headers
 		String colNames= "colNames:[";
 		boolean first = true;
@@ -142,17 +146,57 @@ public class ReverseEngineerXml {
 		 //select clause;
 		
 		 String sel = "SELECT ";first = true;
+		 String sel2 = "SELECT ";
 			for (int i = 0; i < aralias.size(); i++) {
 				alias = aralias.get(i);
 				size = arcolprecision.get(i);
 				datatype = ardatatype.get(i);
 				col = arcol.get(i);
-				sel += (first)?"":","; first = false;
+				sel += (first)?"":",";  
 				sel += col+" \""+alias+"\"";
+				sel2 += (first)?"":","; first = false;
+				sel2 += col+" ";
 			}
 			sel += " FROM "+tableName;
+			sel2 += " FROM "+tableName;
 			
 			System.out.println(sel);
+			System.out.println(sel2);
+			
+			String crs = "";
+			String crs1 = "";
+			String crs2 = "";
+			String insertSql = " insert into "+tableName+" (\"+insertCol+\") values (\"+insertVal+\")";
+			String insertCol = "";
+			String insertVal = "";
+			String ins = "";
+			String upd = "";
+			for (int i = 0; i < arheader.size(); i++) {
+				crs += "res.set"+arheader.get(i).replace(" ", "")+"(crs.getString(\""+arcol.get(i)+"\"));\r\n";
+				crs1 += "res.set"+arheader.get(i).replace(" ", "")+"(crs.getString(\""+aralias.get(i)+"\"));\r\n";
+				crs2 += "res.set"+ toPropoerCase(aralias.get(i).replace(" ", ""))+"(crs.getString(\""+aralias.get(i)+"\"));\r\n";
+				
+				upd+="if (pinMaster.get"+arheader.get(i).replace(" ", "")+"() != null) {\r\n" + 
+						"				qry+= (first)?\"\":\",\";first = false;\r\n" + 
+						"				qry+= \""+arcol.get(i)+" = ?\";\r\n" + 
+						"				arPrepstmt.add(DataType."+ardatatype.get(i)+", pinMaster.get"+arheader.get(i).replace(" ", "")+"());\r\n" + 
+						"			}\r\n";
+				
+				ins +="if (pinMaster.get"+arheader.get(i).replace(" ", "")+"() != null) {\r\n" + 
+						"              insertCol += (first)?\"\":\",\";\r\n" + 
+						"              insertVal += (first)?\"\":\",\";\r\n" + 
+						"              insertCol +=\"" +arcol.get(i)+"\";\r\n"+
+						"              insertVal += \"?\";\r\n" + 
+						"              first = false;\r\n" + 
+						"              arPrepstmt.add(DataType."+ardatatype.get(i)+", pinMaster.get"+arheader.get(i).replace(" ", "")+"());\r\n" + 
+						"           }\r\n";
+			}
+			System.out.println(crs+"\r\n");
+			System.out.println(crs1+"\r\n");
+			System.out.println(crs2+"\r\n");
+			System.out.println(upd+"\r\n");
+			System.out.println(ins+"\r\n");
+			System.out.println(insertSql+"\r\n");
 	}
 
 	/**

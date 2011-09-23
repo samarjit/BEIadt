@@ -36,7 +36,7 @@ public class CommandProcessor {
 	 * {"row":1,"programname":"TRACARD","txtnewprogname":"TRACARD","txtprogramdesc":"Travel Card Program","issuername":"HSBC Bank","countryofissue":"SINGAPORE",
 	 * "txtstatus":"Modify",
 	 * command:"jrpcCmd1"}],
-	 * “txnrec”:{single:””,multiple:[{aaa:’’},{aaa:’’}]}, 
+	 * "txnrec":{single:"",multiple:[{aaa:''},{aaa:''}]}, 
 	 * bulkcmd:'',
 	 * sessionvars: {key:'value',sessionkey:'sessiondata'} //This part is dynamically inserted
 	 * }
@@ -101,8 +101,8 @@ public class CommandProcessor {
 		    
 		    if(submitdataObj.get("bulkcmd") !=null && !"inline".equals(submitdataObj.getString("bulkcmd"))){
 		    	String bulkcmd = ((JSONObject) submitdataObj).getString("bulkcmd");
-		    	Element elmBulkCmd = (Element) rootXml.selectSingleNode("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"']");
-		    	logger.debug("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"']");
+		    	Element elmBulkCmd = (Element) rootXml.selectSingleNode("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"' ] ");
+		    	logger.debug("/root/screen/commands/bulkcmd[@name='"+bulkcmd+"' ] ");
 		    	String operation = "";
 		    	if(elmBulkCmd !=null)
 				  operation = elmBulkCmd.attributeValue("opt");
