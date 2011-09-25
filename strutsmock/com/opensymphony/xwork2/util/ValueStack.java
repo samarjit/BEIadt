@@ -6,8 +6,6 @@ import java.util.Map;
 import ognl.Ognl;
 import ognl.OgnlException;
 
-import com.ycs.fe.exception.QueryParseException;
-
 public class ValueStack {
 	Map<String, Object> root = new HashMap<String, Object>();
 	Map<String, Object> context = new HashMap<String, Object>();
@@ -19,11 +17,11 @@ public class ValueStack {
 		context.put(key, value);
 	}
 
-	public String findString(String string) throws QueryParseException   {
+	public String findString(String string) throws OgnlException   {
 		try {
 			return (String) Ognl.getValue(string, context, root);
 		} catch (OgnlException e) {
-			throw new  QueryParseException("expression ["+string+"]");
+			throw new  OgnlException("expression ["+string+"]");
 		}
 
 	}

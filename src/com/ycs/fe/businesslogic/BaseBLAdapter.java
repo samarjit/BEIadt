@@ -5,11 +5,10 @@ import java.util.HashMap;
 import net.sf.json.JSONObject;
 
 import com.opensymphony.xwork2.ActionInvocation;
-import com.ycs.fe.businesslogic.BaseBL;
 import com.ycs.fe.dto.InputDTO;
 import com.ycs.fe.dto.ResultDTO;
 
-public abstract class EzlinkBL implements BaseBL {
+public abstract class BaseBLAdapter implements BaseBL {
 
 	@Override
 	public HashMap preJsRPCListerner(ActionInvocation invocation) {

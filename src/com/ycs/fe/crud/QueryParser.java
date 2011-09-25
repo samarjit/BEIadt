@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
+import ognl.OgnlException;
+
 import org.apache.log4j.Logger;
 import org.dom4j.Element;
 
@@ -69,7 +71,7 @@ public class QueryParser{
 	public static String parseQuery(String updatequery,String panelname,JSONObject jsonObject, PrepstmtDTOArray  arparam, HashMap<String, DataType> hmfielddbtype, InputDTO jsonInput, ResultDTO prevResultDTO) throws BackendException{
 		//Where
 //		String updatewhere = crudnode.selectSingleNode("sqlwhere").getText();
-		String PATTERN = "\\:(inp|res|vs|ses)?\\.?([^,\\s\\|]*)\\|?([^,\\s]*)";//"\\:(\\w*)\\[?(\\d*)\\]?\\.?([^,\\s\\|]*)\\|?([^,\\s]*)";
+		String PATTERN = "\\#(inp|res|vs|ses)?\\.?([^,\\s\\|]*)\\|?([^,\\s]*)";//"\\:(\\w*)\\[?(\\d*)\\]?\\.?([^,\\s\\|]*)\\|?([^,\\s]*)";
 		
 		Pattern   pattern = Pattern.compile(PATTERN,Pattern.DOTALL|Pattern.MULTILINE);
 		updatequery = updatequery.trim();
@@ -209,6 +211,9 @@ public class QueryParser{
 	    	throw new BackendException("error.queryparsing",e);
 	    } catch (DataTypeException e) {
 	    	logger.error("error.queryparsing", e);
+	    	throw new BackendException("error.queryparsing",e);
+		} catch (OgnlException e) {
+			logger.error("error.queryparsing", e);
 	    	throw new BackendException("error.queryparsing",e);
 		}
 	       return parsedquery;

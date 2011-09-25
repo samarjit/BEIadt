@@ -30,8 +30,8 @@ import com.ycs.ws.client.SPCallService;
 
 /**
  * jsonRecord will be like
- * “txnrec”:[{single:"",multiple:[{aaa:’11’,bbb:’22’,ccc:
- * ’33’},{aaa:’1’,bbb:’2’,ccc:’3’}], command=”TXNPROC1”}]}
+ * "txnrec":[{single:"",multiple:[{aaa:"11",bbb:"22",ccc:
+ * "33"},{aaa:"1",bbb:"2",ccc:"3"}], command="TXNPROC1"}]}
  * 
  * @author Samarjit
  * 
@@ -41,8 +41,8 @@ public class DmCommandProcessor implements BaseCommandProcessor {
 
 	/**
 	 * jsonRecord will be like
-	 * “txnrec”:[{single:"",multiple:[{aaa:’11’,bbb:’22’,
-	 * ccc:’33’},{aaa:’1’,bbb:’2’,ccc:’3’}], command=”TXNPROC1”}]}
+	 * "txnrec":[{single:"",multiple:[{aaa:"11",bbb:"22",
+	 * ccc:"33"},{aaa:"1",bbb:"2",ccc:"3"}], command="TXNPROC1"}]}
 	 * 
 	 */
 
