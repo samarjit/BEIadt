@@ -14,7 +14,6 @@ import org.quartz.impl.StdSchedulerFactory;
 import com.ycs.scheduler.alertq.MyJobClass;
 import com.ycs.scheduler.otp.OtpCleanJob;
 import com.ycs.scheduler.refund.RefundJob;
-import com.ycs.scheduler.txn.TxnHstConsolJob;
 
 public class FixedTimeScheduler {
 	Scheduler sched = null;
@@ -36,10 +35,6 @@ public class FixedTimeScheduler {
 		JobDetail otpCleanJob = JobBuilder.newJob(OtpCleanJob.class).withIdentity("OtpCleanJob", "alertgroup1").build();
 		CronTrigger otpCleanTrigger = TriggerBuilder.newTrigger().withIdentity("OtpCleantrigger1", "alertgroup1").withSchedule(CronScheduleBuilder.cronSchedule("0/20 * * * * ?")).build();
 		sched.scheduleJob(otpCleanJob, otpCleanTrigger);
-		
-		JobDetail txnHstConsolJob = JobBuilder.newJob(TxnHstConsolJob.class).withIdentity("txnHstConsolJob", "txnHstConsolgroup1").build();
-		CronTrigger txnHstConsolTrigger = TriggerBuilder.newTrigger().withIdentity("txnHstConsoltrigger1", "txnHstConsolgroup1").withSchedule(CronScheduleBuilder.cronSchedule("0/20 * * * * ?")).build();
-		sched.scheduleJob(txnHstConsolJob, txnHstConsolTrigger);
 		
 		
 		

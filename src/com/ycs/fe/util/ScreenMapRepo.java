@@ -48,11 +48,11 @@ public class ScreenMapRepo {
 		
 			doc = new SAXReader().read(scrxml);
 				root = doc.getRootElement();
-				System.out.println("xmlcache -> scrxmlroot cache miss");
+//				System.out.println("xmlcache -> scrxmlroot cache miss");
 				AppCacheManager.putElementInCache("xmlcache", "scrxmlroot", root);
 			}else{
 				root = (Element) scrXmlFromCache.getObjectValue();
-				System.out.println("xmlcache -> scrxmlroot cache hit");
+//				System.out.println("xmlcache -> scrxmlroot cache hit");
 			}
 			
 			

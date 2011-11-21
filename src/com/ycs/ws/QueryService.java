@@ -68,6 +68,7 @@ public class QueryService<str> {
 	
 	@WebMethod
 	public String remoteCommandProcessor(String submitdataObj, String screenName) throws Exception{
+		logger.debug(">>>>incoming value : +++ "+ submitdataObj);
 		String tmpResDTO = "Query Service Error in remoteCommandProcessor";
 		JSONObject submitdata =  JSONObject.fromObject(submitdataObj);
 
@@ -88,7 +89,8 @@ public class QueryService<str> {
 		CommandProcessor processor = new CommandProcessor();
 		ResultDTO resultDTO = processor.commandProcessor(submitdata, screenName);
 		tmpResDTO = JSONObject.fromObject(resultDTO).toString();
-		
+		logger.debug("<<<<Return value : +++ " + tmpResDTO);
+		System.out.println("<<<<Return value : +++ " + tmpResDTO);
 		ServletActionContext.destroy();
 		
 		return tmpResDTO ;

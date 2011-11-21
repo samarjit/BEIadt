@@ -9,8 +9,8 @@ import org.apache.log4j.Logger;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-public class CompondResource {
-	private static Logger logger = Logger.getLogger(CompondResource.class);
+public class CompoundResource {
+	private static Logger logger = Logger.getLogger(CompoundResource.class);
  
 	 
 	/**

@@ -5,6 +5,9 @@ import javax.jws.WebService;
 
 import org.apache.log4j.Logger;
 
+import com.ycs.ezlink.dao.AuthenticationDAO;
+import com.ycs.fe.exception.BackendException;
+
 @WebService
 public class Authentication {
 	
@@ -14,9 +17,17 @@ public class Authentication {
 	 * @return "success" or "fail"
 	 */
 	@WebMethod
-	public String authenticate(){
+	public String authenticate(String user, String pass){
 		logger.info("Authentication");
-		
+		boolean res = false;;
+		try {
+			res = AuthenticationDAO.authenticate(user, pass);
+		} catch (BackendException e) {
+			e.printStackTrace();
+		}
+		if(res) 
 		return "success";
+		else
+			return "fail";
 	}
 }

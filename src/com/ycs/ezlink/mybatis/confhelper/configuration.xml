@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+<!--Configuration for mybatis-->
+	<properties resource="path_config.properties">
+		<property name="foo" value="bar" />
+	</properties>
+	<!--<typeAliases>
+		<typeAlias type="org.mybatis.example.beans.Contact" alias="contact" />
+	</typeAliases>
+	--><environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${DRIVERNAME}" />
+				<property name="url" value="${DBURL}" />
+				<property name="username" value="${DBUSER}" />
+				<property name="password" value="${DBPASSWORD}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="com/ycs/ezlink/mybatis/sqlmaps/AlertQueueMapper.xml" />
+		<mapper resource="com/ycs/ezlink/mybatis/sqlmaps/AlertTemplateMasterMapper.xml" />
+	</mappers>
+</configuration>

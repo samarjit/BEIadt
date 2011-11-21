@@ -95,7 +95,7 @@ public class DBConnector {
 				initContext = new InitialContext();
 				envContext = (Context) initContext.lookup("java:/comp/env");
 			} catch (NamingException e1) {
-				logger.error("Exception occured in contructing InitialContext");
+				//logger.error("Exception occured in contructing InitialContext");
 			}
 
 			boolean fallaback = false;
@@ -121,8 +121,14 @@ public class DBConnector {
 
 			if (envContext == null || fallaback) {
 				// /Running in standalone mode
-				debug(3, "Database connection Running in standalone mode# " + DBURL);
+				//debug(3, "Database connection Running in standalone mode# " + DBURL);
 				// conn = DriverManager.getConnection (url, userName, password);
+//				 conn = JDBCUtils.getConnection();
+//				 JDBCUtils.listCacheInfos();
+				
+//				conn =  MiniConnectionPoolHelper.getConnection();
+//				isRuninServerContext = false;
+				 
 				Class.forName(driverName);
 				conn = DriverManager.getConnection(url, userName, password);
 				if (conn == null) {
@@ -202,6 +208,7 @@ public class DBConnector {
 			conn = getConnection();
 			Statement stmt = conn.createStatement();
 			retval = stmt.executeUpdate(qry);
+			conn.commit();
 		} catch (SQLException e) {
 			logger.error("error.sqlstatement", e);
 			try {
@@ -371,6 +378,7 @@ public class DBConnector {
 			}
 
 			retval = stmt.executeUpdate();
+			conn.commit();
 		} catch (SQLException e) {
 			logger.error("error.sqlstatement", e);
 			try {

@@ -76,7 +76,7 @@ public class AppCacheManager {
 	}
 	
 	public static void createCache(String cacheName){
-		  localCache = new Cache(cacheName, 5000, false, false, 5, 2);
+		  localCache = new Cache(cacheName, 5000, false, false, 500, 200);
 		  singletonManager.addCache(localCache);
 	}
 	public static void putElementInCache(String cachename,String key, Object object){

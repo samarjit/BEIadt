@@ -43,8 +43,8 @@ public class FileSyncImpl implements FileSync{
 			ServletActionContext.create();
 			String screenpath = ServletActionContext.getServletContext().getRealPath("WEB-INF/classes/map");
 			System.out.println("screenpath="+screenpath);
-			scrxml = new BufferedInputStream(new FileInputStream(screenpath+"\\screenmap.xml"));
-			File file = new File(screenpath+"\\screenmap.xml");
+			scrxml = new BufferedInputStream(new FileInputStream(screenpath+"/screenmap.xml"));
+			File file = new File(screenpath+"/screenmap.xml");
 			returnJson += "'screenmap':"+file.lastModified();
 			Document doc = new SAXReader().read(scrxml);
 			Element	root = doc.getRootElement();

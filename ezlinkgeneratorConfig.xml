@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+  <context id="context1" >
+  	<commentGenerator>  
+  		<property name="suppressDate" value="true" />
+	</commentGenerator>
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@192.168.100.160:1521:dev" userId="ezlink" password="ezlink" />
+    <javaModelGenerator targetPackage="com.ycs.ezlink.mybatis.dto" targetProject="BEQueryProcssor" >
+       <property name="trimStrings" value="true" />
+       
+    </javaModelGenerator>
+    <sqlMapGenerator targetPackage="com.ycs.ezlink.mybatis.sqlmaps" targetProject="BEQueryProcssor" ></sqlMapGenerator>
+    <javaClientGenerator targetPackage="com.ycs.ezlink.mybatis.mapper" targetProject="BEQueryProcssor" type="MIXEDMAPPER">
+             </javaClientGenerator>
+    <!--<table schema="ezlink" tableName="CUSTOMER_MASTER" >
+       	<columnOverride column="F_NAME"  property="FName"></columnOverride>
+		<columnOverride column="L_NAME"  property="LName"></columnOverride>
+		<columnOverride column="M_NAME"  property="MName"></columnOverride>
+    </table>
+    <table schema="ezlink" tableName="USER_MASTER" >
+       
+    </table>
+    <table schema="ezlink" tableName="PIN_MASTER" >
+        
+    </table>
+    <table schema="ezlink" tableName="USER_ID_MAPPING" >    </table>
+    <table schema="ezlink" tableName="OTP_USER_DTL" >    </table>
+    <table schema="ezlink" tableName="CARD_BLOCK_REFUND" >    </table> 
+    <table tableName="EZL_RETN_FILE_TRACK" >    </table>-->
+    <table tableName="ALERT_QUEUE" >    </table>
+    <table tableName="ALERT_TEMPLATE_MASTER" >    </table>
+    
+ </context>
+</generatorConfiguration>

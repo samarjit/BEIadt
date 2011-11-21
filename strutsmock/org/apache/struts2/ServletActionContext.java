@@ -3,6 +3,7 @@ package org.apache.struts2;
 import java.util.ResourceBundle;
 
 import com.opensymphony.xwork2.ActionContext;
+import com.ycs.fe.util.CompoundResource;
 
 public class ServletActionContext extends ActionContext{
 	private static ServletActionContext context;
@@ -17,7 +18,8 @@ public class ServletActionContext extends ActionContext{
 	}
 
 	public String getRealPath(String string) {
-		String path = ResourceBundle.getBundle("path_config").getString("context.path");//"D:/workspace/BEIadt/src";
+		ResourceBundle rb = ResourceBundle.getBundle("path_config");
+		String path = CompoundResource.getString(rb, "context.path");//"D:/workspace/BEIadt/src";
 		if(string.contains("classes")){
 		String parts[] = string.split("classes");
 			if(parts.length ==1 )return path;
