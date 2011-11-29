@@ -22,17 +22,17 @@
 			
 		</stylesheets>
 		<crud>
-			<jsonrpc id="insertcard" outstack="frmIns1">insert into card_order (invoice_no,product_code,product_name,plastic_code,plastic_desc,ordered_quantity,ordered_by,ordered_date,authorize_status,embossing_status,process_status)values(CARD_ORDER_SEQ.currval,:productCode|STRING,:productName|STRING, :plasticCode|STRING ,:plasticDesc|STRING , :quantity|STRING , :ses.userid|STRING ,sysdate,'PENDING','PROGRESS',1)</jsonrpc>
+			<jsonrpc id="insertcard" outstack="frmIns1">insert into card_order (invoice_no,product_code,product_name,plastic_code,plastic_desc,ordered_quantity,ordered_by,ordered_date,authorize_status,embossing_status,process_status)values(CARD_ORDER_SEQ.currval,#productCode|STRING,#productName|STRING, #plasticCode|STRING ,#plasticDesc|STRING , #quantity|STRING , #ses.userid|STRING ,sysdate,'PENDING','PROGRESS',1)</jsonrpc>
 			<jsonrpc id="getSeq" outstack="seqval">select nextval('CARD_ORDER_SEQ') "invoice" from dual;</jsonrpc>
 		</crud>
 		<dm>
-			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }</txnproc>
+			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': #inp.single ,'multiple':#inp.multiple }</txnproc>
 		</dm>
 		<bl>
 			<buslogic id="ArbritrarySelect" outstack="frmUpd1"> </buslogic>
 		</bl>
 		<anyprocs>
-				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
+				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[#inp.param1 ,#inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
 		   <cmd name="create" opt="jsonrpc:getSeq|jsonrpc:insertcard"  instack="form1"  result="ajax|{screenName}"  processor="crud" />

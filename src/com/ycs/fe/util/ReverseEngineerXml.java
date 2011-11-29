@@ -11,7 +11,7 @@ import com.ycs.fe.dao.DBConnector;
 import com.ycs.fe.dto.PrepstmtDTO.DataType;
 
 public class ReverseEngineerXml {
-	private String globalSQL = " select * from USER_ID_MAPPING where rownum <2";
+	private String globalSQL = "  SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS ";
 	public static String toPropoerCase(String inputString) {
 
 		StringBuffer result = new StringBuffer();
@@ -110,26 +110,43 @@ public class ReverseEngineerXml {
 			con.close();
 		}
 		//headers
-		String colNames= "colNames:[";
+		System.out.println("jQuery(\"#listid\").jqGrid( {\r\n");
+		System.out.println("      	url:'<%= request.getContextPath() %>/jqgrid.action?command=true&screenName=XXXXXTestPage&submitdata={bulkcmd=\"XXXXXprodgrid\"}',");
+		System.out.println("      	datatype: \"json\",");
+		String colNames= "      	colNames:[";
 		boolean first = true;
 		for (String string : arheader) {
 			colNames += (first)?"":","; first = false;
 			colNames += "'"+string.trim()+"'";
 		}
-		colNames += "],";
+		colNames += "      	],";
 		
 		System.out.println(colNames);
 		
 		//jqgrid column model
-		String colModel = "colModel:[";first =true;
+		String colModel = "      	colModel:[";first =true;
 		for (int i = 0; i < aralias.size(); i++) {
 			alias = aralias.get(i);
 			size = arcolprecision.get(i);
-			colModel += (first)?"":",\r\n";first = false;
-			colModel +="{name: '"+alias+"', index: '"+alias+"' , width:"+size+" }" ;
+			colModel += (first)?"\r\n":",\r\n";first = false;
+			colModel +="      	{name: '"+alias+"', index: '"+alias+"' , width:"+size+" }" ;
 		}
-		colModel +="\r\n],";
+		colModel +="\r\n      	],";
 		System.out.println(colModel);
+		System.out.println("      	rowNum: 10,\r\n" + 
+				"      	rowList: [ 10, 20, 30],\r\n" + 
+				"      	pager: '#pagerid',\r\n" + 
+				"      	sortname: 'XXXXSORTING_COLUMN_REF',\r\n" + 
+				"        viewrecords: true,\r\n" + 
+				"        sortorder: \"desc\",\r\n" + 
+				"        jsonReader: {\r\n" + 
+				"    		repeatitems : false,\r\n" + 
+				"    		id: \"0\"\r\n" + 
+				"    	},\r\n" + 
+				"       caption: \"XXXXType the Caption here\"\r\n" + 
+				"   } );");
+		
+		
 		//validation xml
 		 String datatype = "";
 		String validationXml = "";

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <?xml-stylesheet type="text/xsl" href="config.xsl"?>
-<root xsi:noNamespaceSchemaLocation="config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<root xsi:noNamespaceSchemaLocation="../config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <screen name="locale">
         <htmltemplate>
             cms/locale.html
@@ -16,7 +16,7 @@
         <stylesheets>
         </stylesheets>
         <crud>
-       		 <selectonload outstack="language" id="getlang">SELECT lang_name "langname",lang_code "langcode" FROM LOCALE </selectonload>
+       		 <sqlselect outstack="language" id="getlang">SELECT lang_name "langname",lang_code "langcode" FROM LOCALE </sqlselect>
         </crud>
         <dm>
         </dm>
@@ -25,6 +25,7 @@
         <anyprocs>
         </anyprocs>
         <commands>
+        	<onload name="getlang" opt="sqlselect:getlang"/>
         </commands>
     </screen>
     
@@ -58,3 +59,4 @@
         </panel>
     </panels>
 </root>
+

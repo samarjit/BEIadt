@@ -21,21 +21,21 @@
 			
 		</stylesheets>
 		<crud>
-			<jsonrpc id="updateStatus" outstack="form1">update card_order set authorize_status =:status|STRING , process_status = 2 where invoice_no = :whereval|INT</jsonrpc>
-			<jsonrpc outstack="form1" id="load">select invoice_no "invoice" ,product_code "productCode" ,product_name "productName" ,plastic_code "plasticCode" ,plastic_desc "plasticDesc" ,ordered_quantity "quantity" ,ordered_by "orderBy" ,ordered_date "orderDate" ,authorize_status "authorizeStatus" from CARD_ORDER where invoice_no = :whereval|STRING </jsonrpc>
+			<jsonrpc id="updateStatus" outstack="form1">update card_order set authorize_status =#status|STRING , process_status = 2 where invoice_no = #whereval|INT</jsonrpc>
+			<jsonrpc outstack="form1" id="load">select invoice_no "invoice" ,product_code "productCode" ,product_name "productName" ,plastic_code "plasticCode" ,plastic_desc "plasticDesc" ,ordered_quantity "quantity" ,ordered_by "orderBy" ,ordered_date "orderDate" ,authorize_status "authorizeStatus" from CARD_ORDER where invoice_no = #whereval|STRING </jsonrpc>
 		</crud>
 		<dm>
-			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': :inp.single ,'multiple'::inp.multiple }</txnproc>
+			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': #inp.single ,'multiple':#inp.multiple }</txnproc>
 		</dm>
 		<bl>
 			<buslogic id="ArbritrarySelect" outstack="frmUpd1"> </buslogic>
 		</bl>
 		<anyprocs>
-				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
+				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[#inp.param1 ,#inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
-		   <cmd name="getselectedorder" opt="jsonrpc:load"  instack="form1"  result="ajax|{screenName}"  processor="crud" />
-		   <cmd name="updateStatus" opt="jsonrpc:updateStatus"  instack="form1"  result="ajax|{screenName}"  processor="crud" />
+		   <cmd name="getselectedorder" opt="jsonrpc:load"  instack="form1"  result="ajax"  processor="crud" />
+		   <cmd name="updateStatus" opt="jsonrpc:updateStatus"  instack="form1"  result="ajax"  processor="crud" />
 		</commands>
 	</screen>
 

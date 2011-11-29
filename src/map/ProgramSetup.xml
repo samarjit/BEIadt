@@ -137,7 +137,7 @@
 				        </select>]]> 
 				        </text> 
 						<rule></rule>
-						<query stackid="countryofissue">select country_code "txtccode",country_name "txtcname" from country</query>
+						<query stackid="countryofissue" >select country_code "txtccode",country_name "txtcname" from country</query>
 					</select>
 				</field>
 			</fields>
