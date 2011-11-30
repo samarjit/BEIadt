@@ -255,7 +255,7 @@ public class FETranslatorDAO {
 						}
 						 
 				}else{
-					logger.debug("invalid query skipping..."+sqlquery);
+					logger.error("invalid query skipping..."+sqlquery);
 					 return -1;
 				}
 				

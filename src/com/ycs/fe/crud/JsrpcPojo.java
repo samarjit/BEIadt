@@ -106,8 +106,8 @@ private Logger logger = Logger.getLogger(getClass());
 							if(jobject.size()>0 ){
 								JSONObject	panel =  jobject.getJSONObject(outstack);
 								pageDTO = new Gson().fromJson(panel.toString(), PaginationDTO.class);
-								System.out.println("pagination :"+panel);
-								System.out.println("pagination pageDTO:"+pageDTO);
+								logger.debug("pagination :"+panel);
+								logger.debug("pagination pageDTO:"+pageDTO);
 								pageno =  pageDTO.getPage();// panel.getInt("currentpage");
 								pagesize = pageDTO.getRows();
 							}else{
@@ -258,6 +258,8 @@ private Logger logger = Logger.getLogger(getClass());
 								
 								updatequery = sql;
 						}
+					}else{
+						logger.debug("There is no count query, selecting all results, no dynamic where clause!");
 					}
 				}
 				//pagination end

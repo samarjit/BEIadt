@@ -36,7 +36,7 @@
 		<commands>
 		   <cmd name="getPlasticDetails" opt="jsonrpc:plasticDetails"  instack="form1"  result="ajax|{screenName}"  processor="crud" />
 		   <cmd name="getPlasticDetails1" opt="anyprocs:pmdetails"  instack="form1"  result="ajax|{screenName}"  processor="anyproc" />
-		   <onload name="productCode" opt="sqlselect:load1"/>
+		   <onload  opt="sqlselect:load1" result="cardOrder.page"/>
 		</commands>
 	</screen>
 

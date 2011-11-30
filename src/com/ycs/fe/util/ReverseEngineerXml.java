@@ -1,5 +1,7 @@
 package com.ycs.fe.util;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -8,7 +10,6 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import com.ycs.fe.dao.DBConnector;
-import com.ycs.fe.dto.PrepstmtDTO.DataType;
 
 public class ReverseEngineerXml {
 	private String globalSQL = "  SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS ";
@@ -67,7 +68,15 @@ public class ReverseEngineerXml {
 		Statement st = con.createStatement();
 
 		String sql = globalSQL;
-
+		StringBuffer inputSql = new StringBuffer();//new BufferedReader(new InputStreamReader(System.in)).readLine();
+		int ch = -1;
+		System.out.println("Enter a query followed by ';' or simply enter ';' and press <enter>\r\n:");
+		while((ch = System.in.read())!= ';'){
+			inputSql.append((char)ch);
+		}
+		if(inputSql.length() >0){
+			sql= inputSql.toString();
+		}
 		ResultSet rs = st.executeQuery(sql);
 		ResultSetMetaData metaData = rs.getMetaData();
 		int rowCount = metaData.getColumnCount();
@@ -144,8 +153,9 @@ public class ReverseEngineerXml {
 				"    		id: \"0\"\r\n" + 
 				"    	},\r\n" + 
 				"       caption: \"XXXXType the Caption here\"\r\n" + 
-				"   } );");
-		
+				"   } ).navGrid('#pager1',{edit:true,add:true,del:true});");
+		System.out.println("...\n  <table id=\"listid\" ></table>\r\n" + 
+				"		 <div id=\"pagerid\"></div>");
 		
 		//validation xml
 		 String datatype = "";
@@ -160,6 +170,20 @@ public class ReverseEngineerXml {
 		}
 		 System.out.println(validationXml);
 		
+		 
+		 System.out.println("<form name=\"form1\" id=\"form1\" method=\"post\">\r\n" + 
+		 		"        	 <table>" );
+		 for (int i = 0; i < aralias.size(); i++) {
+			 alias = aralias.get(i);
+			 System.out.println("        	   <tr><td>"+arheader.get(i)+"</td><td><input name=\""+alias+"\" id=\""+alias+"\" value=\"${resultDTO.data.formonload[0]."+alias+"}\"/></td></tr>");
+		 }
+		 System.out.println("        	   \r\n\r\n");
+		 for (int i = 0; i < aralias.size(); i++) {
+			 alias = aralias.get(i);
+			 System.out.println("        	   <tr><td>"+arheader.get(i)+"</td><td><s:property value=\"#resultDTO.data.formonload[0]."+alias+"\"  /></td></tr>");
+		 }		 
+		 System.out.println("        	 </table>\r\n" + 
+		 		"</form>");
 		 //select clause;
 		
 		 String sel = "SELECT ";first = true;

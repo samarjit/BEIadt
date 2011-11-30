@@ -25,5 +25,7 @@
  <screen name="cardReceipt" mappingxml="map/cms/cardReceipt.xml" />
  <screen name="merchant_view" mappingxml="map/temp/merchant_view.xml" />
  <screen name="deal_view" mappingxml="map/temp/deal_view.xml" />
+ <screen name="JspTest" mappingxml="map/jsptest/jsptest.xml" />
+ <screen name="JspTestEdit" mappingxml="map/jsptest/jsptestEdit.xml" />
  
 </root>

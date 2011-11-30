@@ -105,7 +105,9 @@ public class AppCacheManager {
 		return singletonManager.getCache(key);
 	}
 	
-	
+	public static void removeCache(String cachename){
+		singletonManager.removeCache(cachename);
+	}
 	/**
 	 * @param args
 	 * @throws CacheException 

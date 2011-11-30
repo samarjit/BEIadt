@@ -25,7 +25,7 @@
         <anyprocs>
         </anyprocs>
         <commands>
-        	<onload name="getlang" opt="sqlselect:getlang"/>
+        	<onload  opt="sqlselect:getlang" result="locale.page"/>
         </commands>
     </screen>
     
@@ -52,7 +52,7 @@
             
             <fields>
                 <field>
-                    <customfield forid="displayuserlist">
+                    <customfield forid="displayuserlist" name="">
                     </customfield>
                 </field>
             </fields>

@@ -86,7 +86,7 @@
 		   <cmd name="selectlist" opt="sqlupdate:ins2|sqlupdate:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="crud" />
 		   <cmd name="Create" opt="proc:upd2"  instack="formChild"  result="ajax"  processor="anyproc" />
 		   <bulkcmd name="blTest" opt="buslogic#ArbritrarySelect"  result="ajax"/>
-		   <onload name="blTest" opt="selectonload:selqry1|selectonload:selqry2|selectonload:programname"  />
+		   <onload  opt="selectonload:selqry1|selectonload:selqry2|selectonload:programname"  result="ProgramSetup.page"/>
 		</commands>
 	</screen>
 

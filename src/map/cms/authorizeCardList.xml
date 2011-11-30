@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <?xml-stylesheet type="text/xsl" href="config.xsl" ?>
-<root xsi:noNamespaceSchemaLocation="config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<root xsi:noNamespaceSchemaLocation="../config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<screen name="authorizeCardList">
 		<htmltemplate>
 			cms/html/authorizeCardList.html
@@ -27,7 +27,7 @@
 			<txnproc id="pmdetails" outstack="frmUpd1">{'transcode':'STUCAP','single': #inp.single ,'multiple':#inp.multiple }</txnproc>
 		</dm>
 		<bl>
-			<buslogic id="ArbritrarySelect" outstack="frmUpd1"> </buslogic>
+			<buslogic id="ArbritrarySelect" method="frmUpd1"> </buslogic>
 		</bl>
 		<anyprocs>
 				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[#inp.param1 ,#inp.whereval] ,'outputparam':'desc'}</proc>
@@ -55,7 +55,7 @@
 			
 			<fields>
 				<field>
-					<customfield forid="displayuserlist">
+					<customfield forid="displayuserlist" name="displayuserlist">
 					</customfield>
 				</field>
 			</fields>

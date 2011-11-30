@@ -140,6 +140,9 @@ public class SelectOnLoad {
 						String[] sqlcmd = opt.split("\\:"); // get Id of query
 						String querynodeXpath = sqlcmd[0] + "[@id='" + sqlcmd[1] + "']"; // Query node xpath
 						Element processorElm = (Element) root.selectSingleNode("/root/screen/*/" + querynodeXpath + " ");
+						if(processorElm ==null)
+					    	  throw new ProcessorNotFoundException("onload cmd resolution error /root/screen/*/" + querynodeXpath + " ");
+						
 						String strProcessor = processorElm.getParent().getName();
 						String outstack = processorElm.attributeValue("outstack");
 						BaseCommandProcessor cmdProcessor = CommandProcessorResolver.getCommandProcessor(strProcessor);

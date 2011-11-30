@@ -81,12 +81,12 @@ public class ScreenMapRepo {
 	
 	public static Element findMapXMLRoot(String scrName) throws FrontendException{
 		Element root = null;
-		String path = findMapXMLPath(scrName);
+		String path = null;
 		try {
 			net.sf.ehcache.Element scrXmlFromCache = AppCacheManager.getElementFromCache("xmlcache", scrName);
 				
 			if(scrXmlFromCache == null){
-		
+			path = findMapXMLPath(scrName);
 			Document doc = new SAXReader().read(path);
 			root = doc.getRootElement();
 				System.out.println("xmlcache -> "+scrName+" cache miss");
@@ -96,6 +96,7 @@ public class ScreenMapRepo {
 				System.out.println("xmlcache -> "+scrName+" cache hit");
 			}
 		} catch (DocumentException e) {
+			path = findMapXMLPath(scrName);
 			logger.error("XML Load Exception path="+path+" ScreenName="+scrName);
 			throw new FrontendException("error.loadxml",e);
 		}

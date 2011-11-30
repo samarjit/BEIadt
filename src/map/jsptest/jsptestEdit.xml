@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config.xsd">
+  <screen name="JspTestEdit">
+    <htmltemplate></htmltemplate>
+    <includedjsp></includedjsp>
+    <callbackclass></callbackclass>
+    <scripts>
+      <scriptinclude></scriptinclude>
+    </scripts>
+    <stylesheets>
+      <styleinclude></styleinclude>
+    </stylesheets>
+    <sessionvars></sessionvars>
+    <crud>
+       
+       <jsonrpc outstack="formonload" id="onloadqry1">SELECT MERCHANT_ID "merchantid",MERCHANT_TYPE "merchanttype",MERCHANT_LOCATION "merchantlocation",STATUS "status" FROM MERCHANT 
+			
+	   </jsonrpc>
+      <sqlselect id="" outstack=""/>
+      <savefieldids/>
+      <sqlinsert id="" outstack=""/>
+      <sqldelete id="" outstack=""/>
+      <sqlselectcount refselectid=""></sqlselectcount>
+      <sqlupdate id="" outstack=""/>
+    </crud>
+    <dm>
+      <txnproc id="" outstack=""/>
+    </dm>
+    <bl id="">
+      <buslogic id="" method=""/>
+    </bl>
+    <anyprocs>
+      <proc id="" outstack=""/>
+    </anyprocs>
+    <commands>
+      <cmd instack="" name="" opt="" processor="" result=""/>
+      <bulkcmd name="fromViewTransition" opt="" result="/jsptest/jsptestEdit.jsp"/>
+      <onload opt="jsonrpc:onloadqry1" result="/jsptest/jsptestEdit.jsp"/>
+    </commands>
+  </screen>
+  <panels>
+    <panel id="editform">
+     	<fields>
+      	 <field>
+        		<validationfld dbcolsize="20" name="merchantid" column="MERCHANT_ID" mandatory="yes" forid="merchantid" dbdatatype="STRING" />
+				<validationfld dbcolsize="20" name="merchanttype" column="MERCHANT_TYPE" mandatory="yes" forid="merchanttype" dbdatatype="STRING" /> 
+				<validationfld dbcolsize="30" name="merchantlocation" column="MERCHANT_LOCATION" mandatory="yes" forid="merchantlocation" dbdatatype="STRING" />
+				<validationfld dbcolsize="8" name="status" column="STATUS" mandatory="yes" forid="status" dbdatatype="STRING" />
+      	 </field>
+     	</fields>
+      <button forid="" id="" onclick="" replace="modify" type="">Edit</button>
+    </panel>
+  </panels>
+</root>
+

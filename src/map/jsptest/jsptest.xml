@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root xsi:noNamespaceSchemaLocation="../config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<screen name="JspTest">
+   <htmltemplate></htmltemplate>
+   <includedjsp></includedjsp>
+   <callbackclass></callbackclass>
+   <scripts></scripts>
+   <stylesheets></stylesheets>
+		<crud>
+			<jsonrpc outstack="formpagination" id="loadView">SELECT MERCHANT_ID "merchantid",MERCHANT_TYPE "merchanttype",MERCHANT_LOCATION "merchantlocation",STATUS "status" FROM MERCHANT 
+			<countquery pagesize="10">select count('x') from MERCHANT </countquery>
+			</jsonrpc>
+			<sqlselect outstack="onloadout" id="onloadq">SELECT COUNTRY_CODE "countrycode",COUNTRY_NAME "countryname",CURRENCY_CODE "currencycode",CURRENCY "currency" FROM COUNTRY</sqlselect>
+		</crud>
+		<dm></dm>
+		<bl></bl>
+		<anyprocs></anyprocs>
+		<commands>
+			<bulkcmd result="jsptestView.jsp" name="simOnload" opt="jsonrpc:loadView" />
+			<onload  opt="sqlselect:onloadq" result="/jsptest/jsptestView.jsp" /> 
+		</commands>
+	</screen>
+	<panels>
+		<panel>
+		  <fields>
+			  <field>
+			  	<validationfld dbcolsize="20" name="merchantid" column="MERCHANT_ID" mandatory="yes" forid="merchantid" dbdatatype="STRING" />
+				<validationfld dbcolsize="20" name="merchanttype" column="MERCHANT_TYPE" mandatory="yes" forid="merchanttype" dbdatatype="STRING" /> 
+				<validationfld dbcolsize="30" name="merchantlocation" column="MERCHANT_LOCATION" mandatory="yes" forid="merchantlocation" dbdatatype="STRING" />
+				<validationfld dbcolsize="8" name="status" column="STATUS" mandatory="yes" forid="status" dbdatatype="STRING" />
+				
+				<validationfld dbcolsize="10" name="countrycode" column="COUNTRY_CODE" mandatory="yes" forid="countrycode" dbdatatype="STRING" />
+				<validationfld dbcolsize="30" name="countryname" column="COUNTRY_NAME" mandatory="yes" forid="countryname" dbdatatype="STRING" />
+				<validationfld dbcolsize="10" name="currencycode" column="CURRENCY_CODE" mandatory="yes" forid="currencycode" dbdatatype="STRING" />
+				<validationfld dbcolsize="30" name="currency" column="CURRENCY" mandatory="yes" forid="currency" dbdatatype="STRING" />
+			  </field>
+		  		
+		  </fields>
+		</panel>
+	</panels>
+</root>

@@ -29,6 +29,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import com.ycs.fe.cache.AppCacheManager;
+
 @MTOM
 @WebService(endpointInterface = "com.ycs.fe.util.FileSync")
 public class FileSyncImpl implements FileSync{
@@ -40,6 +42,7 @@ public class FileSyncImpl implements FileSync{
 		InputStream scrxml;
 		String returnJson = "{";
 		try {
+			AppCacheManager.removeCache("xmlcache");
 			ServletActionContext.create();
 			String screenpath = ServletActionContext.getServletContext().getRealPath("WEB-INF/classes/map");
 			System.out.println("screenpath="+screenpath);
