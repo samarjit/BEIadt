@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <?xml-stylesheet type="text/xsl" href="config.xsl" ?>
-<root   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<root xsi:noNamespaceSchemaLocation="../config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<screen name="generateCard">
 		<htmltemplate>
 			cms/html/generateCard.html
@@ -34,8 +34,8 @@
 				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
-		   <cmd name="getselectedorder" opt="jsonrpc:load"  instack="form1"  result="ajax|{screenName}"  processor="crud" />
-		   <cmd name="updateStatus" opt="jsonrpc:updateStatus|buslogic:generateCard"  instack="form1"  result="ajax|{screenName}"  processor="crud|bl" />
+		   <cmd name="getselectedorder" opt="jsonrpc:load"  instack="form1"  result="ajax|{screenName}"   />
+		   <cmd name="updateStatus" opt="jsonrpc:updateStatus|buslogic:generateCard"  instack="form1"  result="ajax|{screenName}"    />
 		</commands>
 	</screen>
 

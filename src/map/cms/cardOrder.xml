@@ -34,8 +34,8 @@
 				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[#inp.param1 ,#inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
-		   <cmd name="getPlasticDetails" opt="jsonrpc:plasticDetails"  instack="form1"  result="ajax|{screenName}"  processor="crud" />
-		   <cmd name="getPlasticDetails1" opt="anyprocs:pmdetails"  instack="form1"  result="ajax|{screenName}"  processor="anyproc" />
+		   <cmd name="getPlasticDetails" opt="jsonrpc:plasticDetails"  instack="form1"  result="ajax|{screenName}"    />
+		   <cmd name="getPlasticDetails1" opt="anyprocs:pmdetails"  instack="form1"  result="ajax|{screenName}"   />
 		   <onload  opt="sqlselect:load1" result="cardOrder.page"/>
 		</commands>
 	</screen>

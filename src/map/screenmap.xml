@@ -26,6 +26,8 @@
  <screen name="merchant_view" mappingxml="map/temp/merchant_view.xml" />
  <screen name="deal_view" mappingxml="map/temp/deal_view.xml" />
  <screen name="JspTest" mappingxml="map/jsptest/jsptest.xml" />
+ <screen name="JspTestViewDetails" mappingxml="map/jsptest/jsptestViewDetails.xml" />
  <screen name="JspTestEdit" mappingxml="map/jsptest/jsptestEdit.xml" />
+ <screen name="JspTestEditAjax" mappingxml="map/jsptest/jsptestEditAjax.xml" />
  
 </root>

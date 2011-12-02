@@ -33,7 +33,7 @@
 				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[#inp.param1 ,#inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
-		   <cmd name="orderList" opt="jsonrpc:load"  instack="form1"  result="ajax"  processor="crud" />
+		   <cmd name="orderList" opt="jsonrpc:load"  instack="form1"  result="ajax"   />
 		</commands>
 	</screen>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <?xml-stylesheet type="text/xsl" href="config.xsl"?>
-<root   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<root xsi:noNamespaceSchemaLocation="../config.xsd"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<screen name="login">
 		<htmltemplate>
 			login.jsp
@@ -36,7 +36,7 @@
 		<anyprocs>
 		</anyprocs>
 		<commands>
-		 <cmd name="loginvalidation" opt="buslogic:login" instack="form1" result="" processor="bl"/>
+		 <cmd name="loginvalidation" opt="buslogic:login" instack="form1" result=""  />
 		 <bulkcmd name="search_mer"  opt="jsonrpc:search_mer" result="ajax" />
 		 <bulkcmd name="search_deal"  opt="jsonrpc:search_deal" result="ajax" />
 		</commands>

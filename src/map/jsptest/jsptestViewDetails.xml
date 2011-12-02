@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config.xsd">
-  <screen name="JspTestEdit">
+  <screen name="JspTestViewDetails">
     <htmltemplate></htmltemplate>
     <includedjsp></includedjsp>
     <callbackclass></callbackclass>
@@ -33,12 +33,12 @@
       <proc id="" outstack=""/>
     </anyprocs>
     <commands>
-      <cmd instack="" name="" opt=""  result="" />
-      <bulkcmd name="fromViewTransition" opt="" result="/jsptest/jsptestViewDetails.jsp" resultScrName="JspTestEdit" />
-      <bulkcmd name="frmgridadd" opt="sqlinsert:frmgridadd" result="/jsptest/jsptestViewDetails.jsp" resultScrName="JspTestViewDetails" />
-      <bulkcmd name="frmgridedit" opt="sqlupdate:frmgridedit" result="/jsptest/jsptestViewDetails.jsp"/>
-      <bulkcmd name="frmgriddel" opt="sqldelete:frmgriddel" result="/jsptest/jsptestViewDetails.jsp"/>
-      <onload opt="jsonrpc:onloadqry1" result="/jsptest/jsptestEdit.jsp"/>
+      <cmd instack="" name="" opt=""  result=""/>
+      <bulkcmd name="fromViewTransition" opt="" result="/jsptest/jsptestEdit.jsp" resultScrName="JspTestEdit" />
+      <bulkcmd name="frmgridadd" opt="sqlinsert:frmgridadd" result="/jsptest/jsptestEdit.jsp"/>
+      <bulkcmd name="frmgridedit" opt="sqlupdate:frmgridedit" result="/jsptest/jsptestEdit.jsp"/>
+      <bulkcmd name="frmgriddel" opt="sqldelete:frmgriddel" result="/jsptest/jsptestEdit.jsp"/>
+      <onload opt="jsonrpc:onloadqry1" result="/jsptest/jsptestConfirm.jsp"/>
     </commands>
   </screen>
   <panels>

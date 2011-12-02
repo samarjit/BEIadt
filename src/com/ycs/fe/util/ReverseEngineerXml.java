@@ -184,6 +184,11 @@ public class ReverseEngineerXml {
 		 }		 
 		 System.out.println("        	 </table>\r\n" + 
 		 		"</form>");
+		 
+		 for (int i = 0; i < aralias.size(); i++) {
+			 alias = aralias.get(i);
+			 System.out.println("        	   "+arheader.get(i)+" \t<s:property value=\"#resultDTO.data.formonload[0]."+alias+"\"  />");
+		 }
 		 //select clause;
 		
 		 String sel = "SELECT ";first = true;
@@ -203,6 +208,73 @@ public class ReverseEngineerXml {
 			
 			System.out.println(sel);
 			System.out.println(sel2);
+			
+			//normal inserts
+			System.out.println("--NORMAL SQLs--");
+			String simplefrmcols ="";
+			String simplefrmvals = "";
+			String prefix = "frmnrml";
+			first = true;
+			for (int i = 0; i < aralias.size(); i++) {
+				col = arcol.get(i);
+				simplefrmcols += (first)?" ":", ";
+				simplefrmvals += (first)?" ":", ";first = false;
+				
+				simplefrmcols +=""+col;
+				simplefrmvals += "#inp.form1[0]."+aralias.get(i);
+			}
+			String simpefrmins="insert into "+tableName +"("+simplefrmcols+") values ("+simplefrmvals+")";
+			System.out.println("      <sqlinsert id=\""+prefix+"add\" outstack=\"inst\">"+simpefrmins+"</sqlinsert>");
+			
+			//simpleform delete
+			String simplefrmdel = "delete from "+tableName +" WHERE "+arcol.get(0)+" = #inp.form1[0]."+aralias.get(0);
+			System.out.println("      <sqldelete id=\""+prefix+"del\" outstack=\"delt\">"+simplefrmdel+"</sqldelete>");
+			
+			//simpleform update
+			String simepleformupd = "update "+tableName +" set ";
+			first = true;
+			for (int i = 1; i < aralias.size(); i++) {
+				simepleformupd += (first)?" ":", ";first = false;
+				simepleformupd += arcol.get(i)+" = "+"#inp.form1[0]."+aralias.get(i);
+			}
+			simepleformupd += " WHERE "+arcol.get(0)+"=#inp.form1[0]."+aralias.get(0);
+			System.out.println("      <sqlupdate id=\""+prefix+"edit\" outstack=\"updt\">"+simepleformupd+"</sqlupdate>");
+			
+			//start grid inserts
+			System.out.println("--GRID INSERTS (check out which alias is required--");
+			//simpleform insert 
+			  simplefrmcols ="";
+			  simplefrmvals = "";
+			  String bulkcmd = "frmgrid"; //bulkcmd+oper
+			first = true;
+			for (int i = 0; i < aralias.size(); i++) {
+				col = arcol.get(i);
+				simplefrmcols += (first)?" ":", ";
+				simplefrmvals += (first)?" ":", ";first = false;
+				
+				simplefrmcols +=""+col;
+				simplefrmvals += "#inp.form1[0]."+arcol.get(i);
+			}
+			  simpefrmins="insert into "+tableName +"("+simplefrmcols+") values ("+simplefrmvals+" )";
+			System.out.println("      <sqlinsert id=\""+bulkcmd+"add\" outstack=\"inst\">"+simpefrmins+"</sqlinsert>");
+			
+			//simpleform delete
+			  simplefrmdel = "delete from "+tableName +" WHERE "+arcol.get(0)+" = #inp.form1[0].id|STRING";//+arcol.get(0);
+			System.out.println("      <sqldelete id=\""+bulkcmd+"del\" outstack=\"delt\">"+simplefrmdel+"</sqldelete>");
+			
+			//simpleform update
+			  simepleformupd = "update "+tableName +" set ";
+			first = true;
+			for (int i = 1; i < aralias.size(); i++) {
+				simepleformupd += (first)?" ":", ";first = false;
+				simepleformupd += arcol.get(i)+" = "+"#inp.form1[0]."+arcol.get(i);
+			}
+			simepleformupd += " WHERE "+arcol.get(0)+"=#inp.form1[0]."+arcol.get(0);
+			System.out.println("      <sqlupdate id=\""+bulkcmd+"edit\" outstack=\"updt\">"+simepleformupd+"</sqlupdate>");
+			///end grid inserts
+			
+			
+			
 			
 			String crs = "";
 			String crs1 = "";

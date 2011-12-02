@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config.xsd">
-  <screen name="JspTestEdit">
+  <screen name="JspTestEditAjax">
     <htmltemplate></htmltemplate>
     <includedjsp></includedjsp>
     <callbackclass></callbackclass>
@@ -34,11 +34,11 @@
     </anyprocs>
     <commands>
       <cmd instack="" name="" opt=""  result="" />
-      <bulkcmd name="fromViewTransition" opt="" result="/jsptest/jsptestViewDetails.jsp" resultScrName="JspTestEdit" />
-      <bulkcmd name="frmgridadd" opt="sqlinsert:frmgridadd" result="/jsptest/jsptestViewDetails.jsp" resultScrName="JspTestViewDetails" />
-      <bulkcmd name="frmgridedit" opt="sqlupdate:frmgridedit" result="/jsptest/jsptestViewDetails.jsp"/>
-      <bulkcmd name="frmgriddel" opt="sqldelete:frmgriddel" result="/jsptest/jsptestViewDetails.jsp"/>
-      <onload opt="jsonrpc:onloadqry1" result="/jsptest/jsptestEdit.jsp"/>
+      <bulkcmd name="fromViewTransition" opt="" result="ajax" resultScrName="JspTestEdit" />
+      <bulkcmd name="frmgridadd" opt="sqlinsert:frmgridadd" result="ajax" resultScrName="JspTestEditAjax"/>
+      <bulkcmd name="frmgridedit" opt="sqlupdate:frmgridedit" result="ajax"/>
+      <bulkcmd name="frmgriddel" opt="sqldelete:frmgriddel" result="ajax"/>
+      <onload opt="jsonrpc:onloadqry1" result="/jsptest/jsptestEditAjax.jsp"/>
     </commands>
   </screen>
   <panels>
