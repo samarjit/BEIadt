@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import javax.mail.Header;
+
 import com.ycs.fe.dao.DBConnector;
 
 public class ReverseEngineerXml {
@@ -119,59 +121,93 @@ public class ReverseEngineerXml {
 			con.close();
 		}
 		//headers
-		System.out.println("jQuery(\"#listid\").jqGrid( {\r\n");
+		System.out.println("	var rulesframework = {}; \r\n" + 
+				           "	<s:if test = \"jsrule != null\" >\r\n" + 
+				           "		 rulesframework =  ${jsrule};\r\n" + 
+				           "	</s:if>");
+		String fieldlist = aralias.toString().replace("[", "        	var fieldlist = \"").replace("]", "\".split(\",\");");
+		System.out.println(fieldlist);
+		System.out.println("   $(document).ready(function(){\r\n" + 
+				           "	iadt.setFieldlist(fieldlist);\r\n" + 
+				           "	$(\"#form1\").validate($.extend(rulesframework,{debug: true}));\r\n" + 
+				           "	calljqgrid();		\r\n" + 
+				           "   });");
+		
+		System.out.println("  var lastsel= {};\r\n" + 
+		                   "  function calljqgrid(formdata){");
+		System.out.println("   jQuery(\"#listid\").jqGrid( {\r\n");
 		System.out.println("      	url:'<%= request.getContextPath() %>/jqgrid.action?command=true&screenName=XXXXXTestPage&submitdata={bulkcmd=\"XXXXXprodgrid\"}',");
 		System.out.println("      	datatype: \"json\",");
-		String colNames= "      	colNames:[";
-		boolean first = true;
-		for (String string : arheader) {
-			colNames += (first)?"":","; first = false;
-			colNames += "'"+string.trim()+"'";
-		}
-		colNames += "      	],";
+		  String colNames= "      	colNames:[";
+		    boolean first = true;
+		    for (String string : arheader) {
+		    	colNames += (first)?"":","; first = false;
+		    	colNames += "'"+string.trim()+"'";
+		    }
+		       colNames += "      	],";
 		
 		System.out.println(colNames);
 		
 		//jqgrid column model
-		String colModel = "      	colModel:[";first =true;
-		for (int i = 0; i < aralias.size(); i++) {
-			alias = aralias.get(i);
-			size = arcolprecision.get(i);
-			colModel += (first)?"\r\n":",\r\n";first = false;
-			colModel +="      	{name: '"+alias+"', index: '"+alias+"' , width:"+size+" }" ;
-		}
-		colModel +="\r\n      	],";
+		 String colModel = "      	colModel:[";first =true;
+		    for (int i = 0; i < aralias.size(); i++) {
+		    	alias = aralias.get(i);
+		    	size = arcolprecision.get(i);
+		    	colModel += (first)?"\r\n":",\r\n";first = false;
+		    	colModel +="      	{name: '"+alias+"', index: '"+alias+"' , width:"+size+" }" ;
+		    }
+		        colModel +="\r\n      	],";
 		System.out.println(colModel);
 		System.out.println("      	rowNum: 10,\r\n" + 
-				"      	rowList: [ 10, 20, 30],\r\n" + 
-				"      	pager: '#pagerid',\r\n" + 
-				"      	sortname: 'XXXXSORTING_COLUMN_REF',\r\n" + 
-				"        viewrecords: true,\r\n" + 
-				"        sortorder: \"desc\",\r\n" + 
-				"        jsonReader: {\r\n" + 
-				"    		repeatitems : false,\r\n" + 
-				"    		id: \"0\"\r\n" + 
-				"    	},\r\n" + 
-				"       caption: \"XXXXType the Caption here\"\r\n" + 
-				"   } ).navGrid('#pager1',{edit:true,add:true,del:true});");
-		System.out.println("...\n  <table id=\"listid\" ></table>\r\n" + 
+				           "      	rowList: [ 10, 20, 30],\r\n" + 
+				           "      	pager: '#pagerid',\r\n" + 
+				           "      	sortname: 'XXXXSORTING_COLUMN_REF',\r\n" + 
+				           "        viewrecords: true,\r\n" + 
+				           "        sortorder: \"desc\",\r\n" + 
+				           "        jsonReader: {\r\n" + 
+				           "    		repeatitems : false,\r\n" + 
+				           "    		id: \"0\"\r\n" + 
+				           "    	},\r\n" + 
+				           "       onSelectRow: function(id){\r\n" + 
+				           "			    		if(id && id!==lastsel){\r\n" + 
+				           "			    			//jQuery('#listid').jqGrid('restoreRow',lastsel);\r\n" + 
+				           "			    			//jQuery('#listid').jqGrid('editRow',id,true);\r\n" + 
+				           "			    			jQuery(\"#listid\").jqGrid('GridToForm',id,\"#form1\");\r\n" + 
+				           "			    			lastsel=id;\r\n" + 
+				           "			    		}\r\n" + 
+				           "			    	},\r\n" + 
+				           "			    	loadComplete: function(){\r\n" + 
+				           "			    		var ret;\r\n" + 
+				           "			    	},\r\n" + 
+				           "			       editurl: \"${pageContext.request.contextPath}/html/simpleform.action?screenName=JspTestEditCrud&bulkcmd=grid\",\r\n"+
+				           "       caption: \"XXXXType the Caption here\"\r\n" + 
+				           "   } ).navGrid('#pager1',{edit:true,add:true,del:true});");
+		System.out.println("   jQuery(\"#listid\").jqGrid('navButtonAdd','#pagerid',{caption:\"Edit\",\r\n" + 
+				           "		onClickButton:function(){\r\n" + 
+				           "			var gsr = jQuery(\"#listid\").jqGrid('getGridParam','selrow');\r\n" + 
+				           "			if(gsr){\r\n" + 
+				           "				jQuery(\"#listid\").jqGrid('GridToForm',gsr,\"#form1\");\r\n" + 
+				           "			} else {\r\n" + 
+				           "				alert(\"Please select Row\");\r\n" + 
+				           "			}							\r\n" + 
+				           "		} \r\n" + 
+				           "	}); ");
+		System.out.println("  } //end calljqgrid"); 
+        System.out.println("  function ajaxSubmit(){\r\n" + 
+        		 		   "	jQuery.post(\"${pageContext.request.contextPath}/html/simpleform.action?screenName=JspTestEditCrud\", \r\n" + 
+        		 		   "			$(\"#form1\").serialize(),\r\n" + 
+        		 		   "			function(data){\r\n" + 
+        		 		   "		var json = jQuery.parseJSON(data);\r\n" + 
+        		 		   "		jQuery(\"#listid\").trigger(\"reloadGrid\");\r\n" + 
+        		 		   "      });\r\n" + 
+        		 		   "  }");
+		System.out.println("...\nhtml...\r\n  <table id=\"listid\" ></table>\r\n" + 
 				"		 <div id=\"pagerid\"></div>");
 		
-		//validation xml
-		 String datatype = "";
-		String validationXml = "";
-		for (int i = 0; i < aralias.size(); i++) {
-			alias = aralias.get(i);
-			size = arcolprecision.get(i);
-			datatype = ardatatype.get(i);
-			col = arcol.get(i);
-			
-			validationXml +="<validationfld dbcolsize=\""+size+"\" name=\""+alias+"\" column=\""+col+"\" mandatory=\"yes\" forid=\""+alias+"\" dbdatatype=\""+datatype+"\" />\r\n" ;
-		}
-		 System.out.println(validationXml);
 		
+		   
 		 
-		 System.out.println("<form name=\"form1\" id=\"form1\" method=\"post\">\r\n" + 
+		 System.out.println("<!--Submit Form -->\r\n<form name=\"form1\" id=\"form1\" method=\"post\" action=\"${pageContext.request.contextPath}/html/simpleform.action?screenName=JspTestEditCrud\">\r\n" + 
 		 		"        	 <table>" );
 		 for (int i = 0; i < aralias.size(); i++) {
 			 alias = aralias.get(i);
@@ -183,12 +219,26 @@ public class ReverseEngineerXml {
 			 System.out.println("        	   <tr><td>"+arheader.get(i)+"</td><td><s:property value=\"#resultDTO.data.formonload[0]."+alias+"\"  /></td></tr>");
 		 }		 
 		 System.out.println("        	 </table>\r\n" + 
+		       "        	 bulkcmd: <input name=\"bulkcmd\" value=\"frmgridadd\"/>\r\n" + 
+		       "        	 <button >submit</button>\r\n" + 
+		       "        	 <button type=\"button\" onclick=\"ajaxSubmit()\">Ajax Submit</button>"+
 		 		"</form>");
+		 System.out.println("<!--View Grid-->\r\n" + 
+			 		"        	 <table>" );
+		 for (int i = 0; i < aralias.size(); i++) {
+			 alias = aralias.get(i);
+			 System.out.println("        	   <tr><td>"+arheader.get(i)+"</td><td><s:property value=\"#resultDTO.data.formonload[0]."+alias+"\"  /></td></tr>");
+		 }		 
+		 System.out.println("        	 </table>\r\n"+ "</form>");
 		 
 		 for (int i = 0; i < aralias.size(); i++) {
 			 alias = aralias.get(i);
 			 System.out.println("        	   "+arheader.get(i)+" \t<s:property value=\"#resultDTO.data.formonload[0]."+alias+"\"  />");
 		 }
+		
+		 
+		 String datatype = "";
+			
 		 //select clause;
 		
 		 String sel = "SELECT ";first = true;
@@ -209,6 +259,11 @@ public class ReverseEngineerXml {
 			System.out.println(sel);
 			System.out.println(sel2);
 			
+			System.out.println("	   <jsonrpc outstack=\"formonload\" id=\"onloadqry1\">"+sel+" \r\n" + 
+					           "	   </jsonrpc>\r\n" + 
+					           "       <jsonrpc outstack=\"formpagination\" id=\"gridonload\">"+sel+" \r\n" + 
+					           "			<countquery pagesize=\"10\">select count('x') from "+tableName+" </countquery>\r\n" + 
+					           "	   </jsonrpc>");
 			//normal inserts
 			System.out.println("--NORMAL SQLs--");
 			String simplefrmcols ="";
@@ -272,8 +327,35 @@ public class ReverseEngineerXml {
 			simepleformupd += " WHERE "+arcol.get(0)+"=#inp.form1[0]."+arcol.get(0);
 			System.out.println("      <sqlupdate id=\""+bulkcmd+"edit\" outstack=\"updt\">"+simepleformupd+"</sqlupdate>");
 			///end grid inserts
+			///xml cmd//
+			System.out.println("    <commands>\r\n" + 
+					           "      <cmd instack=\"\" name=\"\" opt=\"\"  result=\"\" />\r\n" + 
+					           "      <bulkcmd name=\"fromViewTransition\" opt=\"\" result=\"ajax\" resultScrName=\"JspTestEdit\" />\r\n" + 
+					           "      <bulkcmd name=\"frmgridadd\" opt=\"sqlinsert:frmgridadd\" result=\"ajax\" resultScrName=\"JspTestEditAjax\"/>\r\n" + 
+					           "      <bulkcmd name=\"frmgridedit\" opt=\"sqlupdate:frmgridedit\" result=\"ajax\"/>\r\n" + 
+					           "      <bulkcmd name=\"frmgriddel\" opt=\"sqldelete:frmgriddel\" result=\"ajax\"/>\r\n" + 
+					           "      <bulkcmd name=\"griddel\" opt=\"sqldelete:griddel\" result=\"ajax\"/>\r\n" + 
+					           "      <bulkcmd name=\"gridonload\" opt=\"jsonrpc:gridonload\" result=\"ajax\"/>\r\n" + 
+					           "      <onload opt=\"jsonrpc:onloadqry1\" result=\"/jsptest/jsptestCrud.jsp\"/>\r\n" + 
+					           "    </commands>");
 			
 			
+			//xml cmd end//
+			//validation xml
+			String validationXml = "";
+			String label = "";
+			for (int i = 0; i < aralias.size(); i++) {
+				alias = aralias.get(i);
+				size = arcolprecision.get(i);
+				datatype = ardatatype.get(i);
+				col = arcol.get(i);
+				
+				validationXml +="<validationfld dbcolsize=\""+size+"\" name=\""+alias+"\" column=\""+col+"\" mandatory=\"yes\" forid=\""+alias+"\" dbdatatype=\""+datatype+"\" />\r\n" ;
+				label += "<label replace=\"modify\" key=\""+alias+"\" value=\""+arheader.get(i).trim()+"\" forname=\""+alias+"\"/>\r\n";
+			}
+			 System.out.println(validationXml);
+			 System.out.println(label);
+			 //xml validation
 			
 			
 			String crs = "";
