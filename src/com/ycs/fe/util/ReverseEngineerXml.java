@@ -15,7 +15,7 @@ import com.ycs.fe.dao.DBConnector;
 
 public class ReverseEngineerXml {
 	private String globalSQL = "  SELECT PRODUCT_CODE ,  PRODUCT_NAME ,  PLASTIC_CODE,   PLASTIC_DESC    FROM PRODUCT_DETAILS ";
-	public static String toPropoerCase(String inputString) {
+	public static String toProperCase(String inputString) {
 
 		StringBuffer result = new StringBuffer();
 		String[] list = null;
@@ -96,11 +96,12 @@ public class ReverseEngineerXml {
 		int scale= 0;
 		String tableName = "";
 		tableName = metaData.getTableName(1);
+		String screenName = toProperCase(tableName).replaceAll(" ", "");
 		for (int i = 0; i < rowCount; i++) {
 			columnName = metaData.getColumnName(i + 1);
 			 
 			arcol.add(columnName);
-			col = toPropoerCase(columnName);
+			col = toProperCase(columnName);
 			col = col.replaceAll("\\_", " ");
 			arheader.add(col);
 			alias = col.toLowerCase().replaceAll(" ", "");
@@ -120,6 +121,24 @@ public class ReverseEngineerXml {
 		if(con!= null){
 			con.close();
 		}
+		
+		//html
+		System.out.println("<!DOCTYPE script PUBLIC \"-//W3C//DTD XHTML 1.1 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\r\n" + 
+				"<%@taglib prefix=\"s\"  uri=\"/struts-tags\" %>\r\n" + 
+				"<%@taglib prefix=\"sj\"  uri=\"/struts-jquery-tags\" %>\r\n" + 
+				"<%@taglib prefix=\"sjg\"  uri=\"/struts-jquery-grid-tags\" %>\r\n" + 
+				"<html>\r\n" + 
+				"<head>\r\n" + 
+				" \r\n" + 
+				"<sj:head jqueryui=\"true\" jquerytheme=\"redmond\"  />\r\n" + 
+				"<link rel=\"stylesheet\" type=\"text/css\" href=\"../jqgrid/css/ui.jqgrid.css\">\r\n" + 
+				"<script src=\"../js/jquery.validate.js\" > </script>\r\n" + 
+				"<script src=\"../js/additional-methods.js\" > </script>\r\n" + 
+				"<script src=\"../jqgrid/js/i18n/grid.locale-en.js\" > </script>\r\n" + 
+				"<script src=\"../jqgrid/js/jquery.jqGrid.min.js\" > </script>\r\n" + 
+				"\r\n"+
+				"<script>");
+		
 		//headers
 		System.out.println("	var rulesframework = {}; \r\n" + 
 				           "	<s:if test = \"jsrule != null\" >\r\n" + 
@@ -136,7 +155,7 @@ public class ReverseEngineerXml {
 		System.out.println("  var lastsel= {};\r\n" + 
 		                   "  function calljqgrid(formdata){");
 		System.out.println("   jQuery(\"#listid\").jqGrid( {\r\n");
-		System.out.println("      	url:'<%= request.getContextPath() %>/jqgrid.action?command=true&screenName=XXXXXTestPage&submitdata={bulkcmd=\"XXXXXprodgrid\"}',");
+		System.out.println("      	url:'<%= request.getContextPath() %>/jqgrid.action?command=true&screenName="+screenName+"&submitdata={bulkcmd=\"frmgrid\"}',");
 		System.out.println("      	datatype: \"json\",");
 		  String colNames= "      	colNames:[";
 		    boolean first = true;
@@ -154,14 +173,14 @@ public class ReverseEngineerXml {
 		    	alias = aralias.get(i);
 		    	size = arcolprecision.get(i);
 		    	colModel += (first)?"\r\n":",\r\n";first = false;
-		    	colModel +="      	{name: '"+alias+"', index: '"+alias+"' , width:"+size+" }" ;
+		    	colModel +="      	{name: '"+alias+"', index: '"+alias+"' , width:"+size*7+", editable:true }" ;
 		    }
 		        colModel +="\r\n      	],";
 		System.out.println(colModel);
 		System.out.println("      	rowNum: 10,\r\n" + 
 				           "      	rowList: [ 10, 20, 30],\r\n" + 
 				           "      	pager: '#pagerid',\r\n" + 
-				           "      	sortname: 'XXXXSORTING_COLUMN_REF',\r\n" + 
+				           "      	sortname: '"+aralias.get(0)+"',\r\n" + 
 				           "        viewrecords: true,\r\n" + 
 				           "        sortorder: \"desc\",\r\n" + 
 				           "        jsonReader: {\r\n" + 
@@ -179,7 +198,7 @@ public class ReverseEngineerXml {
 				           "			    	loadComplete: function(){\r\n" + 
 				           "			    		var ret;\r\n" + 
 				           "			    	},\r\n" + 
-				           "			       editurl: \"${pageContext.request.contextPath}/html/simpleform.action?screenName=JspTestEditCrud&bulkcmd=grid\",\r\n"+
+				           "			       editurl: \"${pageContext.request.contextPath}/html/simpleform.action?screenName="+screenName+"&bulkcmd=grid\",\r\n"+
 				           "       caption: \"XXXXType the Caption here\"\r\n" + 
 				           "   } ).navGrid('#pager1',{edit:true,add:true,del:true});");
 		System.out.println("   jQuery(\"#listid\").jqGrid('navButtonAdd','#pagerid',{caption:\"Edit\",\r\n" + 
@@ -194,20 +213,25 @@ public class ReverseEngineerXml {
 				           "	}); ");
 		System.out.println("  } //end calljqgrid"); 
         System.out.println("  function ajaxSubmit(){\r\n" + 
-        		 		   "	jQuery.post(\"${pageContext.request.contextPath}/html/simpleform.action?screenName=JspTestEditCrud\", \r\n" + 
+        		 		   "	jQuery.post(\"${pageContext.request.contextPath}/html/simpleform.action?screenName="+screenName+"\", \r\n" + 
         		 		   "			$(\"#form1\").serialize(),\r\n" + 
         		 		   "			function(data){\r\n" + 
         		 		   "		var json = jQuery.parseJSON(data);\r\n" + 
         		 		   "		jQuery(\"#listid\").trigger(\"reloadGrid\");\r\n" + 
         		 		   "      });\r\n" + 
         		 		   "  }");
-		System.out.println("...\nhtml...\r\n  <table id=\"listid\" ></table>\r\n" + 
+        
+        System.out.println("</script>");
+		System.out.println("\r\n</head>\r\n" + 
+				"\r\n" + 
+				"<body>\r\n"+
+				"  <table id=\"listid\" ></table>\r\n" + 
 				"		 <div id=\"pagerid\"></div>");
 		
 		
 		   
 		 
-		 System.out.println("<!--Submit Form -->\r\n<form name=\"form1\" id=\"form1\" method=\"post\" action=\"${pageContext.request.contextPath}/html/simpleform.action?screenName=JspTestEditCrud\">\r\n" + 
+		 System.out.println("<!--Submit Form -->\r\n<form name=\"form1\" id=\"form1\" method=\"post\" action=\"${pageContext.request.contextPath}/html/simpleform.action?screenName="+screenName+"\">\r\n" + 
 		 		"        	 <table>" );
 		 for (int i = 0; i < aralias.size(); i++) {
 			 alias = aralias.get(i);
@@ -223,6 +247,9 @@ public class ReverseEngineerXml {
 		       "        	 <button >submit</button>\r\n" + 
 		       "        	 <button type=\"button\" onclick=\"ajaxSubmit()\">Ajax Submit</button>"+
 		 		"</form>");
+		 System.out.println("</body>\r\n" + 
+		 		"\r\n" + 
+		 		"</html>");
 		 System.out.println("<!--View Grid-->\r\n" + 
 			 		"        	 <table>" );
 		 for (int i = 0; i < aralias.size(); i++) {
@@ -330,13 +357,13 @@ public class ReverseEngineerXml {
 			///xml cmd//
 			System.out.println("    <commands>\r\n" + 
 					           "      <cmd instack=\"\" name=\"\" opt=\"\"  result=\"\" />\r\n" + 
-					           "      <bulkcmd name=\"fromViewTransition\" opt=\"\" result=\"ajax\" resultScrName=\"JspTestEdit\" />\r\n" + 
-					           "      <bulkcmd name=\"frmgridadd\" opt=\"sqlinsert:frmgridadd\" result=\"ajax\" resultScrName=\"JspTestEditAjax\"/>\r\n" + 
+					           "      <bulkcmd name=\"fromViewTransition\" opt=\"\" result=\"ajax\" resultScrName=\""+screenName+"\" />\r\n" + 
+					           "      <bulkcmd name=\"frmgridadd\" opt=\"sqlinsert:frmgridadd\" result=\"ajax\" resultScrName=\""+screenName+"\"/>\r\n" + 
 					           "      <bulkcmd name=\"frmgridedit\" opt=\"sqlupdate:frmgridedit\" result=\"ajax\"/>\r\n" + 
 					           "      <bulkcmd name=\"frmgriddel\" opt=\"sqldelete:frmgriddel\" result=\"ajax\"/>\r\n" + 
 					           "      <bulkcmd name=\"griddel\" opt=\"sqldelete:griddel\" result=\"ajax\"/>\r\n" + 
 					           "      <bulkcmd name=\"gridonload\" opt=\"jsonrpc:gridonload\" result=\"ajax\"/>\r\n" + 
-					           "      <onload opt=\"jsonrpc:onloadqry1\" result=\"/jsptest/jsptestCrud.jsp\"/>\r\n" + 
+					           "      <onload opt=\"jsonrpc:onloadqry1\" result=\"/jsptest/"+screenName+".jsp\"/>\r\n" + 
 					           "    </commands>");
 			
 			
@@ -355,6 +382,7 @@ public class ReverseEngineerXml {
 			}
 			 System.out.println(validationXml);
 			 System.out.println(label);
+			 System.out.println("<screen name=\""+screenName+"\" mappingxml=\"map/jsptest/"+screenName+".xml\" />");
 			 //xml validation
 			
 			
@@ -369,7 +397,7 @@ public class ReverseEngineerXml {
 			for (int i = 0; i < arheader.size(); i++) {
 				crs += "res.set"+arheader.get(i).replace(" ", "")+"(crs.getString(\""+arcol.get(i)+"\"));\r\n";
 				crs1 += "res.set"+arheader.get(i).replace(" ", "")+"(crs.getString(\""+aralias.get(i)+"\"));\r\n";
-				crs2 += "res.set"+ toPropoerCase(aralias.get(i).replace(" ", ""))+"(crs.getString(\""+aralias.get(i)+"\"));\r\n";
+				crs2 += "res.set"+ toProperCase(aralias.get(i).replace(" ", ""))+"(crs.getString(\""+aralias.get(i)+"\"));\r\n";
 				
 				upd+="if (pinMaster.get"+arheader.get(i).replace(" ", "")+"() != null) {\r\n" + 
 						"				qry+= (first)?\"\":\",\";first = false;\r\n" + 
