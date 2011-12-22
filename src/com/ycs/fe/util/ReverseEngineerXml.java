@@ -147,7 +147,7 @@ public class ReverseEngineerXml {
 		String fieldlist = aralias.toString().replace("[", "        	var fieldlist = \"").replace("]", "\".split(\",\");");
 		System.out.println(fieldlist);
 		System.out.println("   $(document).ready(function(){\r\n" + 
-				           "	iadt.setFieldlist(fieldlist);\r\n" + 
+				           "	//iadt.setFieldlist(fieldlist);\r\n" + 
 				           "	$(\"#form1\").validate($.extend(rulesframework,{debug: true}));\r\n" + 
 				           "	calljqgrid();		\r\n" + 
 				           "   });");
@@ -155,7 +155,7 @@ public class ReverseEngineerXml {
 		System.out.println("  var lastsel= {};\r\n" + 
 		                   "  function calljqgrid(formdata){");
 		System.out.println("   jQuery(\"#listid\").jqGrid( {\r\n");
-		System.out.println("      	url:'<%= request.getContextPath() %>/jqgrid.action?command=true&screenName="+screenName+"&submitdata={bulkcmd=\"frmgrid\"}',");
+		System.out.println("      	url:'<%= request.getContextPath() %>/jqgrid.action?command=true&screenName="+screenName+"&submitdata={bulkcmd=\"gridonload\"}',");
 		System.out.println("      	datatype: \"json\",");
 		  String colNames= "      	colNames:[";
 		    boolean first = true;
@@ -200,7 +200,7 @@ public class ReverseEngineerXml {
 				           "			    	},\r\n" + 
 				           "			       editurl: \"${pageContext.request.contextPath}/html/simpleform.action?screenName="+screenName+"&bulkcmd=grid\",\r\n"+
 				           "       caption: \"XXXXType the Caption here\"\r\n" + 
-				           "   } ).navGrid('#pager1',{edit:true,add:true,del:true});");
+				           "   } ).navGrid('#pagerid',{edit:true,add:true,del:true});");
 		System.out.println("   jQuery(\"#listid\").jqGrid('navButtonAdd','#pagerid',{caption:\"Edit\",\r\n" + 
 				           "		onClickButton:function(){\r\n" + 
 				           "			var gsr = jQuery(\"#listid\").jqGrid('getGridParam','selrow');\r\n" + 
@@ -327,7 +327,8 @@ public class ReverseEngineerXml {
 			//simpleform insert 
 			  simplefrmcols ="";
 			  simplefrmvals = "";
-			  String bulkcmd = "frmgrid"; //bulkcmd+oper
+			  String bulkcmd = "grid"; //bulkcmd+oper
+			  String bulkcmdsimplfrm = "frmgrid"; //bulkcmd+oper
 			first = true;
 			for (int i = 0; i < aralias.size(); i++) {
 				col = arcol.get(i);
@@ -338,22 +339,31 @@ public class ReverseEngineerXml {
 				simplefrmvals += "#inp.form1[0]."+arcol.get(i);
 			}
 			  simpefrmins="insert into "+tableName +"("+simplefrmcols+") values ("+simplefrmvals+" )";
+			  System.out.println("      <sqlinsert id=\""+bulkcmdsimplfrm+"add\" outstack=\"inst\">"+simpefrmins+"</sqlinsert>");
 			System.out.println("      <sqlinsert id=\""+bulkcmd+"add\" outstack=\"inst\">"+simpefrmins+"</sqlinsert>");
 			
 			//simpleform delete
-			  simplefrmdel = "delete from "+tableName +" WHERE "+arcol.get(0)+" = #inp.form1[0].id|STRING";//+arcol.get(0);
-			System.out.println("      <sqldelete id=\""+bulkcmd+"del\" outstack=\"delt\">"+simplefrmdel+"</sqldelete>");
+			simplefrmdel = "delete from "+tableName +" WHERE "+arcol.get(0)+" = #inp.form1[0]."+arcol.get(0)+"|STRING";//+arcol.get(0);
+			System.out.println("      <sqldelete id=\""+bulkcmdsimplfrm+"del\" outstack=\"delt\">"+simplefrmdel+"</sqldelete>");
 			
+			  simplefrmdel = "delete from "+tableName +" WHERE "+arcol.get(0)+" = #inp.form1[0].id|STRING";//+arcol.get(0);
+			  System.out.println("      <sqldelete id=\""+bulkcmd+"del\" outstack=\"delt\">"+simplefrmdel+"</sqldelete>");
+			 
 			//simpleform update
+			String gridupd= "";
 			  simepleformupd = "update "+tableName +" set ";
 			first = true;
 			for (int i = 1; i < aralias.size(); i++) {
 				simepleformupd += (first)?" ":", ";first = false;
 				simepleformupd += arcol.get(i)+" = "+"#inp.form1[0]."+arcol.get(i);
 			}
+			gridupd = simepleformupd;
 			simepleformupd += " WHERE "+arcol.get(0)+"=#inp.form1[0]."+arcol.get(0);
-			System.out.println("      <sqlupdate id=\""+bulkcmd+"edit\" outstack=\"updt\">"+simepleformupd+"</sqlupdate>");
+			System.out.println("      <sqlupdate id=\""+bulkcmdsimplfrm+"edit\" outstack=\"updt\">"+simepleformupd+"</sqlupdate>");
+			gridupd += " WHERE "+arcol.get(0)+"=#inp.form1[0].id|STRING";
+			System.out.println("      <sqlupdate id=\""+bulkcmd+"edit\" outstack=\"updt\">"+gridupd+"</sqlupdate>");
 			///end grid inserts
+			
 			///xml cmd//
 			System.out.println("    <commands>\r\n" + 
 					           "      <cmd instack=\"\" name=\"\" opt=\"\"  result=\"\" />\r\n" + 
@@ -362,6 +372,8 @@ public class ReverseEngineerXml {
 					           "      <bulkcmd name=\"frmgridedit\" opt=\"sqlupdate:frmgridedit\" result=\"ajax\"/>\r\n" + 
 					           "      <bulkcmd name=\"frmgriddel\" opt=\"sqldelete:frmgriddel\" result=\"ajax\"/>\r\n" + 
 					           "      <bulkcmd name=\"griddel\" opt=\"sqldelete:griddel\" result=\"ajax\"/>\r\n" + 
+					           "      <bulkcmd name=\"gridedit\" opt=\"sqlupdate:gridedit\" result=\"ajax\"/>\r\n" + 
+					           "      <bulkcmd name=\"gridadd\" opt=\"sqlinsert:gridadd\" result=\"ajax\"/>\r\n" + 
 					           "      <bulkcmd name=\"gridonload\" opt=\"jsonrpc:gridonload\" result=\"ajax\"/>\r\n" + 
 					           "      <onload opt=\"jsonrpc:onloadqry1\" result=\"/jsptest/"+screenName+".jsp\"/>\r\n" + 
 					           "    </commands>");
@@ -382,7 +394,7 @@ public class ReverseEngineerXml {
 			}
 			 System.out.println(validationXml);
 			 System.out.println(label);
-			 System.out.println("<screen name=\""+screenName+"\" mappingxml=\"map/jsptest/"+screenName+".xml\" />");
+			 System.out.println("\r\n<screen name=\""+screenName+"\" mappingxml=\"map/jsptest/"+screenName+".xml\" />\r\n");
 			 //xml validation
 			
 			
