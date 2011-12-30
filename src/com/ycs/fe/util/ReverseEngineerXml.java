@@ -82,8 +82,6 @@ public class ReverseEngineerXml {
 		ResultSet rs = st.executeQuery(sql);
 		ResultSetMetaData metaData = rs.getMetaData();
 		int rowCount = metaData.getColumnCount();
-		System.out.println("Table Name : " + metaData.getTableName(1));
-		System.out.println("Field  \tsize\tDataType");
 		ArrayList<String> arheader = new ArrayList<String>();
 		ArrayList<String> aralias = new ArrayList<String>();
 		ArrayList<String> arcol = new ArrayList<String>();
@@ -96,6 +94,22 @@ public class ReverseEngineerXml {
 		int scale= 0;
 		String tableName = "";
 		tableName = metaData.getTableName(1);
+		if(tableName == null || tableName.equals("")){
+			tableName = metaData.getTableName(0);
+		}
+		StringBuffer sb = new StringBuffer();
+		if(tableName == null || tableName.equals("")){
+			System.out.println("Enter Table Name(in CAPS): followed by ';'<enter>");
+			while((ch = System.in.read())!= ';'){
+				sb.append((char)ch);
+			}
+			if(sb.length() >0){
+				tableName= sb.toString().trim();
+			}
+			 
+		}
+		System.out.println("Table Name : " + tableName);
+		System.out.println("Field  \tsize\tDataType");
 		String screenName = toProperCase(tableName).replaceAll(" ", "");
 		for (int i = 0; i < rowCount; i++) {
 			columnName = metaData.getColumnName(i + 1);
@@ -114,8 +128,6 @@ public class ReverseEngineerXml {
 			System.out.print(metaData.getColumnName(i + 1) + "  \t");
 			System.out.print(metaData.getColumnDisplaySize(i + 1) + " ==? " + metaData.getPrecision(i+1)+"\t");
 			System.out.println(metaData.getColumnTypeName(i + 1));
-			
-			
 		}
 		
 		if(con!= null){
@@ -126,7 +138,7 @@ public class ReverseEngineerXml {
 		System.out.println("<!DOCTYPE script PUBLIC \"-//W3C//DTD XHTML 1.1 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">\r\n" + 
 				"<%@taglib prefix=\"s\"  uri=\"/struts-tags\" %>\r\n" + 
 				"<%@taglib prefix=\"sj\"  uri=\"/struts-jquery-tags\" %>\r\n" + 
-				"<%@taglib prefix=\"sjg\"  uri=\"/struts-jquery-grid-tags\" %>\r\n" + 
+				"<%--@taglib prefix=\"sjg\"  uri=\"/struts-jquery-grid-tags\" --%>\r\n" + 
 				"<html>\r\n" + 
 				"<head>\r\n" + 
 				" \r\n" + 
@@ -287,7 +299,8 @@ public class ReverseEngineerXml {
 			System.out.println(sel2);
 			
 			System.out.println("	   <jsonrpc outstack=\"formonload\" id=\"onloadqry1\">"+sel+" \r\n" + 
-					           "	   </jsonrpc>\r\n" + 
+					           "			<countquery pagesize=\"10\">select count('x') from "+tableName+" </countquery>\r\n" +
+							   "	   </jsonrpc>\r\n" + 
 					           "       <jsonrpc outstack=\"formpagination\" id=\"gridonload\">"+sel+" \r\n" + 
 					           "			<countquery pagesize=\"10\">select count('x') from "+tableName+" </countquery>\r\n" + 
 					           "	   </jsonrpc>");

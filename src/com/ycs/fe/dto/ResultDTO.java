@@ -17,6 +17,7 @@ private HashMap<String, Object>  data;
 private Map<String,Map<String,Integer>> pagination; //{currentpage:,totalpage:,totalrec:,pagesize:}
 private String result; //it will override the result described in command result type in screen xml
 private Map<String, String> sessionvars; //These variables will be put in session in command processor
+private String resultScrName;
 
 public ResultDTO() {
 	data = new HashMap<String,Object>();
@@ -175,6 +176,16 @@ public Map<String, String> getSessionvars() {
 
 public void setSessionvars(Map<String, String> sessionvars) {
 	this.sessionvars = sessionvars;
+}
+
+
+public String getResultScrName() {
+	return resultScrName;
+}
+
+
+public void setResultScrName(String resultScrName) {
+	this.resultScrName = resultScrName;
 }
 
 
