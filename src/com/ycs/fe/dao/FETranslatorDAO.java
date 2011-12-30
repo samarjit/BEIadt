@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.ycs.fe.dto.PrepstmtDTO;
 import com.ycs.fe.dto.PrepstmtDTO.DataType;
 import com.ycs.fe.dto.PrepstmtDTOArray;
 import com.ycs.fe.dto.ResultDTO;
@@ -143,7 +144,7 @@ public class FETranslatorDAO {
 			try {
 				//case i insensitive m multiline s doall  
 				if(sqlquery.matches("(?ims:select)[\\S\\s]*(?ims:from)[\\S\\s]*")){
-					logger.debug("valid query processing...");
+					logger.debug("valid query processing select...");
 					
 					
 					crs = dbconn.executePreparedQuery(sqlquery, prepar);
@@ -153,7 +154,11 @@ public class FETranslatorDAO {
 						while (crs.next()) {
 							row = new HashMap<String, String>();
 							for (int i = 1; i <= colcount; i++) {
+								if(md.getColumnType(i) == 93){//TIMESTAMP
+									row.put(md.getColumnLabel(i), PrepstmtDTO.getDateStringFormat(crs.getDate(i), PrepstmtDTO.DATE_NS_FORMAT) );
+								}else{
 								row.put(md.getColumnLabel(i), crs.getString(i));
+							}
 							}
 							values.add(row);
 							countrec++;	
@@ -164,11 +169,13 @@ public class FETranslatorDAO {
 							text = ParseSentenceOgnl.parse(messageTemplate, jsonObject);
 					resultDTO.addMessage("SUCCESS:"+String.valueOf(countrec)+"|"+text);
 				}else if(sqlquery.matches("[\\S\\s]*(?ims:insert)[\\S\\s]*(?ims:into)[\\S\\s]*")){
+					logger.debug("valid query processing insert...");
 					countrec = dbconn.executePreparedUpdate(sqlquery, prepar);
 					if(jsonObject !=null) 
 						text = ParseSentenceOgnl.parse(messageTemplate, jsonObject);
 					resultDTO.addMessage("SUCCESS:"+String.valueOf(countrec)+"|"+text);
 				}else if(sqlquery.matches("[\\S\\s]*(?ims:update|delete)[\\S\\s]*(?ims:where)[\\S\\s]*")){
+					logger.debug("valid query processing update...");
 					countrec = dbconn.executePreparedUpdate(sqlquery, prepar);
 					if(jsonObject !=null) 
 						text = ParseSentenceOgnl.parse(messageTemplate, jsonObject);
@@ -182,7 +189,7 @@ public class FETranslatorDAO {
 				}
 				
 			} catch (SQLException e) {
-				logger.error("Accessing Result set"+e);
+				logger.error("Accessing Result set",e);
 				if(jsonObject !=null)
 					try {
 						text = ParseSentenceOgnl.parse(errorTemplate, jsonObject);
@@ -214,7 +221,7 @@ public class FETranslatorDAO {
 			resultDTO.setData(hm);
 			
 			ResultDTO tempresDTO = (ResultDTO) stack.getContext().get("resultDTO");
-			logger.debug("previously set resultDTO in FEtranaltorDAO="+JSONSerializer.toJSON(tempresDTO));
+			//logger.debug("previously set resultDTO in FEtranaltorDAO="+JSONSerializer.toJSON(tempresDTO));
 			if(tempresDTO != null){
 			  tempresDTO.merge(resultDTO);
 			  resultDTO = null;
@@ -222,7 +229,7 @@ public class FETranslatorDAO {
 			} 
 			
 			
-			logger.debug(screenName+stackid+"="+resultDTO.getData().toString());
+			logger.debug(screenName+" stackid="+stackid+" error="+resultDTO.getErrors()+" message="+resultDTO.getMessages()+" data="+resultDTO.getData().toString());
 			//context.put("resultDTO", resultDTO);
 			
 	    	stack.getContext().put("resultDTO",resultDTO);

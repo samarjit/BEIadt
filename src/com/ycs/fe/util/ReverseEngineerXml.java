@@ -127,7 +127,7 @@ public class ReverseEngineerXml {
 			
 			System.out.print(metaData.getColumnName(i + 1) + "  \t");
 			System.out.print(metaData.getColumnDisplaySize(i + 1) + " ==? " + metaData.getPrecision(i+1)+"\t");
-			System.out.println(metaData.getColumnTypeName(i + 1));
+			System.out.println(metaData.getColumnTypeName(i + 1)+" , "+metaData.getColumnType(i + 1));
 		}
 		
 		if(con!= null){
