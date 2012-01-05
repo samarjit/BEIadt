@@ -75,16 +75,16 @@
 				<proc id="pmdetails"  outstack="frmUpd1">{'procname':'ws_test_proc','inputparam':[:inp.param1 ,:inp.whereval] ,'outputparam':'desc'}</proc>
 		</anyprocs>
 		<commands>
-			<cmd name="getpmdetails1" opt="txnproc:pmdetails" instack="form1" result="login.jsp" processor="dm"></cmd>
-			<cmd name="getpmdetails" opt="jsonrpc:progdetails" instack="form1" result="TestPage.page" processor="crud"></cmd>
-		   <cmd name="BusLogic1" opt="buslogic:ArbritrarySelect" instack="form1" result="ajax" processor="bl" />
-		   <cmd name="TXNPROC1" opt="txnproc:TRANSCODE" instack="form1" result="ajax" processor="dm" />
-		   <cmd name="jrpcCmd1" opt="jsonrpc:rpc3" instack="form1" result="ajax"  processor="crud" />
-		   <cmd name="Update" opt="sqlupdate:Upd1" instack="form1" result="ajax"  processor="crud" />
-		   <cmd name="Create1" opt="sqlinsert:ins1" instack="form1" result="ajax"  processor="crud" />
-		   <cmd name="merge" opt="jsonrpc:rpc1|selectonload:selqry1" instack="form1" result="ajax|{screenName}"  processor="crud" />
-		   <cmd name="selectlist" opt="sqlupdate:ins2|sqlupdate:upd2"  instack="formChild"  result="ajax|{screenName}"  processor="crud" />
-		   <cmd name="Create" opt="proc:upd2"  instack="formChild"  result="ajax"  processor="anyproc" />
+			<cmd name="getpmdetails1" opt="txnproc:pmdetails" instack="form1" result="login.jsp" ></cmd>
+			<cmd name="getpmdetails" opt="jsonrpc:progdetails" instack="form1" result="TestPage.page" ></cmd>
+		   <cmd name="BusLogic1" opt="buslogic:ArbritrarySelect" instack="form1" result="ajax"  />
+		   <cmd name="TXNPROC1" opt="txnproc:TRANSCODE" instack="form1" result="ajax"  />
+		   <cmd name="jrpcCmd1" opt="jsonrpc:rpc3" instack="form1" result="ajax"   />
+		   <cmd name="Update" opt="sqlupdate:Upd1" instack="form1" result="ajax"   />
+		   <cmd name="Create1" opt="sqlinsert:ins1" instack="form1" result="ajax"   />
+		   <cmd name="merge" opt="jsonrpc:rpc1|selectonload:selqry1" instack="form1" result="ajax|{screenName}"   />
+		   <cmd name="selectlist" opt="sqlupdate:ins2|sqlupdate:upd2"  instack="formChild"  result="ajax|{screenName}"   />
+		   <cmd name="Create" opt="proc:upd2"  instack="formChild"  result="ajax"   />
 		   <bulkcmd name="blTest" opt="buslogic#ArbritrarySelect"  result="ajax"/>
 		   <onload  opt="selectonload:selqry1|selectonload:selqry2|selectonload:programname"  result="ProgramSetup.page"/>
 		</commands>

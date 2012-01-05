@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config.xsd">
+  <screen name="JspTestEditCrud">
+    <htmltemplate></htmltemplate>
+    <includedjsp></includedjsp>
+    <callbackclass></callbackclass>
+    <scripts>
+      <scriptinclude></scriptinclude>
+    </scripts>
+    <stylesheets>
+      <styleinclude></styleinclude>
+    </stylesheets>
+    <sessionvars></sessionvars>
+    <crud>
+       
+       <jsonrpc outstack="formonload" id="onloadqry1">SELECT MERCHANT_ID "merchantid",MERCHANT_TYPE "merchanttype",MERCHANT_LOCATION "merchantlocation",STATUS "status" FROM MERCHANT 
+	   </jsonrpc>
+       <jsonrpc outstack="formpagination" id="gridonload">SELECT MERCHANT_ID "merchantid",MERCHANT_TYPE "merchanttype",MERCHANT_LOCATION "merchantlocation",STATUS "status" FROM MERCHANT 
+			<countquery pagesize="10">select count('x') from MERCHANT </countquery>
+	   </jsonrpc>
+      <sqlselect id="" outstack=""/>
+      <savefieldids/>
+      <sqlinsert id="frmgridadd" outstack="inst">insert into MERCHANT( MERCHANT_ID, MERCHANT_TYPE, MERCHANT_LOCATION, STATUS) values ( #inp.form1[0].MERCHANT_ID, #inp.form1[0].MERCHANT_TYPE, #inp.form1[0].MERCHANT_LOCATION, #inp.form1[0].STATUS)</sqlinsert>
+      <sqldelete id="frmgriddel" outstack="delt">delete from MERCHANT WHERE MERCHANT_ID = #inp.form1[0].MERCHANT_ID|STRING</sqldelete>
+      <sqldelete id="griddel" outstack="delt">delete from MERCHANT WHERE MERCHANT_ID = #inp.form1[0].id|STRING</sqldelete>
+      <sqlupdate id="frmgridedit" outstack="updt">update MERCHANT set  MERCHANT_TYPE = #inp.form1[0].MERCHANT_TYPE, MERCHANT_LOCATION = #inp.form1[0].MERCHANT_LOCATION, STATUS = #inp.form1[0].STATUS WHERE MERCHANT_ID=#inp.form1[0].MERCHANT_ID</sqlupdate>
+      
+    </crud>
+    <dm>
+      <txnproc id="" outstack=""/>
+    </dm>
+    <bl id="">
+      <buslogic id="" method=""/>
+    </bl>
+    <anyprocs>
+      <proc id="" outstack=""/>
+    </anyprocs>
+    <commands>
+      <cmd instack="" name="" opt=""  result="" />
+      <bulkcmd name="fromViewTransition" opt="" result="ajax" resultScrName="JspTestEdit" />
+      <bulkcmd name="frmgridadd" opt="sqlinsert:frmgridadd" result="ajax" resultScrName="JspTestEditAjax"/>
+      <bulkcmd name="frmgridedit" opt="sqlupdate:frmgridedit" result="ajax"/>
+      <bulkcmd name="frmgriddel" opt="sqldelete:frmgriddel" result="ajax"/>
+      <bulkcmd name="griddel" opt="sqldelete:griddel" result="ajax"/>
+      <bulkcmd name="gridonload" opt="jsonrpc:gridonload" result="ajax"/>
+      <onload opt="jsonrpc:onloadqry1" result="/jsptest/jsptestCrud.jsp"/>
+    </commands>
+  </screen>
+  <panels>
+    <panel id="editform">
+     	<fields>
+      	 <field>
+        		<validationfld dbcolsize="20" name="merchantid" column="MERCHANT_ID" mandatory="yes" forid="merchantid" dbdatatype="STRING" />
+				<validationfld dbcolsize="20" name="merchanttype" column="MERCHANT_TYPE" mandatory="yes" forid="merchanttype" dbdatatype="STRING" /> 
+				<validationfld dbcolsize="30" name="merchantlocation" column="MERCHANT_LOCATION" mandatory="yes" forid="merchantlocation" dbdatatype="STRING" />
+				<validationfld dbcolsize="8" name="status" column="STATUS" mandatory="yes" forid="status" dbdatatype="STRING" />
+				
+				<label replace="modify" key="merchantid" value="Merchant Id" forname="merchantid"/>
+      	 </field>
+     	</fields>
+      <button forid="" id="" onclick="" replace="modify" type="">Edit</button>
+    </panel>
+  </panels>
+</root>
+

@@ -125,12 +125,19 @@ public class DBConnector {
 				// conn = DriverManager.getConnection (url, userName, password);
 //				 conn = JDBCUtils.getConnection();
 //				 JDBCUtils.listCacheInfos();
+
+				try{
+					conn =  MiniConnectionPoolHelper.getConnection();
+				}catch(Exception e){
+					logger.error("Mini data source connection error"+e);
+				}
 				
-//				conn =  MiniConnectionPoolHelper.getConnection();
-//				isRuninServerContext = false;
-				 
-				Class.forName(driverName);
-				conn = DriverManager.getConnection(url, userName, password);
+				isRuninServerContext = false;
+				if(conn == null){ 
+					Class.forName(driverName);
+					conn = DriverManager.getConnection(url, userName, password);
+				}
+				
 				if (conn == null) {
 					logger.error("Some thing wrong with connecting with database!");
 					throw new SQLException("DBConnection is null");

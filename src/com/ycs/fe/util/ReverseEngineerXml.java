@@ -148,6 +148,7 @@ public class ReverseEngineerXml {
 				"<script src=\"../js/additional-methods.js\" > </script>\r\n" + 
 				"<script src=\"../jqgrid/js/i18n/grid.locale-en.js\" > </script>\r\n" + 
 				"<script src=\"../jqgrid/js/jquery.jqGrid.min.js\" > </script>\r\n" + 
+				"<script src=\"../js/json2.js\" > </script>\r\n"+
 				"\r\n"+
 				"<script>");
 		
@@ -207,8 +208,9 @@ public class ReverseEngineerXml {
 				           "			    			lastsel=id;\r\n" + 
 				           "			    		}\r\n" + 
 				           "			    	},\r\n" + 
-				           "			    	loadComplete: function(){\r\n" + 
+				           "	    loadComplete: function(){\r\n" + 
 				           "			    		var ret;\r\n" + 
+				           " 						$(\"#messagegrid\").text(JSON.stringify(jQuery(\"#listid\").getGridParam('userData'), null, 2));\r\n"+
 				           "			    	},\r\n" + 
 				           "			       editurl: \"${pageContext.request.contextPath}/html/simpleform.action?screenName="+screenName+"&bulkcmd=grid\",\r\n"+
 				           "       caption: \"XXXXType the Caption here\"\r\n" + 
@@ -238,7 +240,8 @@ public class ReverseEngineerXml {
 				"\r\n" + 
 				"<body>\r\n"+
 				"  <table id=\"listid\" ></table>\r\n" + 
-				"		 <div id=\"pagerid\"></div>");
+				"  <div id=\"pagerid\"></div>"+
+				"  <div id=\"messagegrid\"></div>");
 		
 		
 		   

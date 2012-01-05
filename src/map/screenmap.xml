@@ -29,5 +29,9 @@
  <screen name="JspTestViewDetails" mappingxml="map/jsptest/jsptestViewDetails.xml" />
  <screen name="JspTestEdit" mappingxml="map/jsptest/jsptestEdit.xml" />
  <screen name="JspTestEditAjax" mappingxml="map/jsptest/jsptestEditAjax.xml" />
+ <screen name="JspTestEditCrud" mappingxml="map/jsptest/jsptestEditCrud.xml" />
+ <screen name="CardBlockRefund" mappingxml="map/jsptest/cardBlockRefund.xml" />
+ <screen name="CustomerMaster" mappingxml="map/jsptest/customerMaster.xml" />
+ <screen name="CardMaster" mappingxml="map/jsptest/CardMaster.xml" />
  
 </root>

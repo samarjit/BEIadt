@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config.xsd">
+  <screen name="CustomerMaster">
+    <htmltemplate></htmltemplate>
+    <includedjsp></includedjsp>
+    <callbackclass></callbackclass>
+    <scripts>
+      <scriptinclude></scriptinclude>
+    </scripts>
+    <stylesheets>
+      <styleinclude></styleinclude>
+    </stylesheets>
+    <sessionvars></sessionvars>
+    <crud>
+        <jsonrpc outstack="formonload" id="onloadqry1">SELECT CIN "cin",NRIC "nric",F_NAME "fname",L_NAME "lname",GENDER "gender",DOB "dob",CUST_CATEGORY "custcategory",MAKER_ID "makerid",SEC_QUES "secques",SEC_QUES_ANS "secquesans",MEMBERSHIP_NO "membershipno",CREATION_MODE "creationmode",REG_STATUS "regstatus",SMS_BLAST_SUBSCRIBED "smsblastsubscribed",EMAIL_BLAST_SUBSCRIBED "emailblastsubscribed",CARD_INSURANCE_SUBSCRIBED "cardinsurancesubscribed",CARD_INSUR_POLICY_YR_START "cardinsurpolicyyrstart",CARD_INSUR_POLICY_NUM "cardinsurpolicynum",MOBILE_AT_REG "mobileatreg",PROG_UNSUBSCRIBED_REASON "progunsubscribedreason",PRODUCT_TYPE "producttype" FROM  
+		CUSTOMER_MASTER	<countquery pagesize="10">select count('x') from CUSTOMER_MASTER </countquery>
+	   </jsonrpc>
+       <jsonrpc outstack="formpagination" id="gridonload">SELECT CIN "cin",NRIC "nric",F_NAME "fname",L_NAME "lname",GENDER "gender",DOB "dob",CUST_CATEGORY "custcategory",MAKER_ID "makerid",SEC_QUES "secques",SEC_QUES_ANS "secquesans",MEMBERSHIP_NO "membershipno",CREATION_MODE "creationmode",REG_STATUS "regstatus",SMS_BLAST_SUBSCRIBED "smsblastsubscribed",EMAIL_BLAST_SUBSCRIBED "emailblastsubscribed",CARD_INSURANCE_SUBSCRIBED "cardinsurancesubscribed",CARD_INSUR_POLICY_YR_START "cardinsurpolicyyrstart",CARD_INSUR_POLICY_NUM "cardinsurpolicynum",MOBILE_AT_REG "mobileatreg",PROG_UNSUBSCRIBED_REASON "progunsubscribedreason",PRODUCT_TYPE "producttype" FROM  
+		CUSTOMER_MASTER	<countquery pagesize="10">select count('x') from CUSTOMER_MASTER </countquery>
+	   </jsonrpc>
+--NORMAL SQLs--
+      <sqlinsert id="frmnrmladd" outstack="inst">insert into CUSTOMER_MASTER( CIN, NRIC, F_NAME, L_NAME, GENDER, DOB, CUST_CATEGORY, MAKER_ID, SEC_QUES, SEC_QUES_ANS, MEMBERSHIP_NO, CREATION_MODE, REG_STATUS, SMS_BLAST_SUBSCRIBED, EMAIL_BLAST_SUBSCRIBED, CARD_INSURANCE_SUBSCRIBED, CARD_INSUR_POLICY_YR_START, CARD_INSUR_POLICY_NUM, MOBILE_AT_REG, PROG_UNSUBSCRIBED_REASON, PRODUCT_TYPE) values ( #inp.form1[0].cin, #inp.form1[0].nric, #inp.form1[0].fname, #inp.form1[0].lname, #inp.form1[0].gender, #inp.form1[0].dob, #inp.form1[0].custcategory, #inp.form1[0].makerid, #inp.form1[0].secques, #inp.form1[0].secquesans, #inp.form1[0].membershipno, #inp.form1[0].creationmode, #inp.form1[0].regstatus, #inp.form1[0].smsblastsubscribed, #inp.form1[0].emailblastsubscribed, #inp.form1[0].cardinsurancesubscribed, #inp.form1[0].cardinsurpolicyyrstart, #inp.form1[0].cardinsurpolicynum, #inp.form1[0].mobileatreg, #inp.form1[0].progunsubscribedreason, #inp.form1[0].producttype)</sqlinsert>
+      <sqldelete id="frmnrmldel" outstack="delt">delete from CUSTOMER_MASTER WHERE CIN = #inp.form1[0].cin</sqldelete>
+      <sqlupdate id="frmnrmledit" outstack="updt">update CUSTOMER_MASTER set  NRIC = #inp.form1[0].nric, F_NAME = #inp.form1[0].fname, L_NAME = #inp.form1[0].lname, GENDER = #inp.form1[0].gender, DOB = #inp.form1[0].dob, CUST_CATEGORY = #inp.form1[0].custcategory, MAKER_ID = #inp.form1[0].makerid, SEC_QUES = #inp.form1[0].secques, SEC_QUES_ANS = #inp.form1[0].secquesans, MEMBERSHIP_NO = #inp.form1[0].membershipno, CREATION_MODE = #inp.form1[0].creationmode, REG_STATUS = #inp.form1[0].regstatus, SMS_BLAST_SUBSCRIBED = #inp.form1[0].smsblastsubscribed, EMAIL_BLAST_SUBSCRIBED = #inp.form1[0].emailblastsubscribed, CARD_INSURANCE_SUBSCRIBED = #inp.form1[0].cardinsurancesubscribed, CARD_INSUR_POLICY_YR_START = #inp.form1[0].cardinsurpolicyyrstart, CARD_INSUR_POLICY_NUM = #inp.form1[0].cardinsurpolicynum, MOBILE_AT_REG = #inp.form1[0].mobileatreg, PROG_UNSUBSCRIBED_REASON = #inp.form1[0].progunsubscribedreason, PRODUCT_TYPE = #inp.form1[0].producttype WHERE CIN=#inp.form1[0].cin</sqlupdate>
+--GRID INSERTS (check out which alias is required--
+      <sqlinsert id="frmgridadd" outstack="inst">insert into CUSTOMER_MASTER( CIN, NRIC, F_NAME, L_NAME, GENDER, DOB, CUST_CATEGORY, MAKER_ID, SEC_QUES, SEC_QUES_ANS, MEMBERSHIP_NO, CREATION_MODE, REG_STATUS, SMS_BLAST_SUBSCRIBED, EMAIL_BLAST_SUBSCRIBED, CARD_INSURANCE_SUBSCRIBED, CARD_INSUR_POLICY_YR_START, CARD_INSUR_POLICY_NUM, MOBILE_AT_REG, PROG_UNSUBSCRIBED_REASON, PRODUCT_TYPE) values ( #inp.form1[0].CIN, #inp.form1[0].NRIC, #inp.form1[0].F_NAME, #inp.form1[0].L_NAME, #inp.form1[0].GENDER, #inp.form1[0].DOB, #inp.form1[0].CUST_CATEGORY, #inp.form1[0].MAKER_ID, #inp.form1[0].SEC_QUES, #inp.form1[0].SEC_QUES_ANS, #inp.form1[0].MEMBERSHIP_NO, #inp.form1[0].CREATION_MODE, #inp.form1[0].REG_STATUS, #inp.form1[0].SMS_BLAST_SUBSCRIBED, #inp.form1[0].EMAIL_BLAST_SUBSCRIBED, #inp.form1[0].CARD_INSURANCE_SUBSCRIBED, #inp.form1[0].CARD_INSUR_POLICY_YR_START, #inp.form1[0].CARD_INSUR_POLICY_NUM, #inp.form1[0].MOBILE_AT_REG, #inp.form1[0].PROG_UNSUBSCRIBED_REASON, #inp.form1[0].PRODUCT_TYPE )</sqlinsert>
+      <sqlinsert id="gridadd" outstack="inst">insert into CUSTOMER_MASTER( CIN, NRIC, F_NAME, L_NAME, GENDER, DOB, CUST_CATEGORY, MAKER_ID, SEC_QUES, SEC_QUES_ANS, MEMBERSHIP_NO, CREATION_MODE, REG_STATUS, SMS_BLAST_SUBSCRIBED, EMAIL_BLAST_SUBSCRIBED, CARD_INSURANCE_SUBSCRIBED, CARD_INSUR_POLICY_YR_START, CARD_INSUR_POLICY_NUM, MOBILE_AT_REG, PROG_UNSUBSCRIBED_REASON, PRODUCT_TYPE) values ( #inp.form1[0].CIN, #inp.form1[0].NRIC, #inp.form1[0].F_NAME, #inp.form1[0].L_NAME, #inp.form1[0].GENDER, #inp.form1[0].DOB, #inp.form1[0].CUST_CATEGORY, #inp.form1[0].MAKER_ID, #inp.form1[0].SEC_QUES, #inp.form1[0].SEC_QUES_ANS, #inp.form1[0].MEMBERSHIP_NO, #inp.form1[0].CREATION_MODE, #inp.form1[0].REG_STATUS, #inp.form1[0].SMS_BLAST_SUBSCRIBED, #inp.form1[0].EMAIL_BLAST_SUBSCRIBED, #inp.form1[0].CARD_INSURANCE_SUBSCRIBED, #inp.form1[0].CARD_INSUR_POLICY_YR_START, #inp.form1[0].CARD_INSUR_POLICY_NUM, #inp.form1[0].MOBILE_AT_REG, #inp.form1[0].PROG_UNSUBSCRIBED_REASON, #inp.form1[0].PRODUCT_TYPE )</sqlinsert>
+      <sqldelete id="frmgriddel" outstack="delt">delete from CUSTOMER_MASTER WHERE CIN = #inp.form1[0].CIN|STRING</sqldelete>
+      <sqldelete id="griddel" outstack="delt">delete from CUSTOMER_MASTER WHERE CIN = #inp.form1[0].id|STRING</sqldelete>
+      <sqlupdate id="frmgridedit" outstack="updt">update CUSTOMER_MASTER set  NRIC = #inp.form1[0].NRIC, F_NAME = #inp.form1[0].F_NAME, L_NAME = #inp.form1[0].L_NAME, GENDER = #inp.form1[0].GENDER, DOB = #inp.form1[0].DOB, CUST_CATEGORY = #inp.form1[0].CUST_CATEGORY, MAKER_ID = #inp.form1[0].MAKER_ID, SEC_QUES = #inp.form1[0].SEC_QUES, SEC_QUES_ANS = #inp.form1[0].SEC_QUES_ANS, MEMBERSHIP_NO = #inp.form1[0].MEMBERSHIP_NO, CREATION_MODE = #inp.form1[0].CREATION_MODE, REG_STATUS = #inp.form1[0].REG_STATUS, SMS_BLAST_SUBSCRIBED = #inp.form1[0].SMS_BLAST_SUBSCRIBED, EMAIL_BLAST_SUBSCRIBED = #inp.form1[0].EMAIL_BLAST_SUBSCRIBED, CARD_INSURANCE_SUBSCRIBED = #inp.form1[0].CARD_INSURANCE_SUBSCRIBED, CARD_INSUR_POLICY_YR_START = #inp.form1[0].CARD_INSUR_POLICY_YR_START, CARD_INSUR_POLICY_NUM = #inp.form1[0].CARD_INSUR_POLICY_NUM, MOBILE_AT_REG = #inp.form1[0].MOBILE_AT_REG, PROG_UNSUBSCRIBED_REASON = #inp.form1[0].PROG_UNSUBSCRIBED_REASON, PRODUCT_TYPE = #inp.form1[0].PRODUCT_TYPE WHERE CIN=#inp.form1[0].CIN</sqlupdate>
+      <sqlupdate id="gridedit" outstack="updt">update CUSTOMER_MASTER set  NRIC = #inp.form1[0].NRIC, F_NAME = #inp.form1[0].F_NAME, L_NAME = #inp.form1[0].L_NAME, GENDER = #inp.form1[0].GENDER, DOB = #inp.form1[0].DOB, CUST_CATEGORY = #inp.form1[0].CUST_CATEGORY, MAKER_ID = #inp.form1[0].MAKER_ID, SEC_QUES = #inp.form1[0].SEC_QUES, SEC_QUES_ANS = #inp.form1[0].SEC_QUES_ANS, MEMBERSHIP_NO = #inp.form1[0].MEMBERSHIP_NO, CREATION_MODE = #inp.form1[0].CREATION_MODE, REG_STATUS = #inp.form1[0].REG_STATUS, SMS_BLAST_SUBSCRIBED = #inp.form1[0].SMS_BLAST_SUBSCRIBED, EMAIL_BLAST_SUBSCRIBED = #inp.form1[0].EMAIL_BLAST_SUBSCRIBED, CARD_INSURANCE_SUBSCRIBED = #inp.form1[0].CARD_INSURANCE_SUBSCRIBED, CARD_INSUR_POLICY_YR_START = #inp.form1[0].CARD_INSUR_POLICY_YR_START, CARD_INSUR_POLICY_NUM = #inp.form1[0].CARD_INSUR_POLICY_NUM, MOBILE_AT_REG = #inp.form1[0].MOBILE_AT_REG, PROG_UNSUBSCRIBED_REASON = #inp.form1[0].PROG_UNSUBSCRIBED_REASON, PRODUCT_TYPE = #inp.form1[0].PRODUCT_TYPE WHERE CIN=#inp.form1[0].id|STRING</sqlupdate>
+    </crud>
+    <dm>
+      <txnproc id="" outstack=""/>
+    </dm>
+    <bl id="">
+      <buslogic id="" method=""/>
+    </bl>
+    <anyprocs>
+      <proc id="" outstack=""/>
+    </anyprocs>
+    <commands> 
+	  <cmd instack="" name="" opt=""  result="" />
+      <bulkcmd name="fromViewTransition" opt="" result="ajax" resultScrName="CustomerMaster" />
+      <bulkcmd name="frmgridadd" opt="sqlinsert:frmgridadd" result="ajax" resultScrName="CustomerMaster"/>
+      <bulkcmd name="frmgridedit" opt="sqlupdate:frmgridedit" result="ajax"/>
+      <bulkcmd name="frmgriddel" opt="sqldelete:frmgriddel" result="ajax"/>
+      <bulkcmd name="griddel" opt="sqldelete:griddel" result="ajax"/>
+      <bulkcmd name="gridedit" opt="sqlupdate:gridedit" result="ajax"/>
+      <bulkcmd name="gridadd" opt="sqlinsert:gridadd" result="ajax"/>
+      <bulkcmd name="gridonload" opt="jsonrpc:gridonload" result="ajax"/>
+      <onload opt="jsonrpc:onloadqry1" result="/jsptest/CustomerMaster.jsp"/>
+    </commands>
+  </screen>
+  <panels>
+    <panel id="">
+    <fields>
+       <field>
+        <validationfld dbcolsize="16" name="cin" column="CIN" mandatory="yes" forid="cin" dbdatatype="STRING" />
+		<validationfld dbcolsize="20" name="nric" column="NRIC" mandatory="yes" forid="nric" dbdatatype="STRING" />
+		<validationfld dbcolsize="50" name="fname" column="F_NAME" mandatory="yes" forid="fname" dbdatatype="STRING" />
+		<validationfld dbcolsize="50" name="lname" column="L_NAME" mandatory="yes" forid="lname" dbdatatype="STRING" />
+		<validationfld dbcolsize="10" name="gender" column="GENDER" mandatory="yes" forid="gender" dbdatatype="STRING" />
+		<validationfld dbcolsize="0" name="dob" column="DOB" mandatory="yes" forid="dob" dbdatatype="DATE_NS" />
+		<validationfld dbcolsize="10" name="custcategory" column="CUST_CATEGORY" mandatory="yes" forid="custcategory" dbdatatype="STRING" />
+		<validationfld dbcolsize="25" name="makerid" column="MAKER_ID" mandatory="yes" forid="makerid" dbdatatype="STRING" />
+		<validationfld dbcolsize="4000" name="secques" column="SEC_QUES" mandatory="yes" forid="secques" dbdatatype="STRING" />
+		<validationfld dbcolsize="1000" name="secquesans" column="SEC_QUES_ANS" mandatory="yes" forid="secquesans" dbdatatype="STRING" />
+		<validationfld dbcolsize="100" name="membershipno" column="MEMBERSHIP_NO" mandatory="yes" forid="membershipno" dbdatatype="STRING" />
+		<validationfld dbcolsize="15" name="creationmode" column="CREATION_MODE" mandatory="yes" forid="creationmode" dbdatatype="STRING" />
+		<validationfld dbcolsize="12" name="regstatus" column="REG_STATUS" mandatory="yes" forid="regstatus" dbdatatype="STRING" />
+		<validationfld dbcolsize="1" name="smsblastsubscribed" column="SMS_BLAST_SUBSCRIBED" mandatory="yes" forid="smsblastsubscribed" dbdatatype="STRING" />
+		<validationfld dbcolsize="1" name="emailblastsubscribed" column="EMAIL_BLAST_SUBSCRIBED" mandatory="yes" forid="emailblastsubscribed" dbdatatype="STRING" />
+		<validationfld dbcolsize="1" name="cardinsurancesubscribed" column="CARD_INSURANCE_SUBSCRIBED" mandatory="yes" forid="cardinsurancesubscribed" dbdatatype="STRING" />
+		<validationfld dbcolsize="0" name="cardinsurpolicyyrstart" column="CARD_INSUR_POLICY_YR_START" mandatory="yes" forid="cardinsurpolicyyrstart" dbdatatype="DATE_NS" />
+		<validationfld dbcolsize="20" name="cardinsurpolicynum" column="CARD_INSUR_POLICY_NUM" mandatory="yes" forid="cardinsurpolicynum" dbdatatype="STRING" />
+		<validationfld dbcolsize="25" name="mobileatreg" column="MOBILE_AT_REG" mandatory="yes" forid="mobileatreg" dbdatatype="STRING" />
+		<validationfld dbcolsize="200" name="progunsubscribedreason" column="PROG_UNSUBSCRIBED_REASON" mandatory="yes" forid="progunsubscribedreason" dbdatatype="STRING" />
+		<validationfld dbcolsize="20" name="producttype" column="PRODUCT_TYPE" mandatory="yes" forid="producttype" dbdatatype="STRING" />
+
+		<label replace="modify" key="cin" value="Cin" forname="cin"/>
+		<label replace="modify" key="nric" value="Nric" forname="nric"/>
+		<label replace="modify" key="fname" value="F Name" forname="fname"/>
+		<label replace="modify" key="lname" value="L Name" forname="lname"/>
+		<label replace="modify" key="gender" value="Gender" forname="gender"/>
+		<label replace="modify" key="dob" value="Dob" forname="dob"/>
+		<label replace="modify" key="custcategory" value="Cust Category" forname="custcategory"/>
+		<label replace="modify" key="makerid" value="Maker Id" forname="makerid"/>
+		<label replace="modify" key="secques" value="Sec Ques" forname="secques"/>
+		<label replace="modify" key="secquesans" value="Sec Ques Ans" forname="secquesans"/>
+		<label replace="modify" key="membershipno" value="Membership No" forname="membershipno"/>
+		<label replace="modify" key="creationmode" value="Creation Mode" forname="creationmode"/>
+		<label replace="modify" key="regstatus" value="Reg Status" forname="regstatus"/>
+		<label replace="modify" key="smsblastsubscribed" value="Sms Blast Subscribed" forname="smsblastsubscribed"/>
+		<label replace="modify" key="emailblastsubscribed" value="Email Blast Subscribed" forname="emailblastsubscribed"/>
+		<label replace="modify" key="cardinsurancesubscribed" value="Card Insurance Subscribed" forname="cardinsurancesubscribed"/>
+		<label replace="modify" key="cardinsurpolicyyrstart" value="Card Insur Policy Yr Start" forname="cardinsurpolicyyrstart"/>
+		<label replace="modify" key="cardinsurpolicynum" value="Card Insur Policy Num" forname="cardinsurpolicynum"/>
+		<label replace="modify" key="mobileatreg" value="Mobile At Reg" forname="mobileatreg"/>
+		<label replace="modify" key="progunsubscribedreason" value="Prog Unsubscribed Reason" forname="progunsubscribedreason"/>
+		<label replace="modify" key="producttype" value="Product Type" forname="producttype"/>
+        
+       </field>
+    </fields>
+      <button forid="" id="" onclick="" replace="modify" type="">button</button>
+    </panel>
+  </panels>
+</root>
+

@@ -64,7 +64,7 @@
 			<proc></proc>
 		</anyprocs>
 		<commands>
-			<cmd result="ajax" instack="inst1" name="testjsrpc" opt="jsonrpc:rpc1" processor="crud"/>
+			<cmd result="ajax" instack="inst1" name="testjsrpc" opt="jsonrpc:rpc1"  />
 			<bulkcmd result="ajax" name="prodgrid" opt="jsonrpc:gridtest"/>
 		</commands>
 
