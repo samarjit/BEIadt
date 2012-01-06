@@ -148,6 +148,7 @@ public class ReverseEngineerXml {
 				"<script src=\"../js/additional-methods.js\" > </script>\r\n" + 
 				"<script src=\"../jqgrid/js/i18n/grid.locale-en.js\" > </script>\r\n" + 
 				"<script src=\"../jqgrid/js/jquery.jqGrid.min.js\" > </script>\r\n" + 
+				"<script src=\"../js/json2.js\" > </script>\r\n"+
 				"\r\n"+
 				"<script>");
 		
@@ -160,10 +161,38 @@ public class ReverseEngineerXml {
 		System.out.println(fieldlist);
 		System.out.println("   $(document).ready(function(){\r\n" + 
 				           "	//iadt.setFieldlist(fieldlist);\r\n" + 
+				           "	globalAjaxErrorSetup();\r\n"+
 				           "	$(\"#form1\").validate($.extend(rulesframework,{debug: true}));\r\n" + 
 				           "	calljqgrid();		\r\n" + 
 				           "   });");
-		
+		System.out.println("	function showAjaxError(request, type, errorThrown)\r\n" + 
+							"   {\r\n" + 
+							"       var message = \"There was an error with the AJAX request.\\n\";\r\n" + 
+							"       switch (type) {\r\n" + 
+							"           case 'timeout':\r\n" + 
+							"               message += \"The request timed out.\";\r\n" + 
+							"               break;\r\n" + 
+							"           case 'notmodified':\r\n" + 
+							"               message += \"The request was not modified but was not retrieved from the cache.\";\r\n" + 
+							"               break;\r\n" + 
+							"           case 'parseerror':\r\n" + 
+							"               message += \"XML/Json format is bad.\";\r\n" + 
+							"               break;\r\n" + 
+							"           default:\r\n" + 
+							"               message += \"HTTP Error (\" +type+\" \"+ request.status + \" \" + request.statusText + \").\";\r\n" + 
+							"       }\r\n" + 
+							"       message += \"\\n\";\r\n" + 
+							"       alert(message);\r\n" + 
+							"   }\r\n" + 
+							"   function globalAjaxErrorSetup(){\r\n" + 
+							"	   $( \"#globalajaxerror\" ).ajaxError(function(e, jqxhr, settings, exception) {\r\n" + 
+							"		     alert( \"Triggered ajaxError handler.\" +exception);\r\n" + 
+							"			 if(window.console){\r\n" + 
+							"				 console.log(\"Ajax ecxcetion:\");\r\n" + 
+							"				 console.log(exception);\r\n" + 
+							"				 }  \r\n" + 
+							"		 });\r\n" + 
+							"	}");
 		System.out.println("  var lastsel= {};\r\n" + 
 		                   "  function calljqgrid(formdata){");
 		System.out.println("   jQuery(\"#listid\").jqGrid( {\r\n");
@@ -197,7 +226,8 @@ public class ReverseEngineerXml {
 				           "        sortorder: \"desc\",\r\n" + 
 				           "        jsonReader: {\r\n" + 
 				           "    		repeatitems : false,\r\n" + 
-				           "    		id: \"0\"\r\n" + 
+				           "    		userdata: 'userdata',\r\n" +
+				           "            id: \"0\"\r\n" + 
 				           "    	},\r\n" + 
 				           "       onSelectRow: function(id){\r\n" + 
 				           "			    		if(id && id!==lastsel){\r\n" + 
@@ -207,8 +237,9 @@ public class ReverseEngineerXml {
 				           "			    			lastsel=id;\r\n" + 
 				           "			    		}\r\n" + 
 				           "			    	},\r\n" + 
-				           "			    	loadComplete: function(){\r\n" + 
+				           "	    loadComplete: function(){\r\n" + 
 				           "			    		var ret;\r\n" + 
+				           " 						$(\"#messagegrid\").text(JSON.stringify(jQuery(\"#listid\").getGridParam('userData'), null, 2));\r\n"+
 				           "			    	},\r\n" + 
 				           "			       editurl: \"${pageContext.request.contextPath}/html/simpleform.action?screenName="+screenName+"&bulkcmd=grid\",\r\n"+
 				           "       caption: \"XXXXType the Caption here\"\r\n" + 
@@ -230,7 +261,7 @@ public class ReverseEngineerXml {
         		 		   "			function(data){\r\n" + 
         		 		   "		var json = jQuery.parseJSON(data);\r\n" + 
         		 		   "		jQuery(\"#listid\").trigger(\"reloadGrid\");\r\n" + 
-        		 		   "      });\r\n" + 
+        		 		   "      }).error(showAjaxError);\r\n" + 
         		 		   "  }");
         
         System.out.println("</script>");
@@ -238,7 +269,8 @@ public class ReverseEngineerXml {
 				"\r\n" + 
 				"<body>\r\n"+
 				"  <table id=\"listid\" ></table>\r\n" + 
-				"		 <div id=\"pagerid\"></div>");
+				"  <div id=\"pagerid\"></div>"+
+				"  <div id=\"messagegrid\"></div>");
 		
 		
 		   

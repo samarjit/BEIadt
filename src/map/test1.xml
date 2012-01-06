@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <?xml-stylesheet type="text/xsl" href="config.xsl"?>
-<root  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<root xsi:noNamespaceSchemaLocation="config.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <screen name="test1">
         <htmltemplate>
             html/test1.html
@@ -93,7 +93,7 @@
             </proc>
         </anyprocs>
         <commands>
-            <cmd name="getPlasticDetails" opt="jsonrpc:plasticDetails" instack="form1" result="ajax|{screenName}" processor="crud"/>
+            <cmd name="getPlasticDetails" opt="jsonrpc:plasticDetails" instack="form1" result="ajax|{screenName}"  />
         </commands>
     </screen>
     

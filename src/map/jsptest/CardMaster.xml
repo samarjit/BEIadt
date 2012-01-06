@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config.xsd">
+  <screen name="CardMaster">
+    <htmltemplate></htmltemplate>
+    <includedjsp></includedjsp>
+    <callbackclass></callbackclass>
+    <scripts>
+      <scriptinclude></scriptinclude>
+    </scripts>
+    <stylesheets>
+      <styleinclude></styleinclude>
+    </stylesheets>
+    <sessionvars></sessionvars>
+    <crud>
+        <jsonrpc outstack="formonload" id="onloadqry1">SELECT CARD_NO "cardno",CIN "cin",PRODUCT_TYPE "producttype",CARD_STATUS "cardstatus",STATUS_FLAG "statusflag",MAKER_DTTM "makerdttm" FROM CARD_MASTER 
+		    <countquery pagesize="10">select count('x') from CARD_MASTER </countquery>
+	   </jsonrpc>
+       <jsonrpc outstack="formpagination" id="gridonload">SELECT CARD_NO "cardno",CIN "cin",PRODUCT_TYPE "producttype",CARD_STATUS "cardstatus",STATUS_FLAG "statusflag",MAKER_DTTM "makerdttm" FROM CARD_MASTER 
+			<countquery pagesize="10">select count('x') from CARD_MASTER </countquery>
+	   </jsonrpc>
+  <sqlinsert id="frmgridadd" outstack="inst">insert into CARD_MASTER( CARD_NO, CIN, PRODUCT_TYPE, CARD_STATUS, STATUS_FLAG, MAKER_DTTM) values ( #inp.form1[0].CARD_NO, #inp.form1[0].CIN, #inp.form1[0].PRODUCT_TYPE, #inp.form1[0].CARD_STATUS, #inp.form1[0].STATUS_FLAG, #inp.form1[0].MAKER_DTTM )</sqlinsert>
+      <sqlinsert id="gridadd" outstack="inst">insert into CARD_MASTER( CARD_NO, CIN, PRODUCT_TYPE, CARD_STATUS, STATUS_FLAG, MAKER_DTTM) values ( #inp.form1[0].CARD_NO, #inp.form1[0].CIN, #inp.form1[0].PRODUCT_TYPE, #inp.form1[0].CARD_STATUS, #inp.form1[0].STATUS_FLAG, #inp.form1[0].MAKER_DTTM )</sqlinsert>
+      <sqldelete id="frmgriddel" outstack="delt">delete from CARD_MASTER WHERE CARD_NO = #inp.form1[0].CARD_NO|STRING</sqldelete>
+      <sqldelete id="griddel" outstack="delt">delete from CARD_MASTER WHERE CARD_NO = #inp.form1[0].id|STRING</sqldelete>
+      <sqlupdate id="frmgridedit" outstack="updt">update CARD_MASTER set  CIN = #inp.form1[0].CIN, PRODUCT_TYPE = #inp.form1[0].PRODUCT_TYPE, CARD_STATUS = #inp.form1[0].CARD_STATUS, STATUS_FLAG = #inp.form1[0].STATUS_FLAG, MAKER_DTTM = #inp.form1[0].MAKER_DTTM WHERE CARD_NO=#inp.form1[0].CARD_NO</sqlupdate>
+      <sqlupdate id="gridedit" outstack="updt">update CARD_MASTER set  CIN = #inp.form1[0].CIN, PRODUCT_TYPE = #inp.form1[0].PRODUCT_TYPE, CARD_STATUS = #inp.form1[0].CARD_STATUS, STATUS_FLAG = #inp.form1[0].STATUS_FLAG, MAKER_DTTM = #inp.form1[0].MAKER_DTTM WHERE CARD_NO=#inp.form1[0].id|STRING</sqlupdate>
+
+    </crud>
+    <dm>
+      <txnproc id="" outstack=""/>
+    </dm>
+    <bl id="">
+      <buslogic id="" method=""/>
+    </bl>
+    <anyprocs>
+      <proc id="" outstack=""/>
+    </anyprocs>
+     <commands>
+      <cmd instack="" name="" opt=""  result="" />
+      <bulkcmd name="fromViewTransition" opt="" result="ajax" resultScrName="CardMaster" />
+      <bulkcmd name="frmgridadd" opt="sqlinsert:frmgridadd" result="ajax" resultScrName="CardMaster"/>
+      <bulkcmd name="frmgridedit" opt="sqlupdate:frmgridedit" result="ajax"/>
+      <bulkcmd name="frmgriddel" opt="sqldelete:frmgriddel" result="ajax"/>
+      <bulkcmd name="griddel" opt="sqldelete:griddel" result="ajax"/>
+      <bulkcmd name="gridedit" opt="sqlupdate:gridedit" result="ajax"/>
+      <bulkcmd name="gridadd" opt="sqlinsert:gridadd" result="ajax"/>
+      <bulkcmd name="gridonload" opt="jsonrpc:gridonload" result="ajax"/>
+      <onload opt="jsonrpc:onloadqry1" result="/jsptest/CardMaster.jsp"/>
+    </commands>
+  </screen>
+  <panels>
+    <panel id="">
+       <fields>
+          <field>
+          	<validationfld dbcolsize="25" name="cardno" column="CARD_NO" mandatory="yes" forid="cardno" dbdatatype="STRING" />
+			<validationfld dbcolsize="25" name="cin" column="CIN" mandatory="yes" forid="cin" dbdatatype="STRING" />
+			<validationfld dbcolsize="20" name="producttype" column="PRODUCT_TYPE" mandatory="yes" forid="producttype" dbdatatype="STRING" />
+			<validationfld dbcolsize="8" name="cardstatus" column="CARD_STATUS" mandatory="yes" forid="cardstatus" dbdatatype="STRING" />
+			<validationfld dbcolsize="30" name="statusflag" column="STATUS_FLAG" mandatory="yes" forid="statusflag" dbdatatype="STRING" />
+			<validationfld dbcolsize="30" name="makerdttm" column="MAKER_DTTM" mandatory="yes" forid="makerdttm" dbdatatype="DATE_NS" />
+			
+			<label replace="modify" key="cardno" value="Card No" forname="cardno"/>
+			<label replace="modify" key="cin" value="Cin" forname="cin"/>
+			<label replace="modify" key="producttype" value="Product Type" forname="producttype"/>
+			<label replace="modify" key="cardstatus" value="Card Status" forname="cardstatus"/>
+			<label replace="modify" key="statusflag" value="Status Flag" forname="statusflag"/>
+			<label replace="modify" key="makerdttm" value="Maker Dttm" forname="makerdttm"/>
+			          	
+          </field>
+       </fields>
+      <button forid="" id="" onclick="" replace="modify" type="">button</button>
+    </panel>
+  </panels>
+</root>
+
