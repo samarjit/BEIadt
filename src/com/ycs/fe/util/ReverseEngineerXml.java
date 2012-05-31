@@ -332,8 +332,11 @@ public class ReverseEngineerXml {
 			
 			System.out.println(sel);
 			System.out.println(sel2);
+<<<<<<< HEAD
 			
 			
+=======
+>>>>>>> 897ee1bcf652729913e8397ce71d087598afa987
 			System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
 					"<root xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"../config.xsd\">\r\n" + 
 					"  <screen name=\""+screenName+"\">\r\n" + 
@@ -346,9 +349,14 @@ public class ReverseEngineerXml {
 					"    <stylesheets>\r\n" + 
 					"      <styleinclude></styleinclude>\r\n" + 
 					"    </stylesheets>\r\n" + 
+<<<<<<< HEAD
 					"    <sessionvars>sessionvars</sessionvars>\r\n" + 
 					"    <crud>");
 			
+=======
+					"    <sessionvars></sessionvars>\r\n" + 
+					"    <crud>");
+>>>>>>> 897ee1bcf652729913e8397ce71d087598afa987
 			System.out.println("	   <jsonrpc outstack=\"formonload\" id=\"onloadqry1\">"+sel+" \r\n" + 
 					           "			<countquery pagesize=\"10\">select count('x') from "+tableName+" </countquery>\r\n" +
 							   "	   </jsonrpc>\r\n" + 
@@ -356,7 +364,7 @@ public class ReverseEngineerXml {
 					           "			<countquery pagesize=\"10\">select count('x') from "+tableName+" </countquery>\r\n" + 
 					           "	   </jsonrpc>");
 			//normal inserts
-			System.out.println("--NORMAL SQLs--");
+			System.out.println("<!--NORMAL SQLs-->");
 			String simplefrmcols ="";
 			String simplefrmvals = "";
 			String prefix = "frmnrml";
@@ -387,7 +395,7 @@ public class ReverseEngineerXml {
 			System.out.println("      <sqlupdate id=\""+prefix+"edit\" outstack=\"updt\">"+simepleformupd+"</sqlupdate>");
 			
 			//start grid inserts
-			System.out.println("--GRID INSERTS (check out which alias is required--");
+			System.out.println("<!--GRID INSERTS (check out which alias is required-->");
 			//simpleform insert 
 			  simplefrmcols ="";
 			  simplefrmvals = "";
@@ -427,10 +435,23 @@ public class ReverseEngineerXml {
 			gridupd += " WHERE "+arcol.get(0)+"=#inp.form1[0].id|STRING";
 			System.out.println("      <sqlupdate id=\""+bulkcmd+"edit\" outstack=\"updt\">"+gridupd+"</sqlupdate>");
 			///end grid inserts
+<<<<<<< HEAD
 			System.out.println(" </crud>\r\n" + 
 					"    <dm></dm>\r\n" + 
 					"    <bl></bl>\r\n" + 
 					"    <anyprocs></anyprocs>");
+=======
+			System.out.println("    </crud>\r\n" + 
+					"    <dm>\r\n" + 
+					"      <txnproc id=\"\" outstack=\"\"/>\r\n" + 
+					"    </dm>\r\n" + 
+					"    <bl id=\"\">\r\n" + 
+					"      <buslogic id=\"\" method=\"\"/>\r\n" + 
+					"    </bl>\r\n" + 
+					"    <anyprocs>\r\n" + 
+					"      <proc id=\"\" outstack=\"\"/>\r\n" + 
+					"    </anyprocs>");
+>>>>>>> 897ee1bcf652729913e8397ce71d087598afa987
 			///xml cmd//
 			System.out.println("    <commands>\r\n" + 
 					           "      <cmd instack=\"\" name=\"\" opt=\"\"  result=\"\" />\r\n" + 
@@ -447,6 +468,14 @@ public class ReverseEngineerXml {
 			
 			
 			//xml cmd end//
+			
+			//screen->panels ->fields
+			System.out.println("  </screen>\r\n" + 
+					"  <panels>\r\n" + 
+					"    <panel id=\"\">\r\n" + 
+					"       <fields>\r\n" + 
+					"          <field>");
+			
 			//validation xml
 			String validationXml = "";
 			String label = "";
@@ -456,8 +485,8 @@ public class ReverseEngineerXml {
 				datatype = ardatatype.get(i);
 				col = arcol.get(i);
 				
-				validationXml +="<validationfld dbcolsize=\""+size+"\" name=\""+alias+"\" column=\""+col+"\" mandatory=\"yes\" forid=\""+alias+"\" dbdatatype=\""+datatype+"\" />\r\n" ;
-				label += "<label replace=\"modify\" key=\""+alias+"\" value=\""+arheader.get(i).trim()+"\" forname=\""+alias+"\"/>\r\n";
+				validationXml +="          	<validationfld dbcolsize=\""+size+"\" name=\""+alias+"\" column=\""+col+"\" mandatory=\"yes\" forid=\""+alias+"\" dbdatatype=\""+datatype+"\" />\r\n" ;
+				label += "          	<label replace=\"modify\" key=\""+alias+"\" value=\""+arheader.get(i).trim()+"\" forname=\""+alias+"\"/>\r\n";
 			}
 			
 			System.out.println("  </screen>\r\n" + 
@@ -467,12 +496,23 @@ public class ReverseEngineerXml {
 					"       <field>");
 			 System.out.println(validationXml);
 			 System.out.println(label);
+<<<<<<< HEAD
 			 System.out.println("       </field>\r\n" + 
 			 		"    </fields>\r\n" + 
 			 		"      <button forid=\"\" id=\"\" onclick=\"\" replace=\"modify\" type=\"\">button</button>\r\n" + 
 			 		"    </panel>\r\n" + 
 			 		"  </panels>\r\n" + 
 			 		"</root>");
+=======
+			 
+			 //ending xml
+			 System.out.println("          </field>\r\n" + 
+			 		"       </fields>\r\n" + 
+			 		"      <button forid=\"\" id=\"\" onclick=\"\" replace=\"modify\" type=\"\">button</button>\r\n" + 
+			 		"    </panel>\r\n" + 
+			 		"  </panels>\r\n" + 
+			 		"</root>\r\n");
+>>>>>>> 897ee1bcf652729913e8397ce71d087598afa987
 			 
 			 System.out.println("\r\n<screen name=\""+screenName+"\" mappingxml=\"map/jsptest/"+screenName+".xml\" />\r\n");
 			 //xml validation
