@@ -131,6 +131,11 @@ public class DBConnector {
 				}catch(Exception e){
 					logger.error("Mini data source connection error"+e);
 				}
+				try{
+					conn =  MiniConnectionPoolHelper.getConnection();
+				}catch(Exception e){
+					logger.error("Mini data source connection error"+e);
+				}
 				
 				isRuninServerContext = false;
 				if(conn == null){ 

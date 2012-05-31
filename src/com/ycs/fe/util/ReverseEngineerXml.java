@@ -45,7 +45,7 @@ public class ReverseEngineerXml {
 		return result.toString();
 	}
 
-	public String getXmlmapDataTypeName(String dbimplType, boolean scale){
+	public String getXmlmapDataTypeName(String dbimplType, boolean scale, int precision){
 		if(dbimplType.equals("VARCHAR2"))return "STRING";
 		if(dbimplType.equals("VARCHAR"))return "STRING";
 		if(dbimplType.equals("DATE"))return "DATE_NS";
@@ -53,8 +53,11 @@ public class ReverseEngineerXml {
 		
 		if(dbimplType.equals("NUMBER") || dbimplType.equals("DECIMAL")  ){
 			if(scale)return "FLOAT";
-			else
-			return "INT";
+			else if(precision > 10){
+				return "LONG";
+			}else{
+				return "INT";
+			}
 		}
 		if(dbimplType.equals("INTEGER"))return "INT";
 		if(dbimplType.equals("FLOAT"))return "FLOAT";
@@ -120,13 +123,13 @@ public class ReverseEngineerXml {
 			arheader.add(col);
 			alias = col.toLowerCase().replaceAll(" ", "");
 			aralias.add(alias);
-			size = metaData.getPrecision(i+1);//metaData.getColumnDisplaySize(i + 1);
+			size = (metaData.getPrecision(i+1) ==0)?10:metaData.getPrecision(i+1);//metaData.getColumnDisplaySize(i + 1);
 			scale= metaData.getScale(i+1);
-			ardatatype.add(getXmlmapDataTypeName(metaData.getColumnTypeName(i + 1), scale != 0));
+			ardatatype.add(getXmlmapDataTypeName(metaData.getColumnTypeName(i + 1), scale != 0, metaData.getPrecision(i+1)));
 			arcolprecision.add(size);
 			
 			System.out.print(metaData.getColumnName(i + 1) + "  \t");
-			System.out.print(metaData.getColumnDisplaySize(i + 1) + " ==? " + metaData.getPrecision(i+1)+"\t");
+			System.out.print(metaData.getColumnDisplaySize(i + 1) + " ==? " + metaData.getPrecision(i+1)+"\t"+scale+"\t");
 			System.out.println(metaData.getColumnTypeName(i + 1)+" , "+metaData.getColumnType(i + 1));
 		}
 		
@@ -330,6 +333,22 @@ public class ReverseEngineerXml {
 			System.out.println(sel);
 			System.out.println(sel2);
 			
+			
+			System.out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n" + 
+					"<root xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"../config.xsd\">\r\n" + 
+					"  <screen name=\""+screenName+"\">\r\n" + 
+					"    <htmltemplate></htmltemplate>\r\n" + 
+					"    <includedjsp></includedjsp>\r\n" + 
+					"    <callbackclass></callbackclass>\r\n" + 
+					"    <scripts>\r\n" + 
+					"      <scriptinclude></scriptinclude>\r\n" + 
+					"    </scripts>\r\n" + 
+					"    <stylesheets>\r\n" + 
+					"      <styleinclude></styleinclude>\r\n" + 
+					"    </stylesheets>\r\n" + 
+					"    <sessionvars>sessionvars</sessionvars>\r\n" + 
+					"    <crud>");
+			
 			System.out.println("	   <jsonrpc outstack=\"formonload\" id=\"onloadqry1\">"+sel+" \r\n" + 
 					           "			<countquery pagesize=\"10\">select count('x') from "+tableName+" </countquery>\r\n" +
 							   "	   </jsonrpc>\r\n" + 
@@ -408,7 +427,10 @@ public class ReverseEngineerXml {
 			gridupd += " WHERE "+arcol.get(0)+"=#inp.form1[0].id|STRING";
 			System.out.println("      <sqlupdate id=\""+bulkcmd+"edit\" outstack=\"updt\">"+gridupd+"</sqlupdate>");
 			///end grid inserts
-			
+			System.out.println(" </crud>\r\n" + 
+					"    <dm></dm>\r\n" + 
+					"    <bl></bl>\r\n" + 
+					"    <anyprocs></anyprocs>");
 			///xml cmd//
 			System.out.println("    <commands>\r\n" + 
 					           "      <cmd instack=\"\" name=\"\" opt=\"\"  result=\"\" />\r\n" + 
@@ -437,8 +459,21 @@ public class ReverseEngineerXml {
 				validationXml +="<validationfld dbcolsize=\""+size+"\" name=\""+alias+"\" column=\""+col+"\" mandatory=\"yes\" forid=\""+alias+"\" dbdatatype=\""+datatype+"\" />\r\n" ;
 				label += "<label replace=\"modify\" key=\""+alias+"\" value=\""+arheader.get(i).trim()+"\" forname=\""+alias+"\"/>\r\n";
 			}
+			
+			System.out.println("  </screen>\r\n" + 
+					"  <panels>\r\n" + 
+					"    <panel id=\"\">\r\n" + 
+					"    <fields>\r\n" + 
+					"       <field>");
 			 System.out.println(validationXml);
 			 System.out.println(label);
+			 System.out.println("       </field>\r\n" + 
+			 		"    </fields>\r\n" + 
+			 		"      <button forid=\"\" id=\"\" onclick=\"\" replace=\"modify\" type=\"\">button</button>\r\n" + 
+			 		"    </panel>\r\n" + 
+			 		"  </panels>\r\n" + 
+			 		"</root>");
+			 
 			 System.out.println("\r\n<screen name=\""+screenName+"\" mappingxml=\"map/jsptest/"+screenName+".xml\" />\r\n");
 			 //xml validation
 			

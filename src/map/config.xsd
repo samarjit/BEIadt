@@ -33,7 +33,7 @@
   <xs:element name="callbackclass" type="xs:string"/>
   <xs:element name="scripts">
     <xs:complexType >
-      <xs:choice maxOccurs="unbounded">
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="scriptinclude"/>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="text"/>
       </xs:choice>
@@ -42,7 +42,7 @@
   <xs:element name="scriptinclude" type="xs:string"/>
   <xs:element name="stylesheets">
     <xs:complexType>
-      <xs:choice  maxOccurs="unbounded"> 
+      <xs:choice  maxOccurs="unbounded" minOccurs="0"> 
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="styleinclude"/>
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="text"/>
       </xs:choice>
@@ -52,7 +52,7 @@
   <xs:element name="panels">
     <xs:complexType>
       <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="panel"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="panel"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -259,7 +259,7 @@
   						type="xs:string" />
   					<xs:attribute name="opt" use="required"
   						type="xs:string" />
-  					<xs:attribute name="processor" use="optional"
+  					<xs:attribute name="resultScrName" use="optional"
   						type="xs:string" />
   					<xs:attribute name="result" use="required" />
   				</xs:complexType>
@@ -275,18 +275,18 @@
   					<xs:attribute name="opt" use="required"
   						type="xs:string" />
   					<xs:attribute name="result" use="required" />
+  					<xs:attribute name="resultScrName" use="optional" />
   				</xs:complexType>
   			</xs:element>
   			<!-- this is onload -->
   			<xs:element name="onload" minOccurs="0" maxOccurs="unbounded">
 			<xs:annotation>
-			      <xs:documentation>Tooltip: bulkcmd will get executed once per request</xs:documentation>
+			      <xs:documentation>Tooltip: onload will get executed once per page load, or whenever decorator interceptor is called- common.action or subclass of common.action</xs:documentation>
 			     </xs:annotation>
   				<xs:complexType>
-  					<xs:attribute name="name" use="required"
-  						type="xs:string" />
   					<xs:attribute name="opt" use="required"
   						type="xs:string" />
+  				    <xs:attribute name="result" use="required" />
   				</xs:complexType>
   			</xs:element>
   		</xs:sequence>
@@ -296,13 +296,15 @@
   
   <xs:element name="field">
     <xs:complexType>
-      <xs:choice minOccurs="0" maxOccurs="2"> 
+      <xs:choice minOccurs="0" maxOccurs="unbounded"> 
         <xs:element ref="compositefield"/>
         <xs:element ref="customfield"/>
         <xs:element ref="div"/>
         <xs:element ref="input"/>
         <xs:element ref="select"/>
         <xs:element ref="sometype"/>
+        <xs:element ref="displayfield"/>
+        <xs:element ref="validationfld"/>
         <xs:element ref="label" maxOccurs="unbounded"/>
       </xs:choice>
     </xs:complexType>
@@ -358,6 +360,7 @@
       <xs:attribute name="column" type="xs:string"/>
       <xs:attribute name="dbcolsize"/>
       <xs:attribute name="forid" use="required" type="xs:string"/>
+      <xs:attribute name="name" use="required" type="xs:string"/>
       <xs:attribute name="mask"/>
       <xs:attribute name="replace" type="xs:string"/>
       <xs:attribute name="type" type="xs:string"/>
@@ -422,6 +425,22 @@
       <xs:attribute name="value" use="required"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="validationfld">
+    <xs:complexType>
+      <xs:sequence>
+          <xs:element ref="rule" minOccurs="0"/>
+          <xs:element ref="validation" minOccurs="0"/>
+      </xs:sequence>
+      <xs:attribute name="column" use="required" type="xs:string"/>
+      <xs:attribute name="dbcolsize" use="required" />
+      <xs:attribute name="dbdatatype" use="required" type="xs:string"/>
+      <xs:attribute name="forid" use="required" type="xs:string"/>
+      <xs:attribute name="id"  type="xs:string"/>
+      <xs:attribute name="mandatory" use="required" />
+      <xs:attribute name="mask"  />
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
   <xs:attribute name="replace">
   <xs:simpleType >
     <xs:restriction  base="xs:string">
@@ -448,7 +467,7 @@
       <xs:attribute name="label"/>
       <xs:attribute name="mandatory"/>
       <xs:attribute name="mask" use="optional"/>
-      <xs:attribute name="name" type="xs:string"/>
+      <xs:attribute name="name"  use="required" type="xs:string"/>
       <xs:attribute use="required" ref="replace"/>
       <xs:attribute name="type" type="xs:string"/>
       <xs:attribute name="validationattr"/>

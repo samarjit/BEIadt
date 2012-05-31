@@ -168,6 +168,10 @@ public class CommandProcessor {
 			logger.error("Processor not found",e);
 			if(resDTO == null)resDTO= new ResultDTO();
 			resDTO.addError("error.processornotfound");
+		}catch(Exception e){
+			if(resDTO == null)resDTO= new ResultDTO();
+			resDTO.addError("system.error");
+			logger.error(e);
 		}
 		
 		return resDTO;
