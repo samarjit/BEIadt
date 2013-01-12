@@ -10,8 +10,8 @@
 		<property name="host"><value>smtpout.secureserver.net</value></property>
 		<property name="host"><value>gmail-smtp-msa.l.google.com</value></property>-->
 		<property name="host"><value>smtp.gmail.com</value></property>
-		<property name="username"><value>samarjit.s@yalamanchili.com.sg</value> </property> 
-		<property name="password"><value>Password@12</value></property> 
+		<property name="username"><value>samarjit@gmail.com</value> </property> 
+		<property name="password"><value>xxxx</value></property> 
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
